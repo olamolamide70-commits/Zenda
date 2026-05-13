@@ -25,7 +25,7 @@ const sections = [
   {
     icon: Lock,
     title: "5. Your Rights",
-    content: "Every Nigerian using GadgetFlex has the right to access, correct, or request deletion of their personal data. Contact our support team for any privacy concerns."
+    content: "Every Nigerian using Zenda has the right to access, correct, or request deletion of their personal data. Contact our support team for any privacy concerns."
   }
 ];
 

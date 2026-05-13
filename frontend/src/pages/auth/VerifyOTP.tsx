@@ -56,7 +56,7 @@ export default function VerifyOTP() {
     try {
       const res = await authService.verifyOTP(email, otpString, name);
       login(res, res.token);
-      toast.success('Account verified! Welcome to GadgetFlex.');
+      toast.success('Account verified! Welcome to Zenda.');
       navigate('/dashboard');
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Verification failed');

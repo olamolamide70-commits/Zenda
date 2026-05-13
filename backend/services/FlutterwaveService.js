@@ -18,7 +18,7 @@ class FlutterwaveService {
         account_bank: details.account_bank,
         account_number: details.account_number,
         amount: details.amount,
-        narration: details.narration || "GadgetFlex Vendor Payout",
+        narration: details.narration || "Zenda Vendor Payout",
         currency: details.currency || "NGN",
         reference: details.reference || `GF-V-PO-${Date.now()}`,
         callback_url: "https://your-api.com/api/webhooks/flutterwave",

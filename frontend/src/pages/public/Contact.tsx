@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 
 const contactInfo = [
-  { icon: Mail, label: 'Support Email', value: 'hello@gadgetflex.com.ng', desc: 'Our team is here to help.' },
+  { icon: Mail, label: 'Support Email', value: 'hello@Zenda.com.ng', desc: 'Our team is here to help.' },
   { icon: Phone, label: 'Phone Number', value: '+234 801 000 0000', desc: 'Mon-Fri from 8am to 5pm.' },
   { icon: MapPin, label: 'Campus Office', value: 'LASUSTECH Ikorodu, Lagos', desc: 'Visit us for a consultation.' },
 ];

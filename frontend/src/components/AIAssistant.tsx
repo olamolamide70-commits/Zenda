@@ -9,7 +9,7 @@ export default function AIAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState<{ role: 'ai' | 'user'; text: string }[]>([
-    { role: 'ai', text: 'Hi! I am your GadgetFlex financial assistant. How can I help you today?' }
+    { role: 'ai', text: 'Hi! I am your Zenda financial assistant. How can I help you today?' }
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);

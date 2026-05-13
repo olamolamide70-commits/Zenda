@@ -117,7 +117,7 @@ export default function SearchPalette() {
                    <span><span className="bg-white px-1.5 py-0.5 rounded border border-slate-200 text-slate-600 mr-1">↑↓</span> Navigate</span>
                    <span><span className="bg-white px-1.5 py-0.5 rounded border border-slate-200 text-slate-600 mr-1">Enter</span> Select</span>
                  </div>
-                 <div>GadgetFlex Command Palette</div>
+                 <div>Zenda Command Palette</div>
               </div>
             </motion.div>
           </div>

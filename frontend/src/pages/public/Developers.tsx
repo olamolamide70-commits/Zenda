@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 export default function Developers() {
   const [copied, setCopied] = useState(false);
 
-  const exampleCode = `fetch('https://api.gadgetflex.com.ng/api/b2b/installments', {
+  const exampleCode = `fetch('https://api.Zenda.com.ng/api/b2b/installments', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ export default function Developers() {
               transition={{ delay: 0.2 }}
               className="text-xl lg:text-2xl text-white/60 font-medium max-w-2xl leading-relaxed mb-12"
             >
-              Integrate GadgetFlex's checkout into your existing business. Let your customers pay later, while you get paid upfront.
+              Integrate Zenda's checkout into your existing business. Let your customers pay later, while you get paid upfront.
             </motion.p>
             <div className="flex flex-col sm:flex-row gap-6">
               <Link to="/register?type=vendor">
@@ -130,7 +130,7 @@ export default function Developers() {
           <div className="text-center mb-20">
             <h2 className="text-4xl lg:text-5xl font-black tracking-tighter text-foreground mb-4">Why Partner with Us?</h2>
             <p className="text-lg text-muted-foreground/60 font-medium max-w-2xl mx-auto">
-              Join 500+ businesses using GadgetFlex to increase their conversion rates by up to 40%.
+              Join 500+ businesses using Zenda to increase their conversion rates by up to 40%.
             </p>
           </div>
 

@@ -41,7 +41,7 @@ export default function Footer() {
           <div>
             <h4 className="mb-10 text-[10px] font-bold uppercase tracking-[0.3em] text-primary/60">Contact</h4>
             <div className="flex flex-col gap-5 text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">
-              <p className="hover:text-primary transition-colors cursor-pointer lowercase">hello@gadgetflex.com.ng</p>
+              <p className="hover:text-primary transition-colors cursor-pointer lowercase">hello@Zenda.com.ng</p>
               <p className="hover:text-primary transition-colors cursor-pointer">+234 801 000 0000</p>
               <p className="text-muted-foreground/20 italic">Global Logistics Center, Lagos</p>
             </div>

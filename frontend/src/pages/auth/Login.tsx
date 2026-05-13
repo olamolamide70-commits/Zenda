@@ -118,7 +118,7 @@ export default function Login() {
               <Laptop className="h-6 w-6" />
             </div>
             <span className="text-2xl font-black text-foreground">
-              GadgetFlex
+              Zenda
             </span>
           </Link>
 

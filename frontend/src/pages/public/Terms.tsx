@@ -5,7 +5,7 @@ const sections = [
   {
     icon: FileText,
     title: "1. Acceptance of Terms",
-    content: "By accessing and using GadgetFlex, you agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use our services."
+    content: "By accessing and using Zenda, you agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use our services."
   },
   {
     icon: Shield,
@@ -20,7 +20,7 @@ const sections = [
   {
     icon: AlertCircle,
     title: "4. Payments & Installments",
-    content: "GadgetFlex provides flexible payment plans. You agree to make timely payments according to your chosen schedule (Daily, Weekly, or Monthly). Failure to pay may result in service restrictions or debt recovery actions."
+    content: "Zenda provides flexible payment plans. You agree to make timely payments according to your chosen schedule (Daily, Weekly, or Monthly). Failure to pay may result in service restrictions or debt recovery actions."
   },
   {
     icon: FileText,
@@ -30,7 +30,7 @@ const sections = [
   {
     icon: Shield,
     title: "6. Privacy",
-    content: "Your use of GadgetFlex is also governed by our Privacy Policy. We are committed to protecting your personal data and using it only as described in our policy."
+    content: "Your use of Zenda is also governed by our Privacy Policy. We are committed to protecting your personal data and using it only as described in our policy."
   },
   {
     icon: AlertCircle,
@@ -60,7 +60,7 @@ export default function Terms() {
             viewport={{ once: true }}
             className="text-xl text-muted-foreground/60 font-medium max-w-2xl mx-auto leading-relaxed"
           >
-            Please read these terms carefully before using GadgetFlex. We believe in transparency and fair use for every Nigerian.
+            Please read these terms carefully before using Zenda. We believe in transparency and fair use for every Nigerian.
           </motion.p>
         </div>
 

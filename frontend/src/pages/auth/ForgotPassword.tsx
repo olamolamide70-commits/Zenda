@@ -32,7 +32,7 @@ export default function ForgotPassword() {
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 ring-1 ring-white/10 shadow-glow backdrop-blur-md">
             <Laptop className="h-6 w-6 text-primary shadow-glow-sm" />
           </div>
-          <span className="font-display text-2xl font-black text-white tracking-tighter">GadgetFlex</span>
+          <span className="font-display text-2xl font-black text-white tracking-tighter">Zenda</span>
         </Link>
 
         <div className="rounded-[40px] border border-white/5 bg-white/[0.03] p-10 shadow-2xl backdrop-blur-xl">

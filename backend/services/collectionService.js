@@ -48,7 +48,7 @@ exports.processCollection = async () => {
         // Notify User
         await sendEmail({
           to: user.email,
-          subject: 'Late Fee Applied - GadgetFlex',
+          subject: 'Late Fee Applied - Zenda',
           text: `Hi ${user.name}, a late fee of ₦${lateFee} has been applied to your overdue installment. Please settle your balance to avoid further penalties.`
         });
       }

@@ -30,7 +30,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <Laptop className="h-6 w-6 text-primary-foreground" />
         </div>
         <div className="flex flex-col">
-          <span className="font-display text-lg font-bold text-foreground leading-none">GadgetFlex</span>
+          <span className="font-display text-lg font-bold text-foreground leading-none">Zenda</span>
           <span className="text-[10px] font-bold uppercase tracking-widest text-primary mt-1">Admin</span>
         </div>
       </div>

@@ -67,7 +67,7 @@ export default function ApiSettings() {
       <div>
         <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">Developer Settings</p>
         <h1 className="text-4xl font-black text-foreground tracking-tight">API Management</h1>
-        <p className="mt-1 text-muted-foreground font-medium">Manage your merchant keys to integrate GadgetFlex into your storefront.</p>
+        <p className="mt-1 text-muted-foreground font-medium">Manage your merchant keys to integrate Zenda into your storefront.</p>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-3">

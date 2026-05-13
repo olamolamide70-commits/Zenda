@@ -14,7 +14,7 @@ interface Message {
 export default function AssistantChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "Hi! I'm your GadgetFlex AI Assistant. How can I help you with your gadgets or installment plans today?" }
+    { role: 'assistant', content: "Hi! I'm your Zenda AI Assistant. How can I help you with your gadgets or installment plans today?" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -63,7 +63,7 @@ export default function AssistantChat() {
                     <Sparkles className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-display font-black leading-none">GadgetFlex AI</h3>
+                    <h3 className="font-display font-black leading-none">Zenda AI</h3>
                     <p className="mt-1 text-[10px] uppercase tracking-widest opacity-70">Always Active</p>
                   </div>
                 </div>

@@ -10,7 +10,7 @@ import { useApp } from '@/context/AppContext';
 import VirtualCard, { CardSkin } from '@/components/VirtualCard';
 
 const SKINS: { id: CardSkin; name: string; description: string; color: string }[] = [
-  { id: 'default', name: 'Premium Blue', description: 'The classic GadgetFlex aesthetic.', color: 'bg-primary' },
+  { id: 'default', name: 'Premium Blue', description: 'The classic Zenda aesthetic.', color: 'bg-primary' },
   { id: 'obsidian', name: 'Obsidian Black', description: 'Stealthy, sleek, and minimalist.', color: 'bg-zinc-900' },
   { id: 'gold', name: 'Royal Gold', description: 'For the high-flyers and achievers.', color: 'bg-amber-600' },
   { id: 'midnight', name: 'Midnight Purple', description: 'Deep, mysterious, and vibrant.', color: 'bg-indigo-900' },

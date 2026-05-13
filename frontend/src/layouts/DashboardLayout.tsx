@@ -73,7 +73,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-md">
           <Laptop className="h-6 w-6 text-white" />
         </div>
-        <span className="text-xl font-bold text-foreground">GadgetFlex</span>
+        <span className="text-xl font-bold text-foreground">Zenda</span>
       </div>
       <nav className="flex-1 space-y-2 px-4 py-8">
         {sidebarItems.map(item => {

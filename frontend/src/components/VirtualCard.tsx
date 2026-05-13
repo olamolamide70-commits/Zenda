@@ -84,7 +84,7 @@ export default function VirtualCard({ userName, creditLimit, availableLimit, ski
                     <div className="flex flex-col gap-1">
                         <div className="flex items-center gap-2">
                             <ShieldCheck className={`h-5 w-5 ${config.primary}`} />
-                            <span className={`text-[10px] font-black uppercase tracking-[0.4em] ${skin === 'glass' ? 'text-white' : 'text-white/50'}`}>GadgetFlex {skin !== 'default' ? skin.toUpperCase() : 'PREMIUM'}</span>
+                            <span className={`text-[10px] font-black uppercase tracking-[0.4em] ${skin === 'glass' ? 'text-white' : 'text-white/50'}`}>Zenda {skin !== 'default' ? skin.toUpperCase() : 'PREMIUM'}</span>
                         </div>
                         <p className="text-[10px] font-bold text-white/40 mt-1 uppercase tracking-widest">Exclusive Installment Line</p>
                     </div>

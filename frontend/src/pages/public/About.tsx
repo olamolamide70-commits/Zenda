@@ -37,7 +37,7 @@ export default function About() {
             transition={{ delay: 0.2, duration: 0.8 }}
             className="mt-12 text-xl text-muted-foreground/60 font-medium max-w-3xl mx-auto leading-relaxed md:text-2xl"
           >
-            GadgetFlex helps every Nigerian get the gadgets they need with easy monthly payments. We make premium technology affordable for everyone.
+            Zenda helps every Nigerian get the gadgets they need with easy monthly payments. We make premium technology affordable for everyone.
           </motion.p>
         </div>
 

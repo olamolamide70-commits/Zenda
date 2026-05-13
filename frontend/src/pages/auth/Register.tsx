@@ -108,7 +108,7 @@ export default function Register() {
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-white shadow-md">
               <Laptop className="h-6 w-6" />
             </div>
-            <span className="text-2xl font-black text-foreground">GadgetFlex</span>
+            <span className="text-2xl font-black text-foreground">Zenda</span>
           </Link>
 
           <div className="mb-10 text-center lg:text-left">
