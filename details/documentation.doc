@@ -1,0 +1,153 @@
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+    <meta charset="utf-8">
+    <title>Zenda System Documentation</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+        h1 { color: #1e3a8a; border-bottom: 2px solid #1e3a8a; padding-bottom: 10px; }
+        h2 { color: #1e40af; margin-top: 30px; border-left: 5px solid #1e40af; padding-left: 10px; }
+        h3 { color: #2563eb; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f8fafc; font-weight: bold; }
+        .tech-tag { background: #eff6ff; color: #1e40af; padding: 2px 8px; border-radius: 4px; font-size: 0.9em; }
+        .highlight { background-color: #fefce8; padding: 15px; border-radius: 8px; border: 1px solid #fef08a; }
+    </style>
+</head>
+<body>
+    <h1>Zenda System Documentation</h1>
+    <p><strong>Project Name:</strong> Zenda.</p>
+    <p><strong>Tagline:</strong> Flexible Payments for Modern Tech.</p>
+    <p><strong>Version:</strong> 1.0.0 (Production Ready)</p>
+
+    <h2>1. Executive Summary</h2>
+    <p>Zenda is a state-of-the-art Buy-Now-Pay-Later (BNPL) and installment payment platform designed specifically for the Nigerian gadget market. It enables consumers to purchase premium technology (laptops, smartphones, tablets) and pay in flexible daily, weekly, or monthly installments, while ensuring vendors receive guaranteed payments through an escrow-like settlement system.</p>
+
+    <h2>2. The Problem It Solves</h2>
+    <p>In the current Nigerian economy, the upfront cost of premium technology is a significant barrier for students, freelancers, and small business owners. Existing credit systems are often exclusionary, requiring collateral or complex paperwork.</p>
+    <ul>
+        <li><strong>Financial Inclusion:</strong> Zenda provides credit based on a dynamic "Risk Score" rather than traditional collateral.</li>
+        <li><strong>Cash Flow Management:</strong> Allows users to manage their income by splitting large purchases into manageable bits.</li>
+        <li><strong>Trust Gap:</strong> The Secure Delivery OTP system ensures buyers only pay when they receive their items, and vendors only release items when payment is secured.</li>
+    </ul>
+
+    <h2>3. Why Node.js Instead of PHP?</h2>
+    <p>While PHP (Laravel) is a common choice for web apps, we chose <strong>Node.js (Express)</strong> for Zenda for several strategic reasons:</p>
+    <table>
+        <tr>
+            <th>Feature</th>
+            <th>Node.js (Our Choice)</th>
+            <th>PHP (Traditional)</th>
+        </tr>
+        <tr>
+            <td><strong>Concurrency</strong></td>
+            <td>Non-blocking I/O allows handling thousands of concurrent connections efficiently.</td>
+            <td>Typically blocking, requires more server resources per request.</td>
+        </tr>
+        <tr>
+            <td><strong>Single Language</strong></td>
+            <td>JavaScript/TypeScript on both Frontend and Backend, improving developer velocity.</td>
+            <td>Switching between PHP and JavaScript creates mental overhead.</td>
+        </tr>
+        <tr>
+            <td><strong>Real-time Support</strong></td>
+            <td>Native support for WebSockets (essential for live notifications and chat).</td>
+            <td>Requires external tools like Pusher or complex configurations.</td>
+        </tr>
+        <tr>
+            <td><strong>Modern Ecosystem</strong></td>
+            <td>Rich ecosystem of NPM packages for AI (Groq/OpenAI) and payment gateways.</td>
+            <td>While large, many legacy packages are less optimized for modern cloud deployments.</td>
+        </tr>
+    </table>
+
+    <h2>4. Design Philosophy: Premium Fintech</h2>
+    <p>The UI/UX was designed to look and feel like a top-tier international fintech product. We moved away from generic "e-commerce" designs toward a <strong>Premium Glassmorphism</strong> aesthetic.</p>
+    <ul>
+        <li><strong>Vibrant Indigo & Slate Palette:</strong> Conveys trust and high-end technology.</li>
+        <li><strong>Micro-animations:</strong> Uses Framer Motion for smooth transitions, making the app feel "alive."</li>
+        <li><strong>Clean Typography:</strong> Focused on readability and professional hierarchy.</li>
+    </ul>
+
+    <h2>5. The AI Aspect: Groq AI Integration</h2>
+    <p>Zenda is not just a payment gateway; it is an intelligent financial companion. We integrated <strong>Groq AI</strong> (LPU Inference Engine) to provide lightning-fast responses.</p>
+    <ul>
+        <li><strong>ZendaBot:</strong> An intelligent assistant that helps users understand installment plans, compare gadgets, and resolve issues.</li>
+        <li><strong>Zenda Coach:</strong> An AI financial advisor that analyzes a user's risk score and provides personalized tips on how to increase their credit limit and manage debt.</li>
+        <li><strong>Why Groq?</strong> Groq provides sub-second latency for LLMs, ensuring the user experience is never delayed by AI processing.</li>
+    </ul>
+
+    <h2>6. Backend API Documentation (Endpoints)</h2>
+    <h3>Auth Endpoints</h3>
+    <table>
+        <tr>
+            <th>Method</th>
+            <th>Endpoint</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/auth/otp/request</td>
+            <td>Triggers a secure 6-digit OTP to the user's email for passwordless login.</td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/auth/otp/verify</td>
+            <td>Validates the OTP and initializes the user session/profile.</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/auth/profile</td>
+            <td>Retrieves the authenticated user's risk score, tier, and credit limits.</td>
+        </tr>
+    </table>
+
+    <h3>Order & Delivery Endpoints</h3>
+    <table>
+        <tr>
+            <th>Method</th>
+            <th>Endpoint</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/orders/request-delivery-code</td>
+            <td>Sends a secure delivery confirmation OTP to the buyer via email.</td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/orders/confirm-delivery</td>
+            <td>Verifies the delivery OTP and triggers vendor fund settlement.</td>
+        </tr>
+    </table>
+
+    <h3>B2B / Merchant Endpoints</h3>
+    <table>
+        <tr>
+            <th>Method</th>
+            <th>Endpoint</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/b2b/initialize-checkout</td>
+            <td>Allows external businesses to use Zenda's installment engine on their own sites.</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/vendor/stats</td>
+            <td>Provides real-time analytics on sales, settlements, and customer defaults.</td>
+        </tr>
+    </table>
+
+    <h2>7. Technical Implementation Details</h2>
+    <p><strong>Frontend:</strong> React.js with Vite for blazing-fast development. State management via React Context API and data fetching via TanStack Query.</p>
+    <p><strong>Backend:</strong> Express.js server hosted on Render, using Helmet and Rate Limiting for security.</p>
+    <p><strong>Database:</strong> Supabase (PostgreSQL) for relational data and Auth. Database triggers handle automatic Risk Score updates.</p>
+    <p><strong>Payments:</strong> Flutterwave integration for secure local transactions in Naira.</p>
+
+    <div class="highlight">
+        <p><strong>Conclusion:</strong> Zenda is built for scale, security, and speed. By choosing Node.js and a modern serverless-first database approach (Supabase), we ensure that the platform remains cost-effective while providing a premium experience for every Nigerian consumer.</p>
+    </div>
+</body>
+</html>
