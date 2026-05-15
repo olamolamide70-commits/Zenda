@@ -26,3 +26,5 @@ dist-ssr
 # Temporary files
 search_results.csv
 search_results_old.csv
+.vercel
+.env*.local
