@@ -38,9 +38,9 @@ export default function Login() {
       <div className="relative hidden w-1/2 flex-col items-center justify-center lg:flex border-r border-border bg-slate-50">
         <div className="absolute inset-0 z-0">
           <img 
-            src="/nigerian_professionals_tech_1774016355381.png" 
-            alt="Nigerian Professionals" 
-            className="absolute inset-0 h-full w-full object-cover opacity-20"
+            src="/hero-gadgets.png" 
+            alt="Zenda Tech" 
+            className="absolute inset-0 h-full w-full object-cover opacity-30"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/20" />
         </div>

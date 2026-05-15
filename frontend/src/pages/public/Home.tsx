@@ -346,7 +346,7 @@ export default function Home() {
             variants={fadeIn}
             className="relative rounded-[3rem] bg-primary py-24 px-10 lg:py-32 overflow-hidden shadow-2xl"
           >
-            <div className="absolute top-0 right-0 w-full h-full bg-[url('/grid.svg')] opacity-[0.05] pointer-events-none" />
+            <div className="absolute top-0 right-0 w-full h-full bg-slate-50 opacity-[0.05] pointer-events-none" />
             <h2 className="mb-8 text-4xl font-black tracking-tighter text-white lg:text-7xl leading-none">
               Get your gadget today.
             </h2>

@@ -37,9 +37,9 @@ export default function Register() {
       <div className="relative hidden w-1/2 flex-col items-center justify-center lg:flex border-r border-border bg-slate-50">
         <div className="absolute inset-0 z-0">
           <img 
-            src="/nigerian_family_gadgets_1774016369079.png" 
-            alt="Nigerian Family" 
-            className="absolute inset-0 h-full w-full object-cover opacity-20"
+            src="/hero-gadgets.png" 
+            alt="Zenda Gadgets" 
+            className="absolute inset-0 h-full w-full object-cover opacity-30"
           />
           <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-primary/20" />
         </div>
