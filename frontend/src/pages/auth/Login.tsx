@@ -14,17 +14,21 @@ import { motion } from "framer-motion";
 export default function Login() {
   const navigate = useNavigate();
 
+  const { login: contextLogin } = useApp();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
     try {
-      await authService.login(email);
-      toast.success("OTP sent to your email!");
-      navigate(`/verify-otp?email=${encodeURIComponent(email)}`);
+      const response = await authService.login({ email, password });
+      contextLogin(response.user, response.token);
+      toast.success("Welcome back!");
+      navigate("/dashboard");
     } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to send OTP.");
+      toast.error(error.response?.data?.error || "Login failed.");
     }
   };
 
@@ -122,28 +126,46 @@ export default function Login() {
             </span>
           </Link>
 
-          <div className="mb-10 text-center lg:text-left">
-            <h1 className="text-3xl font-bold text-foreground tracking-tight mb-3">
-              Welcome back
-            </h1>
-            <p className="text-muted-foreground font-medium">
-              Enter your email to receive a secure login code.
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                Email Address
-              </Label>
-              <Input
-                name="email"
-                type="email"
-                placeholder="yourname@gmail.com"
-                className="h-12 px-4 bg-secondary/20 border-border rounded-xl focus:ring-primary/20 transition-all font-medium"
-                required
-              />
+            <div className="mb-10 text-center lg:text-left">
+              <h1 className="text-3xl font-bold text-foreground tracking-tight mb-3">
+                Welcome back
+              </h1>
+              <p className="text-muted-foreground font-medium">
+                Enter your credentials to access your Zenda dashboard.
+              </p>
             </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                  Email Address
+                </Label>
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="yourname@gmail.com"
+                  className="h-12 px-4 bg-secondary/20 border-border rounded-xl focus:ring-primary/20 transition-all font-medium"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between ml-1">
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                    Password
+                  </Label>
+                  <Link to="/forgot-password" size="sm" className="text-[10px] font-bold uppercase tracking-widest text-primary hover:underline">
+                    Forgot?
+                  </Link>
+                </div>
+                <Input
+                  name="password"
+                  type="password"
+                  placeholder="••••••••"
+                  className="h-12 px-4 bg-secondary/20 border-border rounded-xl focus:ring-primary/20 transition-all font-medium"
+                  required
+                />
+              </div>
 
             <div className="pt-4">
               <Button

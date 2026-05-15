@@ -19,12 +19,13 @@ export default function Register() {
     const firstName = formData.get('firstName') as string;
     const lastName = formData.get('lastName') as string;
     const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
     const name = `${firstName} ${lastName}`;
 
     try {
-      await authService.register({ name, email });
-      toast.success('Registration initiated! Please check your email for the verification code.');
-      navigate(`/verify-otp?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`);
+      await authService.register({ name, email, password });
+      toast.success('Account created! Please login with your credentials.');
+      navigate('/login');
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Registration failed.');
     }
@@ -131,6 +132,11 @@ export default function Register() {
             <div className="space-y-2">
               <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">Email Address</Label>
               <Input name="email" type="email" placeholder="email@example.com" className="h-12 px-4 bg-secondary/20 border-border rounded-xl focus:ring-primary/20 transition-all font-medium" required />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">Password</Label>
+              <Input name="password" type="password" placeholder="••••••••" className="h-12 px-4 bg-secondary/20 border-border rounded-xl focus:ring-primary/20 transition-all font-medium" required />
             </div>
             
             <div className="flex items-center px-1">

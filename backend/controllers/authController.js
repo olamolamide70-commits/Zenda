@@ -5,72 +5,78 @@ const crypto = require('crypto');
  * GadgetFlex Auth Controller
  */
 
-// 1. Request Email OTP (Login/Signup)
-exports.requestOtp = async (req, res) => {
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ error: 'Email is required' });
+// 1. Signup with Email and Password
+exports.signup = async (req, res) => {
+  const { email, password, name } = req.body;
+  if (!email || !password || !name) {
+    return res.status(400).json({ error: 'Name, email and password are required' });
+  }
 
   try {
-    const { error } = await supabase.auth.signInWithOtp({
+    const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
+      password,
       options: {
-        shouldCreateUser: true
+        data: { name }
       }
     });
 
-    if (error) throw error;
-    res.json({ message: 'OTP sent! Please check your email for the 6-digit code.' });
+    if (authError) throw authError;
+
+    // Create profile in public.users
+    const { data: user, error: profileError } = await supabase
+      .from('users')
+      .insert([
+        {
+          id: authData.user.id,
+          name,
+          email,
+          role: 'user',
+          tier: 'Bronze',
+          is_verified: true
+        }
+      ])
+      .select()
+      .single();
+
+    if (profileError) throw profileError;
+
+    res.status(201).json({ 
+      message: 'Account created successfully! Please log in.',
+      user: { id: user.id, email: user.email, name: user.name }
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// 2. Verify Email OTP
-exports.verifyOtp = async (req, res) => {
-  const { email, token, name } = req.body; // 'name' may be passed during signup
-  if (!email || !token) return res.status(400).json({ error: 'Email and code are required' });
+// 2. Login with Email and Password
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required' });
+  }
 
   try {
-    const { data: authData, error: authError } = await supabase.auth.verifyOtp({
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
       email,
-      token,
-      type: 'email'
+      password
     });
 
     if (authError) throw authError;
 
-    // Check if user profile exists in public.users
-    let { data: user, error: profileError } = await supabase
+    // Fetch profile
+    const { data: user, error: profileError } = await supabase
       .from('users')
       .select('*')
       .eq('id', authData.user.id)
       .single();
 
-    if (profileError || !user) {
-      // Create profile for new user
-      const { data: newUser, error: createError } = await supabase
-        .from('users')
-        .insert([
-          {
-            id: authData.user.id,
-            name: name || authData.user.user_metadata?.name || 'User',
-            email,
-            role: 'user',
-            tier: 'Bronze',
-            is_verified: true
-          }
-        ])
-        .select()
-        .single();
-
-      if (createError) throw createError;
-      user = newUser;
-    }
+    if (profileError || !user) throw new Error('User profile not found');
 
     res.json({
       message: 'Login successful',
       token: authData.session.access_token,
-      refresh_token: authData.session.refresh_token,
       user: {
         id: user.id,
         name: user.name,
@@ -78,12 +84,11 @@ exports.verifyOtp = async (req, res) => {
         role: user.role,
         tier: user.tier || 'Bronze',
         risk_score: user.risk_score,
-        credit_limit: user.credit_limit,
-        is_card_active: user.is_card_active
+        credit_limit: user.credit_limit
       }
     });
   } catch (error) {
-    res.status(401).json({ error: 'Invalid or expired code' });
+    res.status(401).json({ error: error.message });
   }
 };
 
