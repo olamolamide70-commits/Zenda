@@ -15,6 +15,14 @@ services:
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: PAYSTACK_SECRET_KEY
+        sync: false
+      - key: FLUTTERWAVE_PUBLIC_KEY
+        sync: false
+      - key: FLUTTERWAVE_SECRET_KEY
+        sync: false
       - key: GROQ_API_KEY
         sync: false
       - key: BREVO_SMTP_USER
@@ -22,6 +30,8 @@ services:
       - key: BREVO_SMTP_KEY
         sync: false
       - key: BREVO_FROM_EMAIL
+        sync: false
+      - key: BACKEND_URL
         sync: false
       - key: FRONTEND_URL
         value: https://gadgetflex.vercel.app

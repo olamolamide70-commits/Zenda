@@ -1,153 +1,292 @@
 <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
 <head>
-    <meta charset="utf-8">
-    <title>Zenda System Documentation</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
-        h1 { color: #1e3a8a; border-bottom: 2px solid #1e3a8a; padding-bottom: 10px; }
-        h2 { color: #1e40af; margin-top: 30px; border-left: 5px solid #1e40af; padding-left: 10px; }
-        h3 { color: #2563eb; }
-        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #f8fafc; font-weight: bold; }
-        .tech-tag { background: #eff6ff; color: #1e40af; padding: 2px 8px; border-radius: 4px; font-size: 0.9em; }
-        .highlight { background-color: #fefce8; padding: 15px; border-radius: 8px; border: 1px solid #fef08a; }
-    </style>
+<meta charset='utf-8'>
+<title>Zenda 400L Project Documentation</title>
+<style>
+    @page { size: 8.5in 11in; margin: 1in; }
+    body { font-family: 'Times New Roman', Times, serif; line-height: 2.0; color: #000; padding: 20px; }
+    .title-page { text-align: center; height: 9in; display: flex; flex-direction: column; justify-content: center; border: 3px double #000; padding: 50px; }
+    .project-title { font-size: 30pt; font-weight: bold; margin-bottom: 30pt; text-transform: uppercase; line-height: 1.2; }
+    .author-info { font-size: 18pt; margin-top: 40pt; font-weight: bold; }
+    .institution { font-size: 20pt; font-weight: bold; margin-top: 50pt; text-transform: uppercase; }
+    h1 { font-size: 24pt; font-weight: bold; margin-top: 50pt; border-bottom: 3px solid #000; text-align: center; page-break-before: always; text-transform: uppercase; }
+    h2 { font-size: 20pt; font-weight: bold; margin-top: 40pt; color: #000; border-bottom: 1px solid #000; padding-bottom: 5px; }
+    h3 { font-size: 16pt; font-weight: bold; margin-top: 30pt; }
+    p { font-size: 13pt; margin-bottom: 15pt; text-align: justify; text-indent: 0.5in; }
+    .list-item { margin-left: 0.5in; margin-bottom: 15pt; display: block; text-indent: 0; }
+    .bullet { margin-right: 15pt; font-weight: bold; }
+    table { width: 100%; border-collapse: collapse; margin: 30pt 0; page-break-inside: avoid; }
+    th, td { border: 2px solid #000; padding: 12pt; text-align: left; font-size: 12pt; }
+    th { background-color: #e6e6e6; font-weight: bold; text-transform: uppercase; }
+    .certification-box { margin-top: 150pt; display: flex; justify-content: space-between; }
+    .sig-line { border-top: 1px solid #000; width: 200pt; text-align: center; font-weight: bold; margin-top: 50pt; }
+</style>
 </head>
 <body>
-    <h1>Zenda System Documentation</h1>
-    <p><strong>Project Name:</strong> Zenda.</p>
-    <p><strong>Tagline:</strong> Flexible Payments for Modern Tech.</p>
-    <p><strong>Version:</strong> 1.0.0 (Production Ready)</p>
 
-    <h2>1. Executive Summary</h2>
-    <p>Zenda is a state-of-the-art Buy-Now-Pay-Later (BNPL) and installment payment platform designed specifically for the Nigerian gadget market. It enables consumers to purchase premium technology (laptops, smartphones, tablets) and pay in flexible daily, weekly, or monthly installments, while ensuring vendors receive guaranteed payments through an escrow-like settlement system.</p>
+<div class='title-page'>
+    <div class='project-title'>ZENDA: AN AUTOMATED FINTECH ECOSYSTEM FOR GADGET INSTALLMENTS AND MICRO CREDIT VERIFICATION</div>
+    <div class='author-info'>BY</div>
+    <div class='author-info'>OLASUBOMI MAKINDE</div>
+    <div class='author-info'>MATRIC NO: LASU/CS/2022/001</div>
+    <div class='institution'>DEPARTMENT OF COMPUTER SCIENCE<br>FACULTY OF PHYSICAL SCIENCES<br>LAGOS STATE UNIVERSITY OF SCIENCE AND TECHNOLOGY (LASUSTECH)</div>
+    <div class='author-info'>MAY 2026</div>
+</div>
 
-    <h2>2. The Problem It Solves</h2>
-    <p>In the current Nigerian economy, the upfront cost of premium technology is a significant barrier for students, freelancers, and small business owners. Existing credit systems are often exclusionary, requiring collateral or complex paperwork.</p>
-    <ul>
-        <li><strong>Financial Inclusion:</strong> Zenda provides credit based on a dynamic "Risk Score" rather than traditional collateral.</li>
-        <li><strong>Cash Flow Management:</strong> Allows users to manage their income by splitting large purchases into manageable bits.</li>
-        <li><strong>Trust Gap:</strong> The Secure Delivery OTP system ensures buyers only pay when they receive their items, and vendors only release items when payment is secured.</li>
-    </ul>
+<br clear='all' style='page-break-before:always'>
 
-    <h2>3. Why Node.js Instead of PHP?</h2>
-    <p>While PHP (Laravel) is a common choice for web apps, we chose <strong>Node.js (Express)</strong> for Zenda for several strategic reasons:</p>
-    <table>
-        <tr>
-            <th>Feature</th>
-            <th>Node.js (Our Choice)</th>
-            <th>PHP (Traditional)</th>
-        </tr>
-        <tr>
-            <td><strong>Concurrency</strong></td>
-            <td>Non-blocking I/O allows handling thousands of concurrent connections efficiently.</td>
-            <td>Typically blocking, requires more server resources per request.</td>
-        </tr>
-        <tr>
-            <td><strong>Single Language</strong></td>
-            <td>JavaScript/TypeScript on both Frontend and Backend, improving developer velocity.</td>
-            <td>Switching between PHP and JavaScript creates mental overhead.</td>
-        </tr>
-        <tr>
-            <td><strong>Real-time Support</strong></td>
-            <td>Native support for WebSockets (essential for live notifications and chat).</td>
-            <td>Requires external tools like Pusher or complex configurations.</td>
-        </tr>
-        <tr>
-            <td><strong>Modern Ecosystem</strong></td>
-            <td>Rich ecosystem of NPM packages for AI (Groq/OpenAI) and payment gateways.</td>
-            <td>While large, many legacy packages are less optimized for modern cloud deployments.</td>
-        </tr>
-    </table>
+<h1>DECLARATION</h1>
+<p>I, OLASUBOMI MAKINDE, hereby declare that this project work titled "ZENDA: AN AUTOMATED FINTECH ECOSYSTEM FOR GADGET INSTALLMENTS AND MICRO CREDIT VERIFICATION" is my original work, carried out under the supervision of the Department of Computer Science, Lagos State University of Science and Technology. All sources of information and materials used in the project have been properly acknowledged.</p>
+<div class='sig-line'>Signature and Date</div>
 
-    <h2>4. Design Philosophy: Premium Fintech</h2>
-    <p>The UI/UX was designed to look and feel like a top-tier international fintech product. We moved away from generic "e-commerce" designs toward a <strong>Premium Glassmorphism</strong> aesthetic.</p>
-    <ul>
-        <li><strong>Vibrant Indigo & Slate Palette:</strong> Conveys trust and high-end technology.</li>
-        <li><strong>Micro-animations:</strong> Uses Framer Motion for smooth transitions, making the app feel "alive."</li>
-        <li><strong>Clean Typography:</strong> Focused on readability and professional hierarchy.</li>
-    </ul>
+<h1>CERTIFICATION</h1>
+<p>This is to certify that this project work titled "ZENDA: AN AUTOMATED FINTECH ECOSYSTEM FOR GADGET INSTALLMENTS AND MICRO CREDIT VERIFICATION" was carried out by OLASUBOMI MAKINDE under our supervision and has been approved as meeting the requirements for the award of Bachelor of Science (B.Sc.) Degree in Computer Science.</p>
 
-    <h2>5. The AI Aspect: Groq AI Integration</h2>
-    <p>Zenda is not just a payment gateway; it is an intelligent financial companion. We integrated <strong>Groq AI</strong> (LPU Inference Engine) to provide lightning-fast responses.</p>
-    <ul>
-        <li><strong>ZendaBot:</strong> An intelligent assistant that helps users understand installment plans, compare gadgets, and resolve issues.</li>
-        <li><strong>Zenda Coach:</strong> An AI financial advisor that analyzes a user's risk score and provides personalized tips on how to increase their credit limit and manage debt.</li>
-        <li><strong>Why Groq?</strong> Groq provides sub-second latency for LLMs, ensuring the user experience is never delayed by AI processing.</li>
-    </ul>
+<div class='sig-line'>Project Supervisor<br>Dr. A. B. Adekunle</div>
+<div class='sig-line'>Head of Department<br>Prof. C. D. Williams</div>
+<div class='sig-line'>External Examiner</div>
 
-    <h2>6. Backend API Documentation (Endpoints)</h2>
-    <h3>Auth Endpoints</h3>
-    <table>
-        <tr>
-            <th>Method</th>
-            <th>Endpoint</th>
-            <th>Description</th>
-        </tr>
-        <tr>
-            <td>POST</td>
-            <td>/api/auth/otp/request</td>
-            <td>Triggers a secure 6-digit OTP to the user's email for passwordless login.</td>
-        </tr>
-        <tr>
-            <td>POST</td>
-            <td>/api/auth/otp/verify</td>
-            <td>Validates the OTP and initializes the user session/profile.</td>
-        </tr>
-        <tr>
-            <td>GET</td>
-            <td>/api/auth/profile</td>
-            <td>Retrieves the authenticated user's risk score, tier, and credit limits.</td>
-        </tr>
-    </table>
+<h1>DEDICATION</h1>
+<p>This academic milestone is dedicated to the Almighty God for His divine guidance, strength, and wisdom throughout the course of this study. I also dedicate this work to my beloved parents, Mr. and Mrs. Makinde, whose financial support and prayers have been the foundation of my success. Finally, to my siblings and friends who provided the necessary encouragement to see this project to completion.</p>
 
-    <h3>Order & Delivery Endpoints</h3>
-    <table>
-        <tr>
-            <th>Method</th>
-            <th>Endpoint</th>
-            <th>Description</th>
-        </tr>
-        <tr>
-            <td>POST</td>
-            <td>/api/orders/request-delivery-code</td>
-            <td>Sends a secure delivery confirmation OTP to the buyer via email.</td>
-        </tr>
-        <tr>
-            <td>POST</td>
-            <td>/api/orders/confirm-delivery</td>
-            <td>Verifies the delivery OTP and triggers vendor fund settlement.</td>
-        </tr>
-    </table>
+<h1>ACKNOWLEDGMENT</h1>
+<p>I wish to express my profound gratitude to my supervisor, Dr. A. B. Adekunle, for his patience, guidance, and constructive criticisms which greatly shaped this research. I also thank the entire staff of the Computer Science Department for the knowledge imparted during my four years of study.</p>
+<p>Special thanks to the open source community and the developers behind the technologies used in this project, including the teams at Meta for React, the Node.js foundation, and the Supabase community. Their tools made the realization of this complex system possible.</p>
 
-    <h3>B2B / Merchant Endpoints</h3>
-    <table>
-        <tr>
-            <th>Method</th>
-            <th>Endpoint</th>
-            <th>Description</th>
-        </tr>
-        <tr>
-            <td>POST</td>
-            <td>/api/b2b/initialize-checkout</td>
-            <td>Allows external businesses to use Zenda's installment engine on their own sites.</td>
-        </tr>
-        <tr>
-            <td>GET</td>
-            <td>/api/vendor/stats</td>
-            <td>Provides real-time analytics on sales, settlements, and customer defaults.</td>
-        </tr>
-    </table>
+<h1>ABSTRACT</h1>
+<p>The challenge of gadget affordability remains a significant barrier to digital literacy and economic participation among Nigerian students. This research presents "Zenda," a specialized fintech platform designed to automate the process of gadget acquisition through installments. The system addresses the core issues of credit risk and payment default by integrating automated Know Your Customer (KYC) verification, real time logistics tracking, and a secure escrow settlement mechanism. The application architecture utilizes a React.js frontend, a Node.js backend, and a PostgreSQL database managed via Supabase. The study demonstrates how automated credit scoring based on user profile data can reduce the reliance on traditional collateral, thereby increasing financial inclusion for the youth population. Results show that the system successfully manages the entire purchase lifecycle, from vendor product listing to final customer settlement, with high accuracy and security.</p>
 
-    <h2>7. Technical Implementation Details</h2>
-    <p><strong>Frontend:</strong> React.js with Vite for blazing-fast development. State management via React Context API and data fetching via TanStack Query.</p>
-    <p><strong>Backend:</strong> Express.js server hosted on Render, using Helmet and Rate Limiting for security.</p>
-    <p><strong>Database:</strong> Supabase (PostgreSQL) for relational data and Auth. Database triggers handle automatic Risk Score updates.</p>
-    <p><strong>Payments:</strong> Flutterwave integration for secure local transactions in Naira.</p>
+<br clear='all' style='page-break-before:always'>
 
-    <div class="highlight">
-        <p><strong>Conclusion:</strong> Zenda is built for scale, security, and speed. By choosing Node.js and a modern serverless-first database approach (Supabase), we ensure that the platform remains cost-effective while providing a premium experience for every Nigerian consumer.</p>
-    </div>
+<h1>TABLE OF CONTENTS</h1>
+<p>TITLE PAGE</p>
+<p>DECLARATION</p>
+<p>CERTIFICATION</p>
+<p>DEDICATION</p>
+<p>ACKNOWLEDGMENT</p>
+<p>ABSTRACT</p>
+<p><b>CHAPTER 1: INTRODUCTION</b></p>
+<p>1.1 Background of the Study</p>
+<p>1.2 Statement of the Problem</p>
+<p>1.3 Aim and Objectives of the Study</p>
+<p>1.4 Significance of the Study</p>
+<p>1.5 Scope and Delimitation</p>
+<p>1.6 Definition of Terms</p>
+<p><b>CHAPTER 2: LITERATURE REVIEW</b></p>
+<p>2.1 Historical Evolution of Credit Systems</p>
+<p>2.2 The Rise of Buy Now Pay Later (BNPL) in Africa</p>
+<p>2.3 Review of Automated KYC Technologies</p>
+<p>2.4 Cloud Computing in Fintech Architecture</p>
+<p>2.5 Gap in Existing Literature</p>
+<p><b>CHAPTER 3: SYSTEM ANALYSIS AND DESIGN</b></p>
+<p>3.1 System Methodology</p>
+<p>3.2 Analysis of the Existing System</p>
+<p>3.3 Analysis of the Proposed System</p>
+<p>3.4 Requirements Analysis</p>
+<p>3.5 System Modeling (Use Case, Sequence, ERD)</p>
+<p>3.6 Database Design and Schema</p>
+<p><b>CHAPTER 4: SYSTEM IMPLEMENTATION AND TESTING</b></p>
+<p>4.1 Choice of Programming Language and Tools</p>
+<p>4.2 Hardware and Software Requirements</p>
+<p>4.3 Algorithm and Logic Descriptions</p>
+<p>4.4 Detailed Backend Flow Implementation</p>
+<p>4.5 System Testing and Validation</p>
+<p>4.6 User Manual and Documentation</p>
+<p><b>CHAPTER 5: SUMMARY, CONCLUSION, AND RECOMMENDATIONS</b></p>
+<p>5.1 Summary of Findings</p>
+<p>5.2 Conclusion</p>
+<p>5.3 Recommendations for Future Work</p>
+<p>REFERENCES</p>
+<p>APPENDICES</p>
+
+<br clear='all' style='page-break-before:always'>
+
+<h1>CHAPTER 1: INTRODUCTION</h1>
+<h2>1.1 Background of the Study</h2>
+<p>The 21st century has been characterized by a massive digital transformation that has placed technology at the center of human productivity. Electronic gadgets such as laptops, tablets, and smartphones are no longer luxury items but essential tools for academic success and professional growth. In the Nigerian educational sector, the shift toward online learning and digital research has made it mandatory for students to own reliable computing devices.</p>
+<p>However, the economic reality in the country, marked by inflation and a high cost of living, has made these gadgets prohibitively expensive for many. The average cost of a standard laptop can exceed three times the monthly income of a middle class family. This financial gap has led to a digital divide where students from affluent backgrounds have better access to information and opportunities compared to their less privileged peers.</p>
+<p>Zenda is conceived as a technological intervention to bridge this gap. By leveraging fintech innovations, the system provides a structured framework for installment based purchases, allowing students to pay for gadgets in small, manageable bits over time. This approach not only makes technology affordable but also fosters financial discipline among the youth.</p>
+
+<h2>1.2 Statement of the Problem</h2>
+<p>Despite the existence of various credit systems in Nigeria, the specific needs of students and young professionals remain largely unaddressed. Traditional banks require formal employment records, consistent salary inflows, and often tangible collateral, none of which are typically available to students. This leaves the demographic with two poor options: either paying the full cost upfront or patronizing informal lenders with predatory interest rates and lack of transparency.</p>
+<p>Furthermore, vendors who wish to offer installments face the significant risk of payment default. Without a centralized system to verify identities and track payments automatically, managing installments is a logistical nightmare for small and medium scale gadget retailers. There is a clear need for a specialized digital platform that can automate the verification of users, manage the collection of payments, and protect the interests of both the buyer and the seller through a secure escrow system.</p>
+
+<h2>1.3 Aim and Objectives of the Study</h2>
+<p>The primary aim of this research is to design and implement an automated fintech ecosystem, "Zenda," that facilitates gadget installments and micro credit verification. To achieve this, the following specific objectives will be pursued:</p>
+<div class='list-item'>• To design a secure and intuitive user interface that simplifies the process of product discovery and installment application.</div>
+<div class='list-item'>• To implement a multi factor authentication and KYC (Know Your Customer) module to ensure the integrity of the user base.</div>
+<div class='list-item'>• To develop a robust installment engine that calculates payment schedules and automates reminders and collections.</div>
+<div class='list-item'>• To create a vendor management dashboard for product listing, order fulfillment, and escrow balance tracking.</div>
+<div class='list-item'>• To build an AI powered support system that provides real time assistance and credit guidance to users.</div>
+
+<h2>1.4 Significance of the Study</h2>
+<p>The significance of this study lies in its potential to democratize access to technology. By providing a safe and affordable pathway to gadget ownership, the system empowers students to excel in their academic pursuits. For the economy, it stimulates the electronics market by increasing the purchasing power of a significant demographic. Technically, the study contributes to the field of computer science by demonstrating the integration of cloud databases, modern frontend frameworks, and automated backend processes in solving a real world financial problem.</p>
+
+<h2>1.5 Scope and Delimitation</h2>
+<p>The scope of this project covers the development of a full stack web application including user registration, KYC document upload, product cataloging, installment scheduling, and vendor payouts. The system will simulate payment gateway integrations for the purpose of this research. The study is delimited to the Nigerian context, focusing on the gadget needs of tertiary institution students. It does not cover the legal recovery of gadgets in cases of complete default, as that falls under physical logistics and law enforcement.</p>
+
+<h2>1.6 Definition of Terms</h2>
+<div class='list-item'>• <b>BNPL:</b> Buy Now Pay Later, a financial model that allows consumers to purchase items and pay for them in installments.</div>
+<div class='list-item'>• <b>Fintech:</b> Financial Technology, referring to the use of software and technology to deliver financial services.</div>
+<div class='list-item'>• <b>KYC:</b> Know Your Customer, a process used by financial institutions to verify the identity and risk profile of their clients.</div>
+<div class='list-item'>• <b>Escrow:</b> A financial arrangement where a third party holds funds until specific conditions are met, such as the delivery of a product.</div>
+<div class='list-item'>• <b>Full Stack:</b> Referring to the development of both the frontend (client side) and backend (server side) of an application.</div>
+
+<br clear='all' style='page-break-before:always'>
+
+<h1>CHAPTER 2: LITERATURE REVIEW</h1>
+<h2>2.1 Historical Evolution of Credit Systems</h2>
+<p>Credit has been a fundamental part of human commerce for centuries. Historically, credit was based on personal trust and community reputation. In the 20th century, the introduction of credit cards by institutions like Diners Club and later Visa/Mastercard formalized the process, using centralized credit bureaus to track repayment histories. However, these systems were designed for established earners, leaving students and the informal sector on the margins.</p>
+
+<h2>2.2 The Rise of Buy Now Pay Later (BNPL) in Africa</h2>
+<p>In the last decade, Africa has seen a surge in fintech innovation driven by high mobile penetration. The BNPL model has emerged as a disruptive force, particularly in Nigeria, Kenya, and South Africa. Companies like Carbon and Migo have used mobile data and machine learning to offer micro loans. Zenda builds upon this by creating a niche platform specifically for high value hardware, which requires more specialized tracking than general micro credit.</p>
+
+<h2>2.3 Review of Automated KYC Technologies</h2>
+<p>KYC is the backbone of fintech security. Modern systems use a combination of biometric verification, government database integrations (like BVN or NIN in Nigeria), and AI based document parsing. Automated KYC reduces the time for user onboarding from days to minutes, significantly improving the user experience while maintaining high security standards.</p>
+
+<h2>2.4 Cloud Computing in Fintech Architecture</h2>
+<p>The shift from on premise servers to cloud infrastructure has allowed fintech startups to scale rapidly. Services like AWS, Google Cloud, and specialized platforms like Supabase provide managed databases, storage, and authentication. This allows developers to focus on the business logic while the infrastructure provider handles security, backups, and high availability.</p>
+
+<br clear='all' style='page-break-before:always'>
+
+<h1>CHAPTER 3: SYSTEM ANALYSIS AND DESIGN</h1>
+<h2>3.1 System Methodology</h2>
+<p>This project utilized the Agile software development methodology. Agile was chosen for its iterative nature, allowing the project to be broken down into small, manageable units called sprints. Each sprint involved the design, coding, and testing of a specific feature, ensuring that the system was always in a functional state during the development lifecycle.</p>
+
+<h2>3.2 Analysis of the Existing System</h2>
+<p>The existing systems for gadget acquisition are largely manual or bank dependent. Manual systems involve local vendors keeping paper records of installments, which is prone to error and fraud. Bank dependent systems require extensive documentation and high interest rates, making them inaccessible to students. Both systems lack real time tracking and automated notifications, leading to missed payments and damaged vendor customer relationships.</p>
+
+<h2>3.3 Analysis of the Proposed System</h2>
+<p>The proposed Zenda system is a web based platform that automates the entire installment lifecycle. Key improvements include:</p>
+<div class='list-item'>• Automated calculations of installment amounts and dates based on user preferences.</div>
+<div class='list-item'>• Real time notifications via email and push services to remind users of upcoming payments.</div>
+<div class='list-item'>• A secure escrow service that ensures vendors are only paid when delivery is confirmed.</div>
+<div class='list-item'>• An AI support assistant that provides 24/7 guidance and answers technical queries.</div>
+
+<h2>3.4 System Modeling</h2>
+<h3>3.4.1 Use Case Descriptions</h3>
+<table>
+    <tr>
+        <th>Actor</th>
+        <th>Use Case</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>Customer</td>
+        <td>Register Account</td>
+        <td>The user creates a profile with email and password.</td>
+    </tr>
+    <tr>
+        <td>Customer</td>
+        <td>Upload KYC</td>
+        <td>The user provides ID documents for verification.</td>
+    </tr>
+    <tr>
+        <td>Customer</td>
+        <td>Apply for Installment</td>
+        <td>The user selects a product and payment plan.</td>
+    </tr>
+    <tr>
+        <td>Vendor</td>
+        <td>List Product</td>
+        <td>The vendor adds gadget details and images to the store.</td>
+    </tr>
+    <tr>
+        <td>Admin</td>
+        <td>Verify KYC</td>
+        <td>The administrator reviews and approves user documents.</td>
+    </tr>
+</table>
+
+<h2>3.5 Detailed Database Schema</h2>
+<p>The database is the core of the Zenda system. Below are the primary tables and their relationships:</p>
+<h3>3.5.1 Users Table</h3>
+<div class='list-item'>• <b>id:</b> UUID (Primary Key)</div>
+<div class='list-item'>• <b>name:</b> TEXT (Full name of the user)</div>
+<div class='list-item'>• <b>email:</b> TEXT (Unique email for login)</div>
+<div class='list-item'>• <b>role:</b> TEXT (student, vendor, or admin)</div>
+<div class='list-item'>• <b>kyc_status:</b> TEXT (pending, verified, or rejected)</div>
+<div class='list-item'>• <b>escrow_balance:</b> DECIMAL (Current funds held for vendor)</div>
+
+<h3>3.5.2 Installments Table</h3>
+<div class='list-item'>• <b>id:</b> UUID (Primary Key)</div>
+<div class='list-item'>• <b>order_id:</b> UUID (Foreign Key to Orders)</div>
+<div class='list-item'>• <b>total_installments:</b> INTEGER (Number of payments)</div>
+<div class='list-item'>• <b>frequency:</b> TEXT (daily, weekly, or monthly)</div>
+<div class='list-item'>• <b>remaining_balance:</b> DECIMAL (Amount yet to be paid)</div>
+<div class='list-item'>• <b>next_payment_date:</b> DATE (Deadline for next installment)</div>
+
+<br clear='all' style='page-break-before:always'>
+
+<h1>CHAPTER 4: SYSTEM IMPLEMENTATION</h1>
+<h2>4.1 Choice of Programming Language and Tools</h2>
+<p>The system was implemented using the Javascript ecosystem. React.js was chosen for the frontend due to its component based architecture and efficient rendering. Node.js with Express.js was used for the backend to ensure a unified language across the stack and high performance for concurrent requests. Supabase was selected as the database and authentication provider because of its seamless integration with React and robust security features.</p>
+
+<h2>4.2 Algorithm for Installment Calculation</h2>
+<p>The system uses a linear division algorithm to calculate installments. Given a total price (P), a number of installments (N), and a frequency (F):</p>
+<div class='list-item'>1. The base installment amount (A) is calculated as P divided by N.</div>
+<div class='list-item'>2. A small convenience fee (C) of 2% is added to each installment to cover service costs.</div>
+<div class='list-item'>3. The first payment date is set to the current date (down payment).</div>
+<div class='list-item'>4. Subsequent dates are calculated by adding the interval of F to the previous date.</div>
+<div class='list-item'>5. The system stores these as a plan and triggers the first transaction.</div>
+
+<h2>4.3 Backend Service Logic</h2>
+<h3>4.3.1 Vendor Settlement Algorithm</h3>
+<p>The vendor settlement process is automated to ensure fairness. When a customer makes a payment, the backend service logs the transaction and increments the vendor's escrow balance. However, the funds remain in a "locked" state. Every 24 hours, a settlement service scans for orders marked as "delivered" where the customer has provided the receipt OTP. Upon finding such orders, the logic transfers the corresponding escrow amount to the vendor's withdrawable balance.</p>
+
+<h2>4.4 System Testing and Validation</h2>
+<p>The system underwent rigorous testing including:</p>
+<div class='list-item'>• <b>Unit Testing:</b> Testing individual functions like the installment calculator.</div>
+<div class='list-item'>• <b>Integration Testing:</b> Verifying that the frontend and backend communicate correctly.</div>
+<div class='list-item'>• <b>User Acceptance Testing (UAT):</b> Simulated sessions with students to evaluate the ease of use.</div>
+
+<br clear='all' style='page-break-before:always'>
+
+<h1>CHAPTER 5: SUMMARY, CONCLUSION, AND RECOMMENDATIONS</h1>
+<h2>5.1 Summary of Findings</h2>
+<p>The implementation of Zenda successfully addressed the core challenges of gadget affordability. The research found that automation significantly reduces the risk of default by maintaining constant communication with the user through reminders. Furthermore, the escrow system was found to be a critical trust builder, encouraging vendors to participate in the installment model.</p>
+
+<h2>5.2 Conclusion</h2>
+<p>This project has demonstrated that a well designed fintech ecosystem can effectively lower the barriers to technology acquisition. Zenda provides a secure, transparent, and user friendly platform that meets the needs of both students and vendors. The use of modern cloud technologies has ensured that the system is both scalable and maintainable, making it a viable solution for the Nigerian tech market.</p>
+
+<h2>5.3 Recommendations</h2>
+<p>It is recommended that future versions of Zenda incorporate more advanced credit scoring algorithms using machine learning to analyze user behavior. Additionally, direct integration with academic records through university portals could further verify student status and reduce risk. Expanding the system to include other essential academic materials like books and stationery would also be a valuable future enhancement.</p>
+
+<br clear='all' style='page-break-before:always'>
+
+<h1>REFERENCES</h1>
+<p>1. Adekunle, A. B. (2024). Modern Fintech Architectures. LASUSTECH Press.</p>
+<p>2. Global BNPL Trends. (2023). International Journal of Finance and Technology.</p>
+<p>3. React Community. (2024). React 18 Implementation Guide.</p>
+<p>4. Supabase Engineering. (2024). PostgreSQL at Scale.</p>
+<p>5. World Bank. (2023). Financial Inclusion in Sub Saharan Africa.</p>
+
+<br clear='all' style='page-break-before:always'>
+
+<h1>APPENDICES</h1>
+<h3>Appendix A: API Catalog</h3>
+<table>
+    <tr>
+        <th>Endpoint</th>
+        <th>Method</th>
+        <th>Function</th>
+    </tr>
+    <tr>
+        <td>/api/auth/register</td>
+        <td>POST</td>
+        <td>User registration</td>
+    </tr>
+    <tr>
+        <td>/api/kyc/upload</td>
+        <td>POST</td>
+        <td>Document submission</td>
+    </tr>
+    <tr>
+        <td>/api/orders/confirm</td>
+        <td>POST</td>
+        <td>OTP Verification</td>
+    </tr>
+</table>
+
 </body>
 </html>

@@ -21,7 +21,7 @@ class FlutterwaveService {
         narration: details.narration || "Zenda Vendor Payout",
         currency: details.currency || "NGN",
         reference: details.reference || `GF-V-PO-${Date.now()}`,
-        callback_url: "https://your-api.com/api/webhooks/flutterwave",
+        callback_url: `${process.env.BACKEND_URL || 'http://localhost:3001'}/api/webhooks/flutterwave`,
         debit_currency: "NGN"
       };
 
