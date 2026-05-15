@@ -4,6 +4,8 @@ const { requestOtp, verifyOtp, getProfile, updateProfile, activateCard } = requi
 const { protect } = require('../middleware/authMiddleware');
 
 router.post('/request-otp', requestOtp);
+router.post('/register', requestOtp); // Alias for legacy frontend
+router.post('/login', requestOtp);    // Alias for legacy frontend
 router.post('/verify-otp', verifyOtp);
 router.put('/profile', protect, updateProfile);
 router.get('/profile', protect, getProfile);
