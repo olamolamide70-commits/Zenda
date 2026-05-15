@@ -41,7 +41,7 @@ export default function ApiSettings() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => api.delete(\`/admin/api-keys/\${id}\`),
+    mutationFn: (id: string) => api.delete(`/admin/api-keys/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['merchantApiKeys'] });
       toast.success('API key revoked');
