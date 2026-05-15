@@ -60,7 +60,7 @@ app.use('/api/notifications/push', require('./routes/pushRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to GadgetFlex API' });
+  res.json({ message: 'Welcome to Zenda API' });
 });
 
 app.get('/health', (req, res) => {
