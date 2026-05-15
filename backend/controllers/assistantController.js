@@ -3,36 +3,40 @@ const supabase = require('../config/supabase');
 
 exports.chatWithAssistant = async (req, res) => {
   const { message } = req.body;
-  const userId = req.user.id;
 
   try {
-    // 1. Fetch user context from Supabase
-    const { data: user, error: userError } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', userId)
-      .single();
+    let userContext = "The user is a Guest (not logged in).";
+    let userName = "Explorer";
 
-    if (userError || !user) throw new Error('User not found');
+    if (req.user) {
+      const userId = req.user.id;
+      // Fetch user profile
+      const { data: user } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', userId)
+        .single();
 
-    const { data: installments, error: instError } = await supabase
-      .from('installments')
-      .select('remaining_balance')
-      .eq('user_id', userId)
-      .eq('status', 'active');
+      if (user) {
+        userName = user.name;
+        const { data: installments } = await supabase
+          .from('installments')
+          .select('remaining_balance')
+          .eq('user_id', userId)
+          .eq('status', 'active');
 
-    if (instError) throw instError;
-
-    const activeDebt = (installments || []).reduce((sum, ins) => sum + (Number(ins.remaining_balance) || 0), 0);
-    
-    const contextStr = `
-      User Context:
-      - Name: ${user.name}
-      - Tier: ${user.tier}
-      - Credit Limit: ₦${user.credit_limit}
-      - Active Debt: ₦${activeDebt}
-      - Risk Score: ${user.risk_score}/100
-    `;
+        const activeDebt = (installments || []).reduce((sum, ins) => sum + (Number(ins.remaining_balance) || 0), 0);
+        
+        userContext = `
+          User Context:
+          - Name: ${user.name}
+          - Tier: ${user.tier || 'Bronze'}
+          - Credit Limit: ₦${user.credit_limit || 0}
+          - Active Debt: ₦${activeDebt}
+          - Risk Score: ${user.risk_score || 0}/100
+        `;
+      }
+    }
 
     let aiResponse = "";
 
@@ -44,15 +48,15 @@ exports.chatWithAssistant = async (req, res) => {
           messages: [
             {
               role: 'system',
-              content: `You are GadgetFlex AI, a high-end financial advisor for a premium gadget financing platform.
+              content: `You are Zenda AI, a high-end financial advisor for a premium gadget financing platform (formerly GadgetFlex).
               Your goal is to provide elite, data-driven advice.
               
-              ${contextStr}
+              ${userContext}
               
               Guidelines:
-              - If the user's Active Debt is high relative to their Credit Limit, advise caution.
-              - If they are in a high tier (Silver/Gold), treat them as a VIP.
-              - Explain the benefits of GadgetFlex (interest-free periods, insurance, credit building).
+              - Always refer to the platform as Zenda.
+              - If the user is a guest, encourage them to sign up to see their personalized credit limit.
+              - If the user has high debt, advise caution.
               - Keep responses professional, concise, and futuristic.`
             },
             { role: 'user', content: message }
@@ -69,13 +73,11 @@ exports.chatWithAssistant = async (req, res) => {
       
       const msg = message.toLowerCase();
       if (msg.includes('daily') || msg.includes('plan')) {
-        aiResponse = `Greetings ${user.name}! Based on your ${user.tier} status, our Daily Plan (90 days) is the most efficient choice for consistency. With your current debt at ₦${activeDebt.toLocaleString()}, sticking to a daily bit-by-bit rhythm will help protect your credit score.`;
-      } else if (msg.includes('credit') || msg.includes('limit') || msg.includes('score')) {
-        aiResponse = `Your current Credit Limit is ₦${user.credit_limit.toLocaleString()}. Since your Risk Score is ${user.risk_score}/100, you are eligible for higher limits soon. Just keep paying your installments on time to boost your internal GadgetFlex rating!`;
+        aiResponse = `Greetings ${userName}! Zenda's Daily Plan is the most efficient choice for consistency. Bit-by-bit rhythm helps protect your credit score.`;
       } else if (msg.includes('interest') || msg.includes('fee')) {
-        aiResponse = "We believe in transparency, bro. Our flat 5% service fee covers everything. For example, a ₦100k gadget only costs ₦5k in total fees, which we spread across your entire payment period. Zero hidden charges, always.";
+        aiResponse = "At Zenda, we believe in transparency. Our flat 5% service fee covers everything. Zero hidden charges, always.";
       } else {
-        aiResponse = `Welcome to the Elite club, ${user.name}. I'm currently optimizing my deep-learning core, but I can see you have ₦${activeDebt.toLocaleString()} in active installments. You're doing great! Check your Dashboard for the latest insurance and upgrade offers.`;
+        aiResponse = `Welcome to Zenda, ${userName}. I'm here to help you upgrade your tech with flexible payments. Sign in to view your personalized offers!`;
       }
     }
     

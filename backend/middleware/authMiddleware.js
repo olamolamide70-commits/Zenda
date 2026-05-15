@@ -48,6 +48,31 @@ exports.protect = async (req, res, next) => {
   }
 };
 
+exports.optional = async (req, res, next) => {
+  let token;
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    try {
+      token = req.headers.authorization.split(' ')[1];
+      const { data: { user: authUser }, error } = await supabase.auth.getUser(token);
+      if (!error && authUser) {
+        const { data: user } = await supabase.from('users').select('*').eq('id', authUser.id).single();
+        if (user) {
+          req.user = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            tier: user.tier || 'Bronze'
+          };
+        }
+      }
+    } catch (error) {
+      console.warn('Optional Auth failed:', error.message);
+    }
+  }
+  next();
+};
+
 exports.admin = (req, res, next) => {
   if (req.user && (req.user.role === 'admin' || req.user.role === 'super_admin')) {
     next();
