@@ -28,6 +28,11 @@ self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
+  // Bypass cache for non-GET requests (e.g. POST, PUT, DELETE)
+  if (request.method !== 'GET') {
+    return;
+  }
+
   // API Requests: Stale-While-Revalidate
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
