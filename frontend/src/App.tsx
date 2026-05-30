@@ -118,12 +118,12 @@ const App = () => (
 
           {/* Admin routes */}
           <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminDashboard /></AdminLayout></ProtectedRoute>} />
-          <Route path="/admin/products" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminProducts /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/products" element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'vendor']}><AdminLayout><AdminProducts /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/users" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminUsers /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/orders" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminOrders /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/installments" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminInstallments /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/transactions" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminTransactions /></AdminLayout></ProtectedRoute>} />
-          <Route path="/admin/analytics" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminAnalytics /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/analytics" element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'vendor']}><AdminLayout><AdminAnalytics /></AdminLayout></ProtectedRoute>} />
           <Route path="*" element={<MainLayout><NotFound /></MainLayout>} />
         </Routes>
         <AssistantChat />

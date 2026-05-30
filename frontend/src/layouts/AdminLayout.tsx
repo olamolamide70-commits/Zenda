@@ -18,10 +18,23 @@ const sidebarItems = [
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useApp();
+  const { logout, user } = useApp();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => { logout(); navigate('/'); };
+
+  const getSidebarItems = () => {
+    if (user?.role === 'vendor') {
+      return [
+        { label: 'Seller Home', to: '/dashboard/vendor', icon: LayoutDashboard },
+        { label: 'My Store', to: '/admin/products', icon: Package },
+        { label: 'Sales Stats', to: '/admin/analytics', icon: BarChart3 },
+      ];
+    }
+    return sidebarItems;
+  };
+
+  const activeSidebarItems = getSidebarItems();
 
   const sidebar = (
     <div className="flex h-full flex-col border-r border-primary/5 bg-background shadow-premium">
@@ -31,11 +44,13 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </div>
         <div className="flex flex-col">
           <span className="font-display text-lg font-bold text-foreground leading-none">Zenda</span>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-primary mt-1">Admin</span>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-primary mt-1">
+            {user?.role === 'vendor' ? 'Seller' : 'Admin'}
+          </span>
         </div>
       </div>
       <nav className="flex-1 space-y-2 px-4 py-8">
-        {sidebarItems.map(item => {
+        {activeSidebarItems.map(item => {
           const active = location.pathname === item.to;
           return (
             <Link key={item.to} to={item.to} onClick={() => setSidebarOpen(false)}
@@ -72,7 +87,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <Button variant="ghost" size="icon" className="lg:hidden text-foreground hover:bg-primary/5 mr-4" onClick={() => setSidebarOpen(true)}>
             <Menu className="h-6 w-6" />
           </Button>
-          <h1 className="font-display text-lg font-bold text-foreground">Admin Panel</h1>
+          <h1 className="font-display text-lg font-bold text-foreground">
+            {user?.role === 'vendor' ? 'Seller Panel' : 'Admin Panel'}
+          </h1>
           <div className="flex-1" />
         </header>
         <main className="flex-1 p-8 lg:p-12 overflow-y-auto">{children}</main>
