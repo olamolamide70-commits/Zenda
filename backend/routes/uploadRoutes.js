@@ -8,6 +8,7 @@ const fileUpload = require('express-fileupload');
 router.get('/image/:id', getImage);
 
 // Protected route to upload images
-router.post('/image', protect, admin, fileUpload(), uploadImage);
+router.post('/image', protect, fileUpload(), uploadImage);
+
 
 module.exports = router;
