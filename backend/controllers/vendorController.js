@@ -44,12 +44,13 @@ exports.getVendorStats = async (req, res) => {
     ] = await Promise.all([
       supabase.from('users').select('*').eq('id', vendorId).single(),
       supabase.from('products').select('*', { count: 'exact', head: true }).eq('vendor_id', vendorId),
-      supabase.from('orders').select('amount').eq('vendor_id', vendorId) // In Supabase schema vendor_id might need to be added to orders
+      supabase.from('orders').select('amount, products!inner(vendor_id)').eq('products.vendor_id', vendorId)
     ]);
 
     if (uError || pError || oError) {
-      // If vendor_id is not yet in orders table, fallback to 0 or handle gracefully
-      console.warn('Order fetch error for vendor stats:', oError?.message);
+      if (uError) throw uError;
+      if (pError) throw pError;
+      if (oError) throw oError;
     }
 
     const totalSales = (orders || []).length;
@@ -72,8 +73,8 @@ exports.getVendorSalesHistory = async (req, res) => {
   try {
     const { data: orders, error } = await supabase
       .from('orders')
-      .select('amount, created_at')
-      .eq('vendor_id', vendorId)
+      .select('amount, created_at, products!inner(vendor_id)')
+      .eq('products.vendor_id', vendorId)
       .order('created_at', { ascending: true });
 
     if (error) throw error;

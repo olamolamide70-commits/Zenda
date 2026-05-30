@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import { 
   TrendingUp, 
   Package, 
@@ -8,7 +9,8 @@ import {
   CheckCircle2,
   BarChart3,
   Plus,
-  Loader2
+  Loader2,
+  Terminal
 } from 'lucide-react';
 import { 
   XAxis, 
