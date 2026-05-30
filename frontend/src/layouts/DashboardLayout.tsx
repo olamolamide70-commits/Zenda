@@ -27,8 +27,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     if (role === 'vendor') {
       return [
         { label: 'Seller Home', to: '/dashboard/vendor', icon: LayoutDashboard },
-        { label: 'My Store', to: '/admin/products', icon: ShoppingBag }, 
-        { label: 'Sales Stats', to: '/admin/analytics', icon: Clock },
+        { label: 'My Store', to: '/merchant/products', icon: ShoppingBag }, 
+        { label: 'Sales Stats', to: '/merchant/analytics', icon: Clock },
         ...common.filter(i => i.label !== 'My Page')
       ];
     }

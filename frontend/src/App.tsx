@@ -116,14 +116,18 @@ const App = () => (
           <Route path="/dashboard/support" element={<ProtectedRoute allowedRoles={['customer_care', 'super_admin']}><DashboardLayout><SupportDashboard /></DashboardLayout></ProtectedRoute>} />
           <Route path="/admin/super" element={<ProtectedRoute allowedRoles={['super_admin']}><AdminLayout><SuperAdminDashboard /></AdminLayout></ProtectedRoute>} />
 
+          {/* Merchant routes */}
+          <Route path="/merchant/products" element={<ProtectedRoute allowedRoles={['vendor', 'admin', 'super_admin']}><DashboardLayout><AdminProducts /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/merchant/analytics" element={<ProtectedRoute allowedRoles={['vendor', 'admin', 'super_admin']}><DashboardLayout><AdminAnalytics /></DashboardLayout></ProtectedRoute>} />
+
           {/* Admin routes */}
           <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminDashboard /></AdminLayout></ProtectedRoute>} />
-          <Route path="/admin/products" element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'vendor']}><AdminLayout><AdminProducts /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/products" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminProducts /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/users" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminUsers /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/orders" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminOrders /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/installments" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminInstallments /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/transactions" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminTransactions /></AdminLayout></ProtectedRoute>} />
-          <Route path="/admin/analytics" element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'vendor']}><AdminLayout><AdminAnalytics /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/analytics" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminAnalytics /></AdminLayout></ProtectedRoute>} />
           <Route path="*" element={<MainLayout><NotFound /></MainLayout>} />
         </Routes>
         <AssistantChat />

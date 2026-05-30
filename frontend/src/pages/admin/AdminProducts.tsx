@@ -4,14 +4,18 @@ import { Button } from '@/components/ui/button';
 import { Plus, Edit, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'react-toastify';
+import { useApp } from '@/context/AppContext';
 
 export default function AdminProducts() {
+  const { user } = useApp();
+  const isVendor = user?.role === 'vendor';
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">Inventory</p>
-          <h1 className="text-4xl font-black text-foreground tracking-tight">Product Catalog</h1>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">{isVendor ? 'Seller Store' : 'Inventory'}</p>
+          <h1 className="text-4xl font-black text-foreground tracking-tight">{isVendor ? 'My Store' : 'Product Catalog'}</h1>
         </div>
         <Button className="h-12 px-6 rounded-xl bg-primary text-white font-bold uppercase tracking-widest text-[10px] gap-2 shadow-md hover:shadow-lg transition-all" onClick={() => toast.info('Product creation interface')}>
           <Plus className="h-4 w-4" /> Add New Item
