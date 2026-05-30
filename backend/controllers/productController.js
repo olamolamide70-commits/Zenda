@@ -48,9 +48,14 @@ exports.getProductById = async (req, res) => {
 
 exports.createProduct = async (req, res) => {
   try {
+    const productData = { ...req.body };
+    if (req.user && req.user.role === 'vendor') {
+      productData.vendor_id = req.user.id;
+    }
+
     const { data: product, error } = await supabase
       .from('products')
-      .insert([req.body])
+      .insert([productData])
       .select()
       .single();
 
@@ -63,14 +68,15 @@ exports.createProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
-    const { data: product, error } = await supabase
-      .from('products')
-      .update(req.body)
-      .eq('id', req.params.id)
-      .select()
-      .single();
+    let query = supabase.from('products').update(req.body).eq('id', req.params.id);
 
-    if (error || !product) return res.status(404).json({ error: 'Product not found' });
+    if (req.user && req.user.role === 'vendor') {
+      query = query.eq('vendor_id', req.user.id);
+    }
+
+    const { data: product, error } = await query.select().single();
+
+    if (error || !product) return res.status(404).json({ error: 'Product not found or unauthorized' });
     res.json(product);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -79,10 +85,13 @@ exports.updateProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
   try {
-    const { error } = await supabase
-      .from('products')
-      .delete()
-      .eq('id', req.params.id);
+    let query = supabase.from('products').delete().eq('id', req.params.id);
+
+    if (req.user && req.user.role === 'vendor') {
+      query = query.eq('vendor_id', req.user.id);
+    }
+
+    const { error } = await query;
 
     if (error) throw error;
     res.json({ message: 'Product deleted' });

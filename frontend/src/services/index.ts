@@ -2,7 +2,7 @@ import api from './api';
 import { Product, CartItem } from '@/types';
 
 export const productService = {
-  getAll: (params?: Record<string, string>) => api.get<Product[]>('/products').then(res => res.data),
+  getAll: (params?: Record<string, string>) => api.get<Product[]>('/products', { params }).then(res => res.data),
   getById: (id: string) => api.get<Product>(`/products/${id}`).then(res => res.data),
   create: (data: Partial<Product>) => api.post<Product>('/products', data).then(res => res.data),
   update: (id: string, data: Partial<Product>) => api.put<Product>(`/products/${id}`, data).then(res => res.data),
