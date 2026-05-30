@@ -81,6 +81,30 @@ exports.admin = (req, res, next) => {
   }
 };
 
+exports.superAdmin = (req, res, next) => {
+  if (req.user && req.user.role === 'super_admin') {
+    next();
+  } else {
+    res.status(403).json({ error: 'Not authorized as a super admin' });
+  }
+};
+
+exports.vendor = (req, res, next) => {
+  if (req.user && (req.user.role === 'vendor' || req.user.role === 'super_admin')) {
+    next();
+  } else {
+    res.status(403).json({ error: 'Not authorized as a merchant' });
+  }
+};
+
+exports.customerCare = (req, res, next) => {
+  if (req.user && (req.user.role === 'customer_care' || req.user.role === 'admin' || req.user.role === 'super_admin')) {
+    next();
+  } else {
+    res.status(403).json({ error: 'Not authorized as a customer care agent' });
+  }
+};
+
 exports.merchantApiKey = async (req, res, next) => {
   const apiKey = req.headers['x-api-key'];
 

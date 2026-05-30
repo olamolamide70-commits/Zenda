@@ -80,6 +80,8 @@ app.use('/api/notifications/push', require('./routes/pushRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 app.use('/api/b2b', require('./routes/b2bRoutes'));
 app.use('/api/b2b/organization', require('./routes/b2bOrgRoutes'));
+app.use('/api/wallet', require('./routes/walletRoutes'));
+app.use('/api/gift-cards', require('./routes/giftCardRoutes'));
 
 
 

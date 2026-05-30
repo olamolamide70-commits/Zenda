@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, Users, ShoppingBag, CreditCard, DollarSign, BarChart3, LogOut, Laptop, Menu } from 'lucide-react';
+import { LayoutDashboard, Package, Users, ShoppingBag, CreditCard, DollarSign, BarChart3, LogOut, Laptop, Menu, ShieldAlert } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -18,10 +18,19 @@ const sidebarItems = [
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useApp();
+  const { logout, user } = useApp();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => { logout(); navigate('/'); };
+
+  const getActiveSidebarItems = () => {
+    if (user?.role === 'super_admin') {
+      return [...sidebarItems, { label: 'Owner Hub', to: '/admin/super', icon: ShieldAlert }];
+    }
+    return sidebarItems;
+  };
+
+  const activeSidebarItems = getActiveSidebarItems();
 
   const sidebar = (
     <div className="flex h-full flex-col border-r border-primary/5 bg-background shadow-premium">
@@ -35,7 +44,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </div>
       </div>
       <nav className="flex-1 space-y-2 px-4 py-8">
-        {sidebarItems.map(item => {
+        {activeSidebarItems.map(item => {
           const active = location.pathname === item.to;
           return (
             <Link key={item.to} to={item.to} onClick={() => setSidebarOpen(false)}

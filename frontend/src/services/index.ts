@@ -50,6 +50,18 @@ export const adminService = {
   getDashboard: () => api.get('/admin/dashboard').then(res => res.data),
   getUsers: () => api.get('/admin/users').then(res => res.data),
   getAnalytics: () => api.get('/admin/analytics').then(res => res.data),
+  updateUser: (id: string, data: any) => api.put(`/admin/users/${id}`, data).then(res => res.data),
+};
+
+export const walletService = {
+  getDetails: () => api.get('/wallet').then(res => res.data),
+  transfer: (data: { recipientEmail: string; amount: number; description?: string }) => api.post('/wallet/transfer', data).then(res => res.data),
+};
+
+export const giftCardService = {
+  generate: (data: { amount: number }) => api.post('/gift-cards/generate', data).then(res => res.data),
+  redeem: (data: { code: string }) => api.post('/gift-cards/redeem', data).then(res => res.data),
+  list: () => api.get('/gift-cards').then(res => res.data),
 };
 
 export const wishlistService = {

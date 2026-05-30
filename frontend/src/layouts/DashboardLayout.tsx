@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, ShoppingBag, CreditCard, Receipt, Clock, Heart, User, Bell, Wallet, LogOut, Laptop, Menu } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, CreditCard, Receipt, Clock, Heart, User, Bell, Wallet, LogOut, Laptop, Menu, ShieldAlert } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -34,10 +34,16 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     }
 
     if (role === 'admin' || role === 'super_admin') {
-      return [
+      const adminItems = [
         { label: 'Admin Panel', to: '/admin', icon: LayoutDashboard },
         { label: 'All Products', to: '/admin/products', icon: ShoppingBag },
         { label: 'All Users', to: '/admin/users', icon: User },
+      ];
+      if (role === 'super_admin') {
+        adminItems.push({ label: 'Owner Hub', to: '/admin/super', icon: ShieldAlert });
+      }
+      return [
+        ...adminItems,
         ...common.filter(i => i.label !== 'My Page' && i.label !== 'My Profile')
       ];
     }

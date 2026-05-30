@@ -72,13 +72,31 @@ exports.getUsers = async (req, res) => {
   try {
     const { data: users, error } = await supabase
       .from('users')
-      .select('id, name, email, role, created_at')
+      .select('id, name, email, role, created_at, wallet_balance, credit_limit, kyc_status')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  try {
+    const { role, credit_limit, wallet_balance, kyc_status } = req.body;
+
+    const { data: user, error } = await supabase
+      .from('users')
+      .update({ role, credit_limit, wallet_balance, kyc_status })
+      .eq('id', req.params.id)
+      .select()
+      .single();
+
+    if (error || !user) return res.status(404).json({ error: 'User not found' });
+    res.json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
 
