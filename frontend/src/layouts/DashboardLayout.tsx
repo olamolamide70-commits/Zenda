@@ -124,12 +124,13 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             <div className="flex items-center gap-3 pl-4 border-l border-border">
               <div className="text-right hidden sm:block">
                 <p className="text-sm font-bold text-foreground leading-none">{user?.name || user?.email}</p>
-                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">Verified</p>
               </div>
+
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary text-sm font-bold shadow-sm">
                 {(user?.name || user?.email)?.charAt(0).toUpperCase()}
               </div>
             </div>
+
           </div>
         </header>
         <main className="flex-1 p-8 lg:p-12 overflow-y-auto">{children}</main>

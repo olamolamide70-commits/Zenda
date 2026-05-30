@@ -2,14 +2,32 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { toast } from 'react-toastify';
-import { User, Mail, Phone, MapPin, ShieldCheck, Loader2 } from 'lucide-react';
+import { User, Mail, Phone, MapPin, ShieldCheck, Loader2, Building2 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
-import { authService } from '@/services';
+import { authService, vendorService } from '@/services';
 import { useState } from 'react';
+
 
 export default function Profile() {
   const { user, login } = useApp();
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isUpgradingRole, setIsUpgradingRole] = useState(false);
+
+  const handleUpgradeToMerchant = async () => {
+    try {
+      setIsUpgradingRole(true);
+      await vendorService.register();
+      toast.success('Successfully upgraded to Merchant Partner! Refreshing account...');
+      const updatedUser = await authService.getProfile();
+      const token = localStorage.getItem('auth_token') || '';
+      login(updatedUser, token);
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || 'Failed to upgrade to merchant');
+    } finally {
+      setIsUpgradingRole(false);
+    }
+  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,6 +122,33 @@ export default function Profile() {
                 {isUpdating ? 'Saving Changes...' : 'Save Profile'}
               </Button>
             </div>
+
+            {user?.role !== 'vendor' && user?.role !== 'admin' && user?.role !== 'super_admin' && (
+              <div className="mt-10 p-8 rounded-2xl border border-indigo-100 bg-indigo-50/20 space-y-4 text-left">
+                <div className="flex gap-4 items-start">
+                  <div className="h-12 w-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+                    <Building2 className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-slate-800 uppercase text-xs tracking-wider">Merchant Partner Portal</h3>
+                    <p className="text-xs text-slate-500 font-medium leading-relaxed mt-1">
+                      Are you a gadget seller or business procurement agent? Upgrade to a Merchant Partner account to upload products, access checkout API keys, and monitor real-time webhook delivery logs.
+                    </p>
+                  </div>
+                </div>
+                <div className="pt-2">
+                  <Button 
+                    type="button" 
+                    onClick={handleUpgradeToMerchant}
+                    disabled={isUpgradingRole}
+                    className="h-12 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-widest flex items-center shadow-lg shadow-indigo-600/10"
+                  >
+                    {isUpgradingRole ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Building2 className="h-4 w-4 mr-2" />}
+                    Upgrade to Merchant
+                  </Button>
+                </div>
+              </div>
+            )}
           </form>
         </div>
       </div>
