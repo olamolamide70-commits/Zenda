@@ -19,6 +19,16 @@ const limiter = rateLimit({
 // Initialize Cron Jobs
 initReminders();
 
+// Public Health Check (Bypasses rate limiting for cloud health checks)
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', uptime: process.uptime() });
+});
+
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome to Zenda API' });
+});
+
+
 // Middleware
 app.use(cors({
   origin: [
@@ -73,13 +83,7 @@ app.use('/api/b2b/organization', require('./routes/b2bOrgRoutes'));
 
 
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Zenda API' });
-});
 
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'OK', uptime: process.uptime() });
-});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
