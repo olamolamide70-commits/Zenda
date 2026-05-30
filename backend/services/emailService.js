@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
+// Nodemailer left for legacy SMTP fallback if ever needed
 const transporter = nodemailer.createTransport({
   host: 'smtp-relay.brevo.com',
   port: 587,
@@ -46,22 +47,16 @@ exports.sendDeliveryOTP = async (email, orderId, otp) => {
 
 exports.sendEmail = async (to, subject, text, html, otp = null) => {
   try {
-    const mailOptions = {
-      from: `"Zenda" <${process.env.BREVO_FROM_EMAIL || "shubbintech@gmail.com"}>`,
-      to,
-      subject,
-      text,
-      html: html || text,
-    };
-
-    // Commented out SMTP delivery for now
-    // await transporter.sendMail(mailOptions);
-
-    console.log(`--- [DEV MODE] EMAIL LOGGED FOR ${to} ---`);
+    // 3rd party mail APIs disabled for complete presentation independence
+    console.log(`--- [SANDBOX EMAIL LOG] TO ${to} ---`);
     console.log(`Subject: ${subject}`);
     if (otp) console.log(`OTP Code: ${otp}`);
-    console.log('-----------------------');
+    console.log('------------------------------------');
+    return { success: true, mock: true };
   } catch (error) {
-    console.error('SMTP Error (Mocked):', error.message);
+    console.error('Email dispatch logging failed:', error.message);
+    return { success: false, error: error.message };
   }
 };
+
+

@@ -56,6 +56,8 @@ import SupportDashboard from "@/pages/dashboard/SupportDashboard";
 import AdminAnalytics from "@/pages/admin/AdminAnalytics";
 import Developers from "@/pages/public/Developers";
 import ApiSettings from "@/pages/dashboard/ApiSettings";
+import B2BProcurementDashboard from "@/pages/dashboard/B2BProcurementDashboard";
+
 
 import NotFound from "./pages/NotFound";
 
@@ -108,7 +110,8 @@ const App = () => (
           <Route path="/dashboard/payment-methods" element={<ProtectedRoute><DashboardLayout><PaymentMethods /></DashboardLayout></ProtectedRoute>} />
           <Route path="/dashboard/notifications" element={<ProtectedRoute><DashboardLayout><Notifications /></DashboardLayout></ProtectedRoute>} />
           <Route path="/dashboard/referrals" element={<ProtectedRoute><DashboardLayout><ReferralHistory /></DashboardLayout></ProtectedRoute>} />
-          <Route path="/dashboard/api" element={<ProtectedRoute allowedRoles={['vendor', 'super_admin']}><DashboardLayout><ApiSettings /></DashboardLayout></ProtectedRoute>} />
+           <Route path="/dashboard/api" element={<ProtectedRoute allowedRoles={['vendor', 'super_admin']}><DashboardLayout><ApiSettings /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dashboard/procurement" element={<ProtectedRoute><DashboardLayout><B2BProcurementDashboard /></DashboardLayout></ProtectedRoute>} />
           <Route path="/dashboard/vendor" element={<ProtectedRoute allowedRoles={['vendor', 'super_admin']}><DashboardLayout><VendorDashboard /></DashboardLayout></ProtectedRoute>} />
           <Route path="/dashboard/support" element={<ProtectedRoute allowedRoles={['customer_care', 'super_admin']}><DashboardLayout><SupportDashboard /></DashboardLayout></ProtectedRoute>} />
           <Route path="/admin/super" element={<ProtectedRoute allowedRoles={['super_admin']}><AdminLayout><SuperAdminDashboard /></AdminLayout></ProtectedRoute>} />

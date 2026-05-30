@@ -68,6 +68,10 @@ app.use('/api/analytics', require('./routes/analyticsRoutes'));
 app.use('/api/ai', require('./routes/aiRoutes'));
 app.use('/api/notifications/push', require('./routes/pushRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
+app.use('/api/b2b', require('./routes/b2bRoutes'));
+app.use('/api/b2b/organization', require('./routes/b2bOrgRoutes'));
+
+
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Zenda API' });
