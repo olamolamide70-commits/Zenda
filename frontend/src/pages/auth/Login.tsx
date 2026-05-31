@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { Laptop } from 'lucide-react';
+import { Laptop, Eye, EyeOff } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useApp } from "@/context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { authService } from "@/services";
@@ -13,6 +14,7 @@ import { motion } from "framer-motion";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const { login: contextLogin } = useApp();
 
@@ -150,21 +152,41 @@ export default function Login() {
               </div>
 
               <div className="space-y-2">
-                <div className="flex items-center justify-between ml-1">
-                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                    Password
-                  </Label>
-                  <Link to="/forgot-password" size="sm" className="text-[10px] font-bold uppercase tracking-widest text-primary hover:underline">
-                    Forgot?
-                  </Link>
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                  Password
+                </Label>
+                <div className="relative">
+                  <Input
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    className="h-12 pl-4 pr-12 bg-secondary/20 border-border rounded-xl focus:ring-primary/20 transition-all font-medium w-full"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none transition-colors"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
                 </div>
-                <Input
-                  name="password"
-                  type="password"
-                  placeholder="••••••••"
-                  className="h-12 px-4 bg-secondary/20 border-border rounded-xl focus:ring-primary/20 transition-all font-medium"
-                  required
-                />
+              </div>
+
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center gap-2">
+                  <Checkbox id="remember" name="remember" className="h-4 w-4 rounded-md border-border text-primary focus:ring-primary" />
+                  <Label htmlFor="remember" className="text-xs font-semibold text-muted-foreground cursor-pointer select-none">
+                    Remember me
+                  </Label>
+                </div>
+                <Link to="/forgot-password" className="text-xs font-bold text-primary hover:underline transition-all">
+                  Forgot Password?
+                </Link>
               </div>
 
             <div className="pt-4">

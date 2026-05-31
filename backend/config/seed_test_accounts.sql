@@ -1,10 +1,9 @@
 -- seed_test_accounts.sql
--- Run this in your Supabase SQL Editor to instantly create test accounts with the password: Password123@
+-- Run this in your Supabase SQL Editor to instantly create the requested test accounts.
+-- Common password for all seeded accounts: Password123@
 
 -- Enable extension pgcrypto in case it is not active
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
--- 1. Declare variables and insert into auth.users and public.users
 
 DO $$
 DECLARE
@@ -26,84 +25,92 @@ DECLARE
 BEGIN
 
   -- =========================================================================
-  -- SUPER_ADMIN ACCOUNTS
+  -- 1. SUPER_ADMIN ACCOUNT (1)
   -- =========================================================================
-  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'master.super@zenda.co') THEN
+  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'makindeolasubomi5@gmail.com') THEN
     INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, aud, role)
-    VALUES (super_id, 'master.super@zenda.co', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Zenda Master"}', now(), now(), 'authenticated', 'authenticated');
+    VALUES (super_id, 'makindeolasubomi5@gmail.com', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Olasubomi Makinde"}', now(), now(), 'authenticated', 'authenticated');
 
     INSERT INTO public.users (id, name, email, role, is_verified)
-    VALUES (super_id, 'Zenda Master', 'master.super@zenda.co', 'super_admin', TRUE);
+    VALUES (super_id, 'Olasubomi Makinde', 'makindeolasubomi5@gmail.com', 'super_admin', TRUE);
   END IF;
 
   -- =========================================================================
-  -- ADMIN ACCOUNTS (3)
+  -- 2. ADMIN ACCOUNTS (3)
   -- =========================================================================
+  -- Admin 1: Tunde Afolayan
+  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'tunde.admin@gadgetflex.com.ng') THEN
+    INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, aud, role)
+    VALUES (admin1_id, 'tunde.admin@gadgetflex.com.ng', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Tunde Afolayan"}', now(), now(), 'authenticated', 'authenticated');
+
+    INSERT INTO public.users (id, name, email, role, is_verified)
+    VALUES (admin1_id, 'Tunde Afolayan', 'tunde.admin@gadgetflex.com.ng', 'admin', TRUE);
+  END IF;
+
+  -- Admin 2: John Olamide
   IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'john.admin@zenda.co') THEN
     INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, aud, role)
-    VALUES (admin1_id, 'john.admin@zenda.co', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"John Olamide"}', now(), now(), 'authenticated', 'authenticated');
+    VALUES (admin2_id, 'john.admin@zenda.co', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"John Olamide"}', now(), now(), 'authenticated', 'authenticated');
 
     INSERT INTO public.users (id, name, email, role, is_verified)
-    VALUES (admin1_id, 'John Olamide', 'john.admin@zenda.co', 'admin', TRUE);
+    VALUES (admin2_id, 'John Olamide', 'john.admin@zenda.co', 'admin', TRUE);
   END IF;
 
+  -- Admin 3: Grace Bello
   IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'grace.admin@zenda.co') THEN
     INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, aud, role)
-    VALUES (admin2_id, 'grace.admin@zenda.co', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Grace Bello"}', now(), now(), 'authenticated', 'authenticated');
+    VALUES (admin3_id, 'grace.admin@zenda.co', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Grace Bello"}', now(), now(), 'authenticated', 'authenticated');
 
     INSERT INTO public.users (id, name, email, role, is_verified)
-    VALUES (admin2_id, 'Grace Bello', 'grace.admin@zenda.co', 'admin', TRUE);
-  END IF;
-
-  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'efe.admin@zenda.co') THEN
-    INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, aud, role)
-    VALUES (admin3_id, 'efe.admin@zenda.co', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Efe Chidi"}', now(), now(), 'authenticated', 'authenticated');
-
-    INSERT INTO public.users (id, name, email, role, is_verified)
-    VALUES (admin3_id, 'Efe Chidi', 'efe.admin@zenda.co', 'admin', TRUE);
+    VALUES (admin3_id, 'Grace Bello', 'grace.admin@zenda.co', 'admin', TRUE);
   END IF;
 
   -- =========================================================================
-  -- CUSTOMER_CARE ACCOUNTS (5)
+  -- 3. CUSTOMER_CARE ACCOUNTS (5)
   -- =========================================================================
-  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'tunde.care@zenda.co') THEN
+  -- CS 1: Sarah Ifeanyi
+  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'sarah.cs@gadgetflex.com.ng') THEN
     INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, aud, role)
-    VALUES (care1_id, 'tunde.care@zenda.co', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Tunde Samuel"}', now(), now(), 'authenticated', 'authenticated');
+    VALUES (care1_id, 'sarah.cs@gadgetflex.com.ng', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Sarah Ifeanyi"}', now(), now(), 'authenticated', 'authenticated');
 
     INSERT INTO public.users (id, name, email, role, is_verified)
-    VALUES (care1_id, 'Tunde Samuel', 'tunde.care@zenda.co', 'customer_care', TRUE);
+    VALUES (care1_id, 'Sarah Ifeanyi', 'sarah.cs@gadgetflex.com.ng', 'customer_care', TRUE);
   END IF;
 
-  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'amina.care@zenda.co') THEN
+  -- CS 2: Ahmed Lawal
+  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'ahmed.cs@gadgetflex.com.ng') THEN
     INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, aud, role)
-    VALUES (care2_id, 'amina.care@zenda.co', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Amina Ibrahim"}', now(), now(), 'authenticated', 'authenticated');
+    VALUES (care2_id, 'ahmed.cs@gadgetflex.com.ng', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Ahmed Lawal"}', now(), now(), 'authenticated', 'authenticated');
 
     INSERT INTO public.users (id, name, email, role, is_verified)
-    VALUES (care2_id, 'Amina Ibrahim', 'amina.care@zenda.co', 'customer_care', TRUE);
+    VALUES (care2_id, 'Ahmed Lawal', 'ahmed.cs@gadgetflex.com.ng', 'customer_care', TRUE);
   END IF;
 
-  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'nneka.care@zenda.co') THEN
+  -- CS 3: Uche Okafor
+  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'uche.cs@gadgetflex.com.ng') THEN
     INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, aud, role)
-    VALUES (care3_id, 'nneka.care@zenda.co', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Nneka Paul"}', now(), now(), 'authenticated', 'authenticated');
+    VALUES (care3_id, 'uche.cs@gadgetflex.com.ng', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Uche Okafor"}', now(), now(), 'authenticated', 'authenticated');
 
     INSERT INTO public.users (id, name, email, role, is_verified)
-    VALUES (care3_id, 'Nneka Paul', 'nneka.care@zenda.co', 'customer_care', TRUE);
+    VALUES (care3_id, 'Uche Okafor', 'uche.cs@gadgetflex.com.ng', 'customer_care', TRUE);
   END IF;
 
-  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'chioma.care@zenda.co') THEN
+  -- CS 4: Tosin Balogun
+  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'tosin.cs@gadgetflex.com.ng') THEN
     INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, aud, role)
-    VALUES (care4_id, 'chioma.care@zenda.co', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Chioma Eze"}', now(), now(), 'authenticated', 'authenticated');
+    VALUES (care4_id, 'tosin.cs@gadgetflex.com.ng', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Tosin Balogun"}', now(), now(), 'authenticated', 'authenticated');
 
     INSERT INTO public.users (id, name, email, role, is_verified)
-    VALUES (care4_id, 'Chioma Eze', 'chioma.care@zenda.co', 'customer_care', TRUE);
+    VALUES (care4_id, 'Tosin Balogun', 'tosin.cs@gadgetflex.com.ng', 'customer_care', TRUE);
   END IF;
 
-  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'segun.care@zenda.co') THEN
+  -- CS 5: Miracle Ebube
+  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'miracle.cs@gadgetflex.com.ng') THEN
     INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, aud, role)
-    VALUES (care5_id, 'segun.care@zenda.co', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Segun Ade"}', now(), now(), 'authenticated', 'authenticated');
+    VALUES (care5_id, 'miracle.cs@gadgetflex.com.ng', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Miracle Ebube"}', now(), now(), 'authenticated', 'authenticated');
 
     INSERT INTO public.users (id, name, email, role, is_verified)
-    VALUES (care5_id, 'Segun Ade', 'segun.care@zenda.co', 'customer_care', TRUE);
+    VALUES (care5_id, 'Miracle Ebube', 'miracle.cs@gadgetflex.com.ng', 'customer_care', TRUE);
   END IF;
 
 END $$;
