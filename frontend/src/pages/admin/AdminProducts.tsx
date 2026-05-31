@@ -30,6 +30,9 @@ export default function AdminProducts() {
   const [imageUrl, setImageUrl] = useState('');
   const [images, setImages] = useState<string[]>([]);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [colors, setColors] = useState('');
+  const [condition, setCondition] = useState('Brand New');
+  const [warranty, setWarranty] = useState('1 Year');
 
   // Fetch products
   const { data: products = [], isLoading } = useQuery<Product[]>({
@@ -135,6 +138,9 @@ export default function AdminProducts() {
     setDescription('');
     setImageUrl('');
     setImages([]);
+    setColors('');
+    setCondition('Brand New');
+    setWarranty('1 Year');
     setIsOpen(true);
   };
 
@@ -147,6 +153,9 @@ export default function AdminProducts() {
     setDescription(p.description);
     setImageUrl(p.image_url || p.image || '');
     setImages(p.images || (p.image_url ? [p.image_url] : []));
+    setColors(p.metadata?.colors?.join(', ') || p.specs?.['Colors'] || '');
+    setCondition(p.metadata?.condition || p.specs?.['Condition'] || 'Brand New');
+    setWarranty(p.metadata?.warranty || p.specs?.['Warranty'] || '1 Year');
     setIsOpen(true);
   };
 
@@ -172,7 +181,16 @@ export default function AdminProducts() {
       description: description || `${name} by ${brand}`,
       image_url: imageUrl || defaultImg,
       images: images.length > 0 ? images : [imageUrl || defaultImg],
-      specs: {},
+      metadata: {
+        colors: colors.split(',').map(c => c.trim()).filter(Boolean),
+        condition,
+        warranty
+      },
+      specs: {
+        "Colors": colors,
+        "Condition": condition,
+        "Warranty": warranty
+      },
       installment_eligible: true
     };
 
@@ -364,6 +382,47 @@ export default function AdminProducts() {
                   </div>
                 </div>
 
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">Colors Available</label>
+                  <input 
+                    type="text" 
+                    value={colors} 
+                    onChange={(e) => setColors(e.target.value)} 
+                    placeholder="e.g. Space Gray, Deep Purple, Silver (comma separated)"
+                    className="w-full h-12 px-4 rounded-xl border border-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium text-sm transition-all"
+                  />
+                </div>
+
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Condition</label>
+                    <select 
+                      value={condition} 
+                      onChange={(e) => setCondition(e.target.value)}
+                      className="w-full h-12 px-4 rounded-xl border border-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary font-bold text-xs uppercase tracking-widest transition-all"
+                    >
+                      <option value="Brand New">Brand New</option>
+                      <option value="Refurbished">Refurbished</option>
+                      <option value="Used - Like New">Used - Like New</option>
+                      <option value="Used - Good">Used - Good</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Warranty</label>
+                    <select 
+                      value={warranty} 
+                      onChange={(e) => setWarranty(e.target.value)}
+                      className="w-full h-12 px-4 rounded-xl border border-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary font-bold text-xs uppercase tracking-widest transition-all"
+                    >
+                      <option value="1 Year">1 Year</option>
+                      <option value="2 Years">2 Years</option>
+                      <option value="6 Months">6 Months</option>
+                      <option value="3 Months">3 Months</option>
+                      <option value="No Warranty">No Warranty</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div className="space-y-4">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Product Images (Upload up to 10 compressed pictures)</label>
                   
@@ -432,7 +491,7 @@ export default function AdminProducts() {
                   <div className="pt-2">
                     <label className="block text-[8px] font-bold uppercase tracking-widest text-slate-400 mb-1 ml-1">Or paste single image URL fallback</label>
                     <input 
-                      type="url" 
+                      type="text" 
                       value={imageUrl} 
                       onChange={(e) => {
                         setImageUrl(e.target.value);

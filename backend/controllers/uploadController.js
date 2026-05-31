@@ -24,7 +24,8 @@ exports.uploadImage = async (req, res) => {
 
     if (error) throw error;
 
-    const publicUrl = `/api/upload/image/${data.id}`;
+    const backendUrl = process.env.BACKEND_URL || 'https://zenda-4ggq.onrender.com';
+    const publicUrl = `${backendUrl}/api/upload/image/${data.id}`;
     res.json({ url: publicUrl });
   } catch (error) {
     console.error('Upload Error:', error.message);
