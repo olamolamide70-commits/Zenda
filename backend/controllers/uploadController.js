@@ -15,10 +15,10 @@ exports.uploadImage = async (req, res) => {
       .jpeg({ quality: 80 })
       .toBuffer();
 
-    // Insert into Supabase
+    // Insert into Supabase (Pre-formatting binary buffer as hex for Postgres BYTEA)
     const { data, error } = await supabase
       .from('product_images')
-      .insert([{ data: compressedBuffer.toString('base64'), mime_type: 'image/jpeg' }])
+      .insert([{ data: '\\x' + compressedBuffer.toString('hex'), mime_type: 'image/jpeg' }])
       .select('id')
       .single();
 
@@ -45,7 +45,9 @@ exports.getImage = async (req, res) => {
       return res.status(404).json({ error: 'Image not found' });
     }
 
-    const imageBuffer = Buffer.from(data.data, 'base64');
+    // Hex format returned by Supabase has \x prefix, parse it to binary buffer
+    const hexData = data.data.startsWith('\\x') ? data.data.slice(2) : data.data;
+    const imageBuffer = Buffer.from(hexData, 'hex');
     res.set('Content-Type', data.mime_type);
     res.send(imageBuffer);
   } catch (error) {
