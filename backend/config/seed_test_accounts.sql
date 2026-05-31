@@ -38,7 +38,7 @@ DELETE FROM auth.users WHERE email IN (
 DO $$
 DECLARE
   -- Hashed password for 'Password123@' (using Supabase Auth default blowfish scheme)
-  pass_hash TEXT := '$2a$10$W/hJ23aZtWbI3Zq8m7kL/Oa5c9Yj3wzH3lW9eT5cT.O1/6P2k3vG.';
+  pass_hash TEXT := '$2a$10$YPuHalL78i3xaWW7ORYYiuURdziDc5f0LODvj5jRqZ8oWNsFoMIHC';
   
   -- Local variable to generate unique IDs dynamically and avoid key collisions
   temp_id UUID;
