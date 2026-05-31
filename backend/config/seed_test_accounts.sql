@@ -12,6 +12,7 @@ DECLARE
   
   -- UUIDs for our test users
   super_id UUID := '00000000-0000-0000-0000-000000000001';
+  super2_id UUID := '00000000-0000-0000-0000-000000000010';
   
   admin1_id UUID := '00000000-0000-0000-0000-000000000002';
   admin2_id UUID := '00000000-0000-0000-0000-000000000003';
@@ -25,14 +26,24 @@ DECLARE
 BEGIN
 
   -- =========================================================================
-  -- 1. SUPER_ADMIN ACCOUNT (1)
+  -- 1. SUPER_ADMIN ACCOUNTS (2)
   -- =========================================================================
+  -- Super Admin 1: Olasubomi Makinde
   IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'makindeolasubomi5@gmail.com') THEN
     INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, aud, role)
     VALUES (super_id, 'makindeolasubomi5@gmail.com', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Olasubomi Makinde"}', now(), now(), 'authenticated', 'authenticated');
 
     INSERT INTO public.users (id, name, email, role, is_verified)
     VALUES (super_id, 'Olasubomi Makinde', 'makindeolasubomi5@gmail.com', 'super_admin', TRUE);
+  END IF;
+
+  -- Super Admin 2: Olamide Admin
+  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'olamide@gmail.com') THEN
+    INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, aud, role)
+    VALUES (super2_id, 'olamide@gmail.com', pass_hash, now(), '{"provider":"email","providers":["email"]}', '{"name":"Olamide Admin"}', now(), now(), 'authenticated', 'authenticated');
+
+    INSERT INTO public.users (id, name, email, role, is_verified)
+    VALUES (super2_id, 'Olamide Admin', 'olamide@gmail.com', 'super_admin', TRUE);
   END IF;
 
   -- =========================================================================
