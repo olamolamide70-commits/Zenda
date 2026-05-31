@@ -371,18 +371,25 @@ export default function AdminProducts() {
                   {images.length > 0 && (
                     <div className="grid grid-cols-5 gap-3">
                       {images.map((img, idx) => (
-                        <div key={idx} className="relative aspect-square rounded-xl border border-border bg-slate-50 overflow-hidden group">
+                        <div 
+                          key={idx} 
+                          onClick={() => setImageUrl(img)}
+                          className={`relative aspect-square rounded-xl border cursor-pointer overflow-hidden group transition-all ${img === imageUrl ? 'border-primary ring-2 ring-primary/20' : 'border-border bg-slate-50 hover:border-slate-300'}`}
+                        >
                           <img src={img} alt={`Product ${idx}`} className="h-full w-full object-cover" />
                           <button
                             type="button"
-                            onClick={() => handleRemoveImage(idx)}
-                            className="absolute top-1 right-1 h-5 w-5 bg-red-600/90 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-all opacity-0 group-hover:opacity-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveImage(idx);
+                            }}
+                            className="absolute top-1 right-1 h-5 w-5 bg-red-600/90 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-all opacity-0 group-hover:opacity-100 z-10"
                           >
                             <X className="h-3 w-3" />
                           </button>
-                          {idx === 0 && (
-                            <div className="absolute bottom-0 left-0 right-0 bg-primary/80 text-[8px] font-bold uppercase tracking-widest text-white text-center py-0.5">
-                              Main
+                          {img === imageUrl && (
+                            <div className="absolute bottom-0 left-0 right-0 bg-primary text-[8px] font-bold uppercase tracking-widest text-white text-center py-0.5 z-10 select-none">
+                              Cover Image
                             </div>
                           )}
                         </div>
