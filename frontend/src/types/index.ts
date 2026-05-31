@@ -29,6 +29,8 @@ export interface User {
   interest_discount?: number;
   card_design?: string;
   is_card_active?: boolean;
+  nin?: string;
+  bvn?: string;
 }
 
 export interface CartItem {

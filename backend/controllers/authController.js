@@ -97,11 +97,11 @@ exports.getProfile = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-  const { name, card_design, is_card_active } = req.body;
+  const { name, card_design, is_card_active, nin, bvn } = req.body;
   try {
     const { data, error } = await supabase
       .from('users')
-      .update({ name, card_design, is_card_active })
+      .update({ name, card_design, is_card_active, nin, bvn })
       .eq('id', req.user.id)
       .select()
       .single();

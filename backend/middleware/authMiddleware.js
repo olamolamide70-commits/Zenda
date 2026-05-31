@@ -33,7 +33,9 @@ exports.protect = async (req, res, next) => {
         risk_score: user.risk_score,
         credit_limit: user.credit_limit,
         tier: user.tier || 'Bronze',
-        interest_discount: user.interest_discount || 0
+        interest_discount: user.interest_discount || 0,
+        nin: user.nin,
+        bvn: user.bvn
       };
       
       next();

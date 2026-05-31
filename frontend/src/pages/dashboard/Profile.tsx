@@ -44,10 +44,21 @@ export default function Profile() {
     const firstName = formData.get('firstName') as string;
     const lastName = formData.get('lastName') as string;
     const name = `${firstName} ${lastName}`.trim();
+    const nin = formData.get('nin') as string;
+    const bvn = formData.get('bvn') as string;
+
+    if (nin && nin.length !== 11) {
+      toast.warning('NIN must be exactly 11 digits');
+      return;
+    }
+    if (bvn && bvn.length !== 11) {
+      toast.warning('BVN must be exactly 11 digits');
+      return;
+    }
 
     try {
       setIsUpdating(true);
-      const updatedUser = await authService.updateProfile({ name });
+      const updatedUser = await authService.updateProfile({ name, nin, bvn });
       const token = localStorage.getItem('auth_token') || '';
       login(updatedUser, token);
       toast.success('Profile updated successfully!');
@@ -204,6 +215,29 @@ export default function Profile() {
                     <div className="relative">
                       <Phone className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
                       <Input placeholder="+234..." className="h-14 pl-12 bg-slate-50 border-slate-100 rounded-xl text-foreground focus:ring-primary/20 transition-all font-bold text-sm" />
+                    </div>
+                  </div>
+
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-2">National Identification Number (NIN)</Label>
+                      <Input 
+                        name="nin" 
+                        defaultValue={user?.nin || ''} 
+                        placeholder="11-digit NIN" 
+                        maxLength={11}
+                        className="h-14 px-6 bg-slate-50 border-slate-100 rounded-xl text-foreground focus:ring-primary/20 transition-all font-bold text-sm" 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-2">Bank Verification Number (BVN)</Label>
+                      <Input 
+                        name="bvn" 
+                        defaultValue={user?.bvn || ''} 
+                        placeholder="11-digit BVN" 
+                        maxLength={11}
+                        className="h-14 px-6 bg-slate-50 border-slate-100 rounded-xl text-foreground focus:ring-primary/20 transition-all font-bold text-sm" 
+                      />
                     </div>
                   </div>
 

@@ -25,6 +25,13 @@ exports.createPlan = async (req, res) => {
   const { productId, duration, frequency, insuranceId } = req.body;
   const userId = req.user.id;
 
+  // Enforce KYC requirement (NIN and BVN) for installments
+  if (!req.user.nin || !req.user.bvn) {
+    return res.status(400).json({ 
+      error: 'KYC Required: Please complete your profile by adding your Bank Verification Number (BVN) and National Identification Number (NIN) to start an installment plan.' 
+    });
+  }
+
   try {
     // 1. Get product info
     const { data: product, error: productError } = await supabase

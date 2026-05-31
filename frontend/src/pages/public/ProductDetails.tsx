@@ -48,6 +48,12 @@ export default function ProductDetails() {
       return;
     }
 
+    if (!user?.nin || !user?.bvn) {
+      toast.error('KYC Required: Please complete your profile by adding your Bank Verification Number (BVN) and National Identification Number (NIN) to use installments.');
+      navigate('/dashboard/profile');
+      return;
+    }
+
     try {
       setIsCreating(true);
       const { data } = await installmentService.create({
