@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { formatCurrency } from '@/utils/helpers';
 import { Button } from '@/components/ui/button';
-import { Plus, Edit, Trash2, Loader2, AlertCircle, ShoppingBag, X, Package } from 'lucide-react';
+import { Plus, Edit, Trash2, Loader2, AlertCircle, ShoppingBag, X, Package, UploadCloud } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'react-toastify';
 import { useApp } from '@/context/AppContext';
 import { productService } from '@/services';
 import { Product } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
+import api from '@/services/api';
 
 const CATEGORIES = ['Laptops', 'Phones', 'Tablets', 'Audio', 'Accessories', 'Wearables'];
 
@@ -27,6 +28,8 @@ export default function AdminProducts() {
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [images, setImages] = useState<string[]>([]);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   // Fetch products
   const { data: products = [], isLoading } = useQuery<Product[]>({
@@ -76,6 +79,53 @@ export default function AdminProducts() {
     }
   });
 
+  // Multi-image upload handlers
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    if (images.length + files.length > 10) {
+      toast.warning('Maximum of 10 pictures is allowed');
+      return;
+    }
+
+    try {
+      setUploadingImage(true);
+      const newImages = [...images];
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const formData = new FormData();
+        formData.append('image', file);
+        
+        const res = await api.post('/upload/image', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        newImages.push(res.data.url);
+      }
+      
+      setImages(newImages);
+      if (newImages.length > 0) {
+        setImageUrl(newImages[0]);
+      }
+      toast.success('Image(s) uploaded and compressed successfully!');
+    } catch (err) {
+      toast.error('Failed to upload image');
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleRemoveImage = (index: number) => {
+    const updated = images.filter((_, idx) => idx !== index);
+    setImages(updated);
+    if (updated.length > 0) {
+      setImageUrl(updated[0]);
+    } else {
+      setImageUrl('');
+    }
+  };
+
   const handleOpenAdd = () => {
     setEditingProduct(null);
     setName('');
@@ -84,6 +134,7 @@ export default function AdminProducts() {
     setPrice('');
     setDescription('');
     setImageUrl('');
+    setImages([]);
     setIsOpen(true);
   };
 
@@ -95,6 +146,7 @@ export default function AdminProducts() {
     setPrice(p.price.toString());
     setDescription(p.description);
     setImageUrl(p.image_url || p.image || '');
+    setImages(p.images || (p.image_url ? [p.image_url] : []));
     setIsOpen(true);
   };
 
@@ -119,6 +171,7 @@ export default function AdminProducts() {
       price: Number(price),
       description: description || `${name} by ${brand}`,
       image_url: imageUrl || defaultImg,
+      images: images.length > 0 ? images : [imageUrl || defaultImg],
       specs: {},
       installment_eligible: true
     };
@@ -311,16 +364,79 @@ export default function AdminProducts() {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Image URL (Optional)</label>
-                  <input 
-                    type="url" 
-                    value={imageUrl} 
-                    onChange={(e) => setImageUrl(e.target.value)} 
-                    placeholder="https://example.com/gadget.png"
-                    className="w-full h-12 px-4 rounded-xl border border-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium text-sm transition-all"
-                  />
-                  <p className="text-[9px] text-muted-foreground mt-1.5 font-medium">Leave blank to assign a beautiful default tech graphic placeholder.</p>
+                <div className="space-y-4">
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Product Images (Upload up to 10 compressed pictures)</label>
+                  
+                  {/* Image Grid of Uploaded Images */}
+                  {images.length > 0 && (
+                    <div className="grid grid-cols-5 gap-3">
+                      {images.map((img, idx) => (
+                        <div key={idx} className="relative aspect-square rounded-xl border border-border bg-slate-50 overflow-hidden group">
+                          <img src={img} alt={`Product ${idx}`} className="h-full w-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(idx)}
+                            className="absolute top-1 right-1 h-5 w-5 bg-red-600/90 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-all opacity-0 group-hover:opacity-100"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                          {idx === 0 && (
+                            <div className="absolute bottom-0 left-0 right-0 bg-primary/80 text-[8px] font-bold uppercase tracking-widest text-white text-center py-0.5">
+                              Main
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Upload Trigger Dropzone */}
+                  {images.length < 10 && (
+                    <div className="relative rounded-2xl border border-dashed border-slate-200 p-6 text-center bg-slate-50/50 hover:bg-slate-50 transition-colors">
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        multiple 
+                        disabled={uploadingImage}
+                        onChange={handleImageUpload} 
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      />
+                      
+                      {uploadingImage ? (
+                        <div className="space-y-2">
+                          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-primary">Uploading & Compressing...</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <div className="h-10 w-10 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
+                            <UploadCloud className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <p className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Drag or Select Product Images</p>
+                            <p className="text-[8px] text-slate-400 font-medium mt-0.5">Upload up to 10 pictures. Auto-compressed using Sharp.</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Single URL fallback for convenience */}
+                  <div className="pt-2">
+                    <label className="block text-[8px] font-bold uppercase tracking-widest text-slate-400 mb-1 ml-1">Or paste single image URL fallback</label>
+                    <input 
+                      type="url" 
+                      value={imageUrl} 
+                      onChange={(e) => {
+                        setImageUrl(e.target.value);
+                        if (images.length === 0 && e.target.value) {
+                          setImages([e.target.value]);
+                        }
+                      }} 
+                      placeholder="https://example.com/gadget.png"
+                      className="w-full h-10 px-4 rounded-xl border border-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary/20 font-medium text-xs transition-all"
+                    />
+                  </div>
                 </div>
 
                 <div>
