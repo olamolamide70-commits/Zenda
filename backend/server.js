@@ -42,6 +42,7 @@ app.use(cors({
 }));
 
 app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
