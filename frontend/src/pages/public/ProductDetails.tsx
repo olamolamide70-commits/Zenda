@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Star, ShoppingCart, CreditCard, CheckCircle, Loader2, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Star, ShoppingCart, CreditCard, CheckCircle, Loader2, ShieldCheck, Palette } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,10 +9,26 @@ import { useApp } from '@/context/AppContext';
 import { productService, insuranceService, installmentService } from '@/services';
 import api from '@/services/api';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import ProductCardSkeleton from '@/components/skeletons/ProductCardSkeleton';
+
+// Map common color names to actual CSS colors for the swatch + overlay
+const COLOR_MAP: Record<string, string> = {
+  red: '#ef4444', blue: '#3b82f6', green: '#22c55e', yellow: '#eab308',
+  orange: '#f97316', purple: '#a855f7', pink: '#ec4899', cyan: '#06b6d4',
+  teal: '#14b8a6', indigo: '#6366f1', white: '#f8fafc', black: '#0f172a',
+  gray: '#94a3b8', grey: '#94a3b8', gold: '#f59e0b', silver: '#cbd5e1',
+  'space gray': '#6b7280', 'deep purple': '#7c3aed', 'midnight': '#1e293b',
+  'starlight': '#f1f5f9', 'alpine green': '#16a34a', 'sierra blue': '#38bdf8',
+  'graphite': '#374151', 'rose gold': '#fb7185', 'coral': '#f87171',
+};
+
+function getColorHex(colorName: string): string {
+  const lower = colorName.toLowerCase().trim();
+  return COLOR_MAP[lower] || '#6366f1';
+}
 
 const plans = [
   { label: 'Daily (3 months)', months: 3, freq: 'day', divisor: 90 },
@@ -27,12 +43,59 @@ export default function ProductDetails() {
   const [selectedInsurance, setSelectedInsurance] = useState<any>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [mainImgError, setMainImgError] = useState(false);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string>('');
+  const [colorOverlay, setColorOverlay] = useState<string | null>(null);
 
   const { data: product, isLoading, isError } = useQuery({
     queryKey: ['product', id],
     queryFn: () => productService.getById(id!),
     enabled: !!id
   });
+
+  useEffect(() => {
+    if (product) {
+      const allImages = product.images && product.images.length > 0
+        ? product.images
+        : product.image_url
+          ? [product.image_url]
+          : product.image
+            ? [product.image]
+            : [];
+      setActiveImage(allImages[0] || null);
+
+      const colorsList = product.metadata?.colors && product.metadata.colors.length > 0
+        ? product.metadata.colors
+        : product.specs?.['Colors']
+          ? product.specs['Colors'].split(',').map((c: string) => c.trim()).filter(Boolean)
+          : [];
+      if (colorsList.length > 0) {
+        setSelectedColor(colorsList[0]);
+        setColorOverlay(null); // no overlay on first load — just the natural photo
+      }
+    }
+  }, [product]);
+
+  const allImages = useMemo(() => {
+    if (!product) return [];
+    if (product.images && product.images.length > 0) return product.images;
+    if (product.image_url) return [product.image_url];
+    if (product.image) return [product.image];
+    return [];
+  }, [product]);
+
+  const colorsList: string[] = useMemo(() => {
+    if (!product) return [];
+    if (product.metadata?.colors && product.metadata.colors.length > 0) return product.metadata.colors;
+    if (product.specs?.['Colors']) return product.specs['Colors'].split(',').map((c: string) => c.trim()).filter(Boolean);
+    return [];
+  }, [product]);
+
+  const handleColorSelect = (color: string) => {
+    setSelectedColor(color);
+    // Apply a semi-transparent color overlay to give real-time color preview
+    setColorOverlay(getColorHex(color));
+  };
 
   const { data: insurancePlans } = useQuery({
     queryKey: ['insurancePlans'],
@@ -117,23 +180,81 @@ export default function ProductDetails() {
         </Link>
  
         <div className="grid gap-16 lg:grid-cols-2">
-          {/* Image */}
-          <div className="flex aspect-square items-center justify-center rounded-[3rem] border border-slate-100 bg-white overflow-hidden shadow-premium transition-transform hover:scale-[1.01] duration-500">
-            {product.image_url && !mainImgError ? (
-              <img 
-                src={product.image_url.startsWith('http') 
-                  ? product.image_url 
-                  : `${import.meta.env.VITE_IMAGE_BASE_URL}${product.image_url}`} 
-                alt={product.name} 
-                onError={() => setMainImgError(true)}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <div className="flex flex-col items-center gap-6">
-                <span className="text-[180px] drop-shadow-[0_20px_50px_rgba(29,78,216,0.1)] transition-transform hover:rotate-3 duration-700 select-none">
-                  {categoryIcons[product.category] || '📦'}
-                </span>
-                <p className="text-xs font-black uppercase tracking-[0.4em] text-muted-foreground/20">Elite Device</p>
+          {/* Image Gallery */}
+          <div className="flex flex-col gap-4">
+            {/* Main Image */}
+            <div className="relative flex aspect-square items-center justify-center rounded-[3rem] border border-slate-100 bg-white overflow-hidden shadow-premium transition-transform hover:scale-[1.01] duration-500">
+              {activeImage && !mainImgError ? (
+                <>
+                  <img 
+                    src={activeImage.startsWith('http') 
+                      ? activeImage 
+                      : `${import.meta.env.VITE_IMAGE_BASE_URL}${activeImage}`} 
+                    alt={product.name} 
+                    onError={() => setMainImgError(true)}
+                    className="h-full w-full object-cover transition-all duration-300"
+                  />
+                  {/* Color Overlay */}
+                  {colorOverlay && (
+                    <div 
+                      className="absolute inset-0 transition-all duration-500 pointer-events-none"
+                      style={{ backgroundColor: colorOverlay, opacity: 0.22, mixBlendMode: 'multiply' }}
+                    />
+                  )}
+                </>
+              ) : (
+                <div className="flex flex-col items-center gap-6">
+                  <span className="text-[180px] drop-shadow-[0_20px_50px_rgba(29,78,216,0.1)] transition-transform hover:rotate-3 duration-700 select-none">
+                    {categoryIcons[product.category] || '📦'}
+                  </span>
+                  <p className="text-xs font-black uppercase tracking-[0.4em] text-muted-foreground/20">Elite Device</p>
+                </div>
+              )}
+
+              {/* Cover Image badge — top right, shown when active image is the first/cover image */}
+              {allImages.length > 0 && activeImage === allImages[0] && (
+                <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-primary text-white rounded-full px-3 py-1.5 shadow-lg shadow-primary/30 text-[9px] font-black uppercase tracking-widest z-10">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  Cover Image
+                </div>
+              )}
+
+              {/* Color badge on image */}
+              {selectedColor && (
+                <div className="absolute bottom-4 left-4 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-sm border border-slate-100">
+                  <div className="h-3.5 w-3.5 rounded-full border border-white shadow-sm" style={{ backgroundColor: getColorHex(selectedColor) }} />
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-600">{selectedColor}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Thumbnail Row — shown when there are images */}
+            {allImages.length > 0 && (
+              <div className="flex gap-3 overflow-x-auto pb-1">
+                {allImages.map((img, idx) => (
+                  <div key={idx} className="relative flex-shrink-0">
+                    <button
+                      onClick={() => { setActiveImage(img); setMainImgError(false); }}
+                      className={`h-20 w-20 rounded-2xl overflow-hidden border-2 transition-all duration-200 block ${
+                        activeImage === img
+                          ? 'border-primary shadow-md shadow-primary/20 scale-105'
+                          : 'border-slate-100 hover:border-slate-300'
+                      }`}
+                    >
+                      <img 
+                        src={img.startsWith('http') ? img : `${import.meta.env.VITE_IMAGE_BASE_URL}${img}`} 
+                        alt={`View ${idx + 1}`} 
+                        className="h-full w-full object-cover"
+                      />
+                    </button>
+                    {/* Cover badge on first thumbnail */}
+                    {idx === 0 && (
+                      <div className="absolute -bottom-0 left-0 right-0 bg-primary text-[7px] font-black uppercase tracking-widest text-white text-center py-0.5 rounded-b-2xl z-10 select-none">
+                        Cover
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -170,7 +291,7 @@ export default function ProductDetails() {
                 )}
               </div>
               
-              <div className="flex flex-wrap gap-4 items-center pt-4">
+              <div className="flex flex-wrap gap-3 items-center pt-4">
                 <div className="flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 border border-emerald-100">
                   <CheckCircle className="h-4 w-4 text-emerald-600" />
                   <span className="text-[8px] font-black uppercase tracking-widest text-emerald-600">Verified Seller</span>
@@ -179,6 +300,16 @@ export default function ProductDetails() {
                   <ShieldCheck className="h-4 w-4 text-primary" />
                   <span className="text-[8px] font-black uppercase tracking-widest text-primary">Quality Guaranteed</span>
                 </div>
+                {(product.metadata?.warranty || product.specs?.['Warranty']) && (
+                  <div className="flex items-center gap-2 rounded-full bg-amber-50 px-4 py-2 border border-amber-100">
+                    <span className="text-[8px] font-black uppercase tracking-widest text-amber-600">🛡 {product.metadata?.warranty || product.specs?.['Warranty']}</span>
+                  </div>
+                )}
+                {(product.metadata?.condition || product.specs?.['Condition']) && (
+                  <div className="flex items-center gap-2 rounded-full bg-slate-50 px-4 py-2 border border-slate-200">
+                    <span className="text-[8px] font-black uppercase tracking-widest text-slate-600">✦ {product.metadata?.condition || product.specs?.['Condition']}</span>
+                  </div>
+                )}
               </div>
             </div>
             </div>
@@ -205,6 +336,9 @@ export default function ProductDetails() {
           <TabsList className="h-14 bg-white p-1 rounded-[1.25rem] border border-slate-100 gap-2 inline-flex shadow-premium">
             <TabsTrigger value="specs" className="h-12 px-8 rounded-xl font-bold tracking-tight data-[state=active]:bg-primary data-[state=active]:text-white transition-all text-[11px] uppercase">Features</TabsTrigger>
             <TabsTrigger value="plans" className="h-12 px-8 rounded-xl font-bold tracking-tight data-[state=active]:bg-primary data-[state=active]:text-white transition-all text-[11px] uppercase">Payment Plans</TabsTrigger>
+            {colorsList.length > 0 && (
+              <TabsTrigger value="colors" className="h-12 px-8 rounded-xl font-bold tracking-tight data-[state=active]:bg-primary data-[state=active]:text-white transition-all text-[11px] uppercase">Colors</TabsTrigger>
+            )}
           </TabsList>
  
           <TabsContent value="specs" className="mt-12">
@@ -301,6 +435,69 @@ export default function ProductDetails() {
               })}
             </div>
           </TabsContent>
+
+          {/* Colors Tab */}
+          {colorsList.length > 0 && (
+            <TabsContent value="colors" className="mt-12">
+              <div className="rounded-[2.5rem] border border-slate-100 bg-white p-10 shadow-premium">
+                <div className="flex items-center gap-4 mb-8">
+                  <Palette className="h-7 w-7 text-primary" />
+                  <div>
+                    <h3 className="text-2xl font-black text-foreground tracking-tight">Available Colors</h3>
+                    <p className="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest mt-0.5">Click a color to preview it on the product image</p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-5">
+                  {colorsList.map((color: string) => {
+                    const hex = getColorHex(color);
+                    const isSelected = selectedColor === color;
+                    return (
+                      <button
+                        key={color}
+                        onClick={() => handleColorSelect(color)}
+                        className={`group flex flex-col items-center gap-3 transition-all duration-200 ${
+                          isSelected ? 'scale-110' : 'hover:scale-105'
+                        }`}
+                      >
+                        <div
+                          className={`h-16 w-16 rounded-2xl border-4 shadow-lg transition-all duration-200 ${
+                            isSelected
+                              ? 'border-primary shadow-primary/30 scale-110'
+                              : 'border-transparent hover:border-slate-200'
+                          }`}
+                          style={{ backgroundColor: hex }}
+                        />
+                        <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${
+                          isSelected ? 'text-primary' : 'text-muted-foreground/60'
+                        }`}>
+                          {color}
+                        </span>
+                        {isSelected && (
+                          <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Live Preview Strip */}
+                {selectedColor && (
+                  <div className="mt-10 flex items-center gap-6 rounded-2xl bg-slate-50 border border-slate-100 p-6">
+                    <div
+                      className="h-14 w-14 rounded-xl border-4 border-white shadow-md flex-shrink-0"
+                      style={{ backgroundColor: getColorHex(selectedColor) }}
+                    />
+                    <div>
+                      <p className="text-xs font-black uppercase tracking-widest text-muted-foreground/40 mb-1">Currently Viewing</p>
+                      <p className="text-xl font-black text-foreground tracking-tight">{selectedColor}</p>
+                      <p className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest mt-1">Color preview applied to product image above ↑</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+          )}
         </Tabs>
 
         {/* Recommendations */}

@@ -487,22 +487,7 @@ export default function AdminProducts() {
                     </div>
                   )}
 
-                  {/* Single URL fallback for convenience */}
-                  <div className="pt-2">
-                    <label className="block text-[8px] font-bold uppercase tracking-widest text-slate-400 mb-1 ml-1">Or paste single image URL fallback</label>
-                    <input 
-                      type="text" 
-                      value={imageUrl} 
-                      onChange={(e) => {
-                        setImageUrl(e.target.value);
-                        if (images.length === 0 && e.target.value) {
-                          setImages([e.target.value]);
-                        }
-                      }} 
-                      placeholder="https://example.com/gadget.png"
-                      className="w-full h-10 px-4 rounded-xl border border-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary/20 font-medium text-xs transition-all"
-                    />
-                  </div>
+                  {/* Deletions are complete */}
                 </div>
 
                 <div>
