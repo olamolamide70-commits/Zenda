@@ -1,6 +1,6 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Star, ShoppingCart, CreditCard, CheckCircle, Loader2, ShieldCheck, Palette } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import { ArrowLeft, Star, ShoppingCart, CreditCard, CheckCircle, Loader2, ShieldCheck, Palette, Heart, Share2, Copy, MessageCircle } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { categoryIcons } from '@/utils/mockData';
@@ -39,13 +39,64 @@ const plans = [
 export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart, user, isAuthenticated } = useApp();
+  const { addToCart, addToWishlist, removeFromWishlist, wishlist, user, isAuthenticated } = useApp();
+  const queryClient = useQueryClient();
   const [selectedInsurance, setSelectedInsurance] = useState<any>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [mainImgError, setMainImgError] = useState(false);
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [colorOverlay, setColorOverlay] = useState<string | null>(null);
+  const [reviewText, setReviewText] = useState('');
+  const [reviewRating, setReviewRating] = useState(5);
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+
+  const isWishlisted = wishlist.some(w => w.id === id);
+
+  const handleWishlistToggle = () => {
+    if (!isAuthenticated) { toast.error('Sign in to save to wishlist'); return; }
+    if (!product) return;
+    if (isWishlisted) {
+      removeFromWishlist(product.id);
+      toast.info('Removed from wishlist');
+    } else {
+      addToWishlist(product);
+      toast.success('Added to wishlist! ❤️');
+    }
+  };
+
+  const handleShare = () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      navigator.share({ title: product?.name || 'Check this out on Zenda', url });
+    } else {
+      navigator.clipboard.writeText(url);
+      toast.success('Link copied to clipboard!');
+    }
+  };
+
+  const handleShareWhatsApp = () => {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent(`Check out ${product?.name} on Zenda! 🔥`);
+    window.open(`https://wa.me/?text=${text}%20${url}`, '_blank');
+  };
+
+  const handleSubmitReview = async () => {
+    if (!isAuthenticated) { toast.error('Sign in to leave a review'); return; }
+    if (!reviewText.trim()) { toast.error('Please write a review'); return; }
+    setIsSubmittingReview(true);
+    try {
+      await api.post(`/products/${id}/reviews`, { rating: reviewRating, comment: reviewText });
+      toast.success('Review submitted! Thank you 🎉');
+      setReviewText('');
+      setReviewRating(5);
+      queryClient.invalidateQueries({ queryKey: ['product-reviews', id] });
+    } catch {
+      toast.error('Failed to submit review. Please try again.');
+    } finally {
+      setIsSubmittingReview(false);
+    }
+  };
 
   const { data: product, isLoading, isError } = useQuery({
     queryKey: ['product', id],
@@ -320,12 +371,42 @@ export default function ProductDetails() {
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Button onClick={() => handleCreatePlan(12, 'monthly')} className="h-16 flex-1 gap-4 rounded-2xl bg-primary text-lg font-black text-white hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">
                 <CreditCard className="h-5 w-5" /> Pay in parts
               </Button>
               <Button variant="outline" className="h-16 gap-4 rounded-2xl border-slate-100 bg-white text-lg font-black text-foreground lg:px-12 transition-all hover:bg-slate-50 shadow-premium" onClick={handleAddToCart}>
                 <ShoppingCart className="h-5 w-5" /> Add to cart
+              </Button>
+            </div>
+
+            {/* Wishlist + Share row */}
+            <div className="flex gap-3 mt-4">
+              <Button
+                variant="outline"
+                onClick={handleWishlistToggle}
+                className={`flex-1 h-12 rounded-2xl gap-2 font-bold text-sm border transition-all ${
+                  isWishlisted
+                    ? 'bg-red-50 border-red-200 text-red-500 hover:bg-red-100'
+                    : 'border-slate-100 bg-white text-muted-foreground hover:border-red-200 hover:text-red-500 hover:bg-red-50'
+                }`}
+              >
+                <Heart className={`h-4 w-4 ${isWishlisted ? 'fill-red-500' : ''}`} />
+                {isWishlisted ? 'Saved' : 'Save'}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleShare}
+                className="flex-1 h-12 rounded-2xl gap-2 font-bold text-sm border-slate-100 bg-white text-muted-foreground hover:bg-slate-50 transition-all"
+              >
+                <Copy className="h-4 w-4" /> Copy Link
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleShareWhatsApp}
+                className="h-12 px-5 rounded-2xl border-slate-100 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-all"
+              >
+                <MessageCircle className="h-4 w-4" />
               </Button>
             </div>
           </div>
@@ -339,6 +420,7 @@ export default function ProductDetails() {
             {colorsList.length > 0 && (
               <TabsTrigger value="colors" className="h-12 px-8 rounded-xl font-bold tracking-tight data-[state=active]:bg-primary data-[state=active]:text-white transition-all text-[11px] uppercase">Colors</TabsTrigger>
             )}
+            <TabsTrigger value="reviews" className="h-12 px-8 rounded-xl font-bold tracking-tight data-[state=active]:bg-primary data-[state=active]:text-white transition-all text-[11px] uppercase">Reviews</TabsTrigger>
           </TabsList>
  
           <TabsContent value="specs" className="mt-12">
@@ -498,6 +580,51 @@ export default function ProductDetails() {
               </div>
             </TabsContent>
           )}
+
+          {/* Reviews Tab */}
+          <TabsContent value="reviews" className="mt-12">
+            <div className="space-y-8">
+              {/* Submit review */}
+              <div className="rounded-[2.5rem] border border-slate-100 bg-white p-10 shadow-premium">
+                <h3 className="text-2xl font-black text-foreground tracking-tight mb-2">Write a Review</h3>
+                <p className="text-sm text-muted-foreground font-medium mb-8">Share your experience with this product.</p>
+
+                {/* Star picker */}
+                <div className="flex items-center gap-2 mb-6">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mr-2">Your Rating</p>
+                  {[1, 2, 3, 4, 5].map(s => (
+                    <button
+                      key={s}
+                      onClick={() => setReviewRating(s)}
+                      className="transition-transform hover:scale-125"
+                    >
+                      <Star className={`h-8 w-8 ${s <= reviewRating ? 'fill-primary text-primary' : 'fill-slate-100 text-slate-200'} transition-colors`} />
+                    </button>
+                  ))}
+                  <span className="ml-2 text-lg font-black text-primary">{reviewRating}/5</span>
+                </div>
+
+                <textarea
+                  value={reviewText}
+                  onChange={e => setReviewText(e.target.value)}
+                  placeholder="Tell others what you think about this product... (quality, delivery, etc.)"
+                  rows={4}
+                  className="w-full p-5 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium text-sm transition-all resize-none mb-6"
+                />
+
+                <Button
+                  onClick={handleSubmitReview}
+                  disabled={isSubmittingReview || !reviewText.trim()}
+                  className="h-12 px-8 rounded-2xl bg-primary text-white font-bold uppercase tracking-widest text-[10px] shadow-md shadow-primary/20"
+                >
+                  {isSubmittingReview ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Submit Review'}
+                </Button>
+              </div>
+
+              {/* Existing reviews */}
+              <ReviewsList productId={id!} />
+            </div>
+          </TabsContent>
         </Tabs>
 
         {/* Recommendations */}
@@ -515,6 +642,85 @@ export default function ProductDetails() {
           <Recommendations productId={id!} />
         </div>
       </div>
+    </div>
+  );
+}
+
+function ReviewsList({ productId }: { productId: string }) {
+  const { data: reviews = [], isLoading } = useQuery({
+    queryKey: ['product-reviews', productId],
+    queryFn: () => api.get(`/products/${productId}/reviews`).then(r => r.data).catch(() => []),
+  });
+
+  if (isLoading) return (
+    <div className="space-y-4">
+      {[1, 2].map(i => <div key={i} className="h-32 rounded-2xl bg-slate-50 animate-pulse" />)}
+    </div>
+  );
+
+  if (!Array.isArray(reviews) || reviews.length === 0) return (
+    <div className="rounded-[2.5rem] border border-dashed border-slate-100 bg-slate-50/50 py-20 text-center">
+      <MessageCircle className="h-12 w-12 text-muted-foreground/20 mx-auto mb-4" />
+      <p className="font-black text-foreground uppercase tracking-widest text-xs">No reviews yet</p>
+      <p className="text-sm font-medium text-muted-foreground mt-2">Be the first to share your experience!</p>
+    </div>
+  );
+
+  const avgRating = reviews.reduce((sum: number, r: any) => sum + (r.rating || 0), 0) / reviews.length;
+
+  return (
+    <div className="space-y-6">
+      {/* Summary */}
+      <div className="rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-premium flex items-center gap-8">
+        <div className="text-center">
+          <p className="text-6xl font-black text-foreground tracking-tighter">{avgRating.toFixed(1)}</p>
+          <div className="flex gap-1 justify-center mt-2">
+            {[1,2,3,4,5].map(s => (
+              <Star key={s} className={`h-4 w-4 ${s <= Math.round(avgRating) ? 'fill-primary text-primary' : 'fill-slate-100 text-slate-200'}`} />
+            ))}
+          </div>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mt-2">{reviews.length} review{reviews.length !== 1 ? 's' : ''}</p>
+        </div>
+        <div className="flex-1 space-y-2">
+          {[5,4,3,2,1].map(star => {
+            const count = reviews.filter((r: any) => Math.round(r.rating) === star).length;
+            const pct = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
+            return (
+              <div key={star} className="flex items-center gap-3">
+                <span className="text-[10px] font-bold text-muted-foreground w-4">{star}</span>
+                <Star className="h-3 w-3 fill-primary text-primary" />
+                <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden">
+                  <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${pct}%` }} />
+                </div>
+                <span className="text-[10px] font-bold text-muted-foreground/60 w-4">{count}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Review cards */}
+      {reviews.map((r: any, i: number) => (
+        <div key={r.id || i} className="rounded-[2rem] border border-slate-100 bg-white p-8 shadow-sm">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center font-black text-primary text-lg">
+                {(r.user_name || r.reviewer || 'A').charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <p className="font-black text-foreground tracking-tight">{r.user_name || r.reviewer || 'Anonymous'}</p>
+                <p className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">{r.created_at ? new Date(r.created_at).toLocaleDateString() : ''}</p>
+              </div>
+            </div>
+            <div className="flex gap-0.5">
+              {[1,2,3,4,5].map(s => (
+                <Star key={s} className={`h-4 w-4 ${s <= (r.rating || 0) ? 'fill-primary text-primary' : 'fill-slate-100 text-slate-200'}`} />
+              ))}
+            </div>
+          </div>
+          <p className="text-base font-medium text-muted-foreground/80 leading-relaxed italic">"{r.comment || r.review || r.text}"</p>
+        </div>
+      ))}
     </div>
   );
 }

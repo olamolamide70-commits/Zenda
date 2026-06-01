@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom';
 import { formatCurrency } from '@/utils/helpers';
-import { CalendarDays, ShieldCheck, Zap, AlertCircle } from 'lucide-react';
+import { CalendarDays, ShieldCheck, Zap, AlertCircle, Banknote, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { installmentService } from '@/services';
 import { useApp } from '@/context/AppContext';
 import { Button } from '@/components/ui/button';
 import { toast } from 'react-toastify';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useState } from 'react';
+import api from '@/services/api';
 
 export default function Installments() {
   const { data: installments, isLoading, refetch } = useQuery({
@@ -15,6 +17,8 @@ export default function Installments() {
     queryFn: () => installmentService.getAll().then(res => res.data || [])
   });
   const { user } = useApp();
+
+  const [payingId, setPayingId] = useState<string | null>(null);
 
   const handleEnableAutoDebit = async (inst: any) => {
     try {
@@ -26,6 +30,27 @@ export default function Installments() {
       window.location.href = data.authorization_url;
     } catch (error) {
       toast.error("Couldn't set up auto-pay");
+    }
+  };
+
+  const handleMakePayment = async (inst: any) => {
+    try {
+      setPayingId(inst.id);
+      const amount = inst.monthly_amount || Math.ceil(inst.remaining_balance / (inst.total_installments || 1));
+      const { data } = await api.post('/installments/pay-now', {
+        installmentId: inst.id,
+        amount,
+        email: user?.email,
+      });
+      if (data.authorization_url) {
+        window.location.href = data.authorization_url;
+      } else {
+        toast.success('Payment initiated successfully!');
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || 'Payment failed. Please try again.');
+    } finally {
+      setPayingId(null);
     }
   };
 
@@ -153,7 +178,7 @@ export default function Installments() {
                       <Button 
                         onClick={() => handleEnableAutoDebit(inst)}
                         variant="outline" 
-                        className="w-full h-14 rounded-xl border-primary text-primary hover:bg-primary hover:text-white transition-all font-bold text-sm gap-2"
+                        className="w-full h-12 rounded-xl border-primary text-primary hover:bg-primary hover:text-white transition-all font-bold text-sm gap-2"
                       >
                         <ShieldCheck className="h-5 w-5" />
                         Turn on auto-pay
@@ -162,10 +187,28 @@ export default function Installments() {
                       <Button 
                         variant="ghost" 
                         disabled 
-                        className="w-full h-14 rounded-xl border border-border text-muted-foreground/50 font-bold text-sm gap-2 cursor-not-allowed"
+                        className="w-full h-12 rounded-xl border border-border text-muted-foreground/50 font-bold text-sm gap-2 cursor-not-allowed"
                       >
                         <Zap className="h-5 w-5 fill-primary" />
                         Auto-pay is on
+                      </Button>
+                    )}
+
+                    {/* Make Payment Now — always show */}
+                    {inst.status !== 'completed' && (
+                      <Button
+                        onClick={() => handleMakePayment(inst)}
+                        disabled={payingId === inst.id}
+                        className="w-full h-14 rounded-xl bg-primary text-white font-bold text-sm gap-2 shadow-md shadow-primary/20 hover:bg-primary/90 transition-all"
+                      >
+                        {payingId === inst.id ? (
+                          <Loader2 className="h-5 w-5 animate-spin" />
+                        ) : (
+                          <>
+                            <Banknote className="h-5 w-5" />
+                            Pay {formatCurrency(inst.monthly_amount || Math.ceil(inst.remaining_balance / (inst.total_installments || 1)))} Now
+                          </>
+                        )}
                       </Button>
                     )}
                   </div>

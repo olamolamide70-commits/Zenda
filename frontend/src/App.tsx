@@ -23,6 +23,8 @@ import About from "@/pages/public/About";
 import Contact from "@/pages/public/Contact";
 import Terms from "@/pages/public/Terms";
 import Privacy from "@/pages/public/Privacy";
+import Cart from "@/pages/public/Cart";
+import Checkout from "@/pages/public/Checkout";
 
 // Auth pages
 import Login from "@/pages/auth/Login";
@@ -91,6 +93,8 @@ const App = () => (
           <Route path="/terms" element={<MainLayout><Terms /></MainLayout>} />
           <Route path="/privacy" element={<MainLayout><Privacy /></MainLayout>} />
           <Route path="/developers" element={<MainLayout><Developers /></MainLayout>} />
+          <Route path="/cart" element={<MainLayout><Cart /></MainLayout>} />
+          <Route path="/checkout" element={<MainLayout><Checkout /></MainLayout>} />
 
           {/* Auth routes */}
           <Route path="/login" element={<Login />} />

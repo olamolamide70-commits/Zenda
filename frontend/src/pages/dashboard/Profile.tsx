@@ -37,6 +37,31 @@ export default function Profile() {
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingCac, setUploadingCac] = useState(false);
   const [submittingOnboarding, setSubmittingOnboarding] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(user?.avatar_url || null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { toast.error('Image must be under 5MB'); return; }
+    try {
+      setUploadingAvatar(true);
+      const formData = new FormData();
+      formData.append('image', file);
+      const res = await api.post('/upload/image', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      const newUrl = res.data.url;
+      setAvatarUrl(newUrl);
+      // Persist to profile
+      const updatedUser = await authService.updateProfile({ avatar_url: newUrl } as any);
+      const token = localStorage.getItem('auth_token') || '';
+      login(updatedUser, token);
+      toast.success('Profile picture updated! 📸');
+    } catch {
+      toast.error('Failed to upload photo');
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
 
   const handleSubmitProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -176,14 +201,41 @@ export default function Profile() {
               <div className="h-32 bg-slate-50 border-b border-border" />
               <div className="px-8 pb-10">
                 <div className="relative -mt-16 mb-10 flex items-end gap-6">
-                  <div className="flex h-32 w-32 items-center justify-center rounded-3xl bg-primary text-4xl font-black text-white shadow-lg ring-4 ring-white select-none">
-                    {user?.name?.[0] || user?.email?.[0]?.toUpperCase()}
-                  </div>
+                  {/* Avatar with upload */}
+                  <label className="relative cursor-pointer group/avatar flex-shrink-0" title="Click to change photo">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={handleAvatarUpload}
+                      disabled={uploadingAvatar}
+                    />
+                    <div className="flex h-32 w-32 items-center justify-center rounded-3xl bg-primary text-4xl font-black text-white shadow-lg ring-4 ring-white select-none overflow-hidden">
+                      {avatarUrl ? (
+                        <img src={avatarUrl.startsWith('http') ? avatarUrl : `${import.meta.env.VITE_IMAGE_BASE_URL}${avatarUrl}`} alt="Avatar" className="h-full w-full object-cover" />
+                      ) : (
+                        user?.name?.[0] || user?.email?.[0]?.toUpperCase()
+                      )}
+                    </div>
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 rounded-3xl bg-black/50 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity">
+                      {uploadingAvatar ? (
+                        <Loader2 className="h-6 w-6 text-white animate-spin" />
+                      ) : (
+                        <Camera className="h-6 w-6 text-white" />
+                      )}
+                    </div>
+                    {/* Small camera badge */}
+                    <div className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full bg-primary flex items-center justify-center border-2 border-white shadow-md">
+                      <Camera className="h-3.5 w-3.5 text-white" />
+                    </div>
+                  </label>
                   <div className="pb-2">
                     <h2 className="text-2xl font-black text-foreground tracking-tight">{user?.name || 'Incomplete Profile'}</h2>
                     <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mt-1">
                       {user?.role === 'super_admin' ? 'System Administrator' : user?.role === 'vendor' ? 'Merchant Partner' : 'Verified Member'}
                     </p>
+                    <p className="text-[10px] text-muted-foreground/50 font-bold mt-1 uppercase tracking-widest">Click photo to change</p>
                   </div>
                 </div>
 

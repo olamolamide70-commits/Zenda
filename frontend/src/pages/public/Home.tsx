@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import ProductCard from '@/components/ProductCard';
 import { productService } from '@/services';
 import { motion, Variants } from 'framer-motion';
+import { useMemo } from 'react';
 
 const fadeIn: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -60,6 +61,13 @@ export default function Home() {
 
   const featuredProducts = products.slice(0, 4);
 
+  // Dynamic category counts from real data
+  const dynamicCategories = useMemo(() => [
+    { icon: Laptop, label: 'Laptops', count: products.filter((p: any) => p.category === 'Laptops').length || 0 },
+    { icon: Smartphone, label: 'Phones', count: products.filter((p: any) => p.category === 'Phones').length || 0 },
+    { icon: Tablet, label: 'Tablets', count: products.filter((p: any) => p.category === 'Tablets').length || 0 },
+    { icon: Headphones, label: 'Accessories', count: products.filter((p: any) => ['Accessories', 'Audio', 'Wearables'].includes(p.category)).length || 0 },
+  ], [products]);
   return (
     <div className="bg-white min-h-screen selection:bg-primary/10">
       {/* Hero */}
@@ -177,7 +185,7 @@ export default function Home() {
             variants={staggerContainer}
             className="grid grid-cols-1 gap-4 md:grid-cols-4"
           >
-            {categories.map(cat => (
+            {dynamicCategories.map(cat => (
               <motion.div key={cat.label} variants={fadeIn}>
                 <Link to={`/marketplace?category=${cat.label}`} className="group relative flex items-center gap-4 rounded-2xl border border-border bg-white p-5 transition-all hover:border-primary/50 shadow-sm hover:shadow-md">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-50 transition-colors group-hover:bg-primary/10">

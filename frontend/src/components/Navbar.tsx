@@ -45,7 +45,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-4">
           <Link 
-            to="/marketplace" 
+            to="/cart" 
             className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 text-muted-foreground/60 transition-all hover:bg-white hover:text-primary border border-slate-100"
             aria-label={`Shopping cart with ${cartCount} items`}
           >
