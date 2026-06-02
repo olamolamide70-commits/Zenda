@@ -48,16 +48,18 @@ export default function Profile() {
       setUploadingAvatar(true);
       const formData = new FormData();
       formData.append('image', file);
-      const res = await api.post('/upload/image', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      // DO NOT set Content-Type manually — browser must auto-set it with the multipart boundary
+      const res = await api.post('/upload/image', formData);
       const newUrl = res.data.url;
       setAvatarUrl(newUrl);
-      // Persist to profile
-      const updatedUser = await authService.updateProfile({ avatar_url: newUrl } as any);
+      // Persist avatar_url to profile
+      const updatedUser = await authService.updateProfile({ avatar_url: newUrl });
       const token = localStorage.getItem('auth_token') || '';
       login(updatedUser, token);
       toast.success('Profile picture updated! 📸');
-    } catch {
-      toast.error('Failed to upload photo');
+    } catch (err: any) {
+      console.error('Avatar upload error:', err?.response?.data || err.message);
+      toast.error(err?.response?.data?.error || 'Failed to upload photo');
     } finally {
       setUploadingAvatar(false);
     }
@@ -103,14 +105,13 @@ export default function Profile() {
       setUploadingLogo(true);
       const formData = new FormData();
       formData.append('image', file);
-      
-      const res = await api.post('/upload/image', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      // DO NOT set Content-Type manually — browser must auto-set it with the multipart boundary
+      const res = await api.post('/upload/image', formData);
       setLogoUrl(res.data.url);
       toast.success('Logo uploaded successfully!');
-    } catch (err) {
-      toast.error('Failed to upload logo');
+    } catch (err: any) {
+      console.error('Logo upload error:', err?.response?.data || err.message);
+      toast.error(err?.response?.data?.error || 'Failed to upload logo');
     } finally {
       setUploadingLogo(false);
     }
@@ -125,14 +126,13 @@ export default function Profile() {
       setUploadingCac(true);
       const formData = new FormData();
       formData.append('image', file);
-      
-      const res = await api.post('/upload/image', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      // DO NOT set Content-Type manually — browser must auto-set it with the multipart boundary
+      const res = await api.post('/upload/image', formData);
       setCacDocUrl(res.data.url);
       toast.success('CAC filing document uploaded successfully!');
-    } catch (err) {
-      toast.error('Failed to upload CAC document');
+    } catch (err: any) {
+      console.error('CAC upload error:', err?.response?.data || err.message);
+      toast.error(err?.response?.data?.error || 'Failed to upload CAC document');
     } finally {
       setUploadingCac(false);
     }

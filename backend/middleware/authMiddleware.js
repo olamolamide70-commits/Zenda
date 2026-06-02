@@ -35,7 +35,8 @@ exports.protect = async (req, res, next) => {
         tier: user.tier || 'Bronze',
         interest_discount: user.interest_discount || 0,
         nin: user.nin,
-        bvn: user.bvn
+        bvn: user.bvn,
+        avatar_url: user.avatar_url || null
       };
       
       next();

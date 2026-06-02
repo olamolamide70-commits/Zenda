@@ -84,7 +84,8 @@ exports.login = async (req, res) => {
         role: user.role,
         tier: user.tier || 'Bronze',
         risk_score: user.risk_score,
-        credit_limit: user.credit_limit
+        credit_limit: user.credit_limit,
+        avatar_url: user.avatar_url || null
       }
     });
   } catch (error) {
@@ -97,11 +98,20 @@ exports.getProfile = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-  const { name, card_design, is_card_active, nin, bvn } = req.body;
+  const { name, card_design, is_card_active, nin, bvn, avatar_url } = req.body;
   try {
+    // Build update object, only include defined fields
+    const updateFields = {};
+    if (name !== undefined) updateFields.name = name;
+    if (card_design !== undefined) updateFields.card_design = card_design;
+    if (is_card_active !== undefined) updateFields.is_card_active = is_card_active;
+    if (nin !== undefined) updateFields.nin = nin;
+    if (bvn !== undefined) updateFields.bvn = bvn;
+    if (avatar_url !== undefined) updateFields.avatar_url = avatar_url;
+
     const { data, error } = await supabase
       .from('users')
-      .update({ name, card_design, is_card_active, nin, bvn })
+      .update(updateFields)
       .eq('id', req.user.id)
       .select()
       .single();

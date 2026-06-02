@@ -31,6 +31,7 @@ export interface User {
   is_card_active?: boolean;
   nin?: string;
   bvn?: string;
+  avatar_url?: string | null;
 }
 
 export interface CartItem {

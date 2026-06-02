@@ -13,7 +13,7 @@ export const authService = {
   login: (data: { email: string; password?: string }) => api.post('/auth/login', data).then(res => res.data),
   register: (data: { name: string; email: string; password?: string }) => api.post('/auth/signup', data).then(res => res.data),
   getProfile: () => api.get('/auth/profile').then(res => res.data),
-  updateProfile: (data: { name?: string; card_design?: string; is_card_active?: boolean; nin?: string; bvn?: string }) => api.put('/auth/profile', data).then(res => res.data),
+  updateProfile: (data: { name?: string; card_design?: string; is_card_active?: boolean; nin?: string; bvn?: string; avatar_url?: string | null }) => api.put('/auth/profile', data).then(res => res.data),
   activateCard: () => api.post('/auth/activate-card').then(res => res.data),
 };
 
