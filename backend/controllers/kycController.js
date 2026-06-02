@@ -71,12 +71,21 @@ exports.adminReviewKYC = async (req, res) => {
     if (error) throw error;
 
     // Update the latest kyc_verifications record
-    await supabase
+    // First fetch the latest record ID (cannot use .order() with .update() in Supabase)
+    const { data: latestKyc } = await supabase
       .from('kyc_verifications')
-      .update({ status, admin_notes: adminNotes })
+      .select('id')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
-      .limit(1);
+      .limit(1)
+      .single();
+
+    if (latestKyc) {
+      await supabase
+        .from('kyc_verifications')
+        .update({ status, admin_notes: adminNotes })
+        .eq('id', latestKyc.id);
+    }
 
     res.json({ message: `KYC ${status}`, user });
   } catch (error) {

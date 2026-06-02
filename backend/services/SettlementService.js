@@ -77,6 +77,9 @@ class SettlementService {
     const payoutAmount = order.vendor_payout_amount;
     const vendorId = order.vendor_id;
 
+    // Safety: skip if no vendor linked (direct platform sale)
+    if (!vendorId || !payoutAmount) return;
+
     // Move balance for vendor
     const { data: vendor } = await supabase.from('users').select('pending_payout_balance, settled_payout_balance').eq('id', vendorId).single();
     
