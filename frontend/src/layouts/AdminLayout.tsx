@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, Users, ShoppingBag, CreditCard, DollarSign, BarChart3, LogOut, Laptop, Menu, ShieldAlert, ChevronDown, User } from 'lucide-react';
+import { LayoutDashboard, Package, Users, ShoppingBag, CreditCard, DollarSign, BarChart3, LogOut, Laptop, Menu, ShieldAlert, ChevronDown, User, Bell } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
@@ -98,6 +98,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <h1 className="font-display text-lg font-bold text-foreground">Admin Panel</h1>
           <div className="flex-1" />
           <div className="flex items-center gap-6">
+            <Link to="/admin/notifications" className="relative group rounded-xl p-2.5 text-muted-foreground transition-all hover:bg-primary/5 hover:text-primary">
+              <Bell className="h-6 w-6" />
+              <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-primary ring-2 ring-white" />
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-3 pl-4 border-l border-border hover:opacity-80 transition-opacity outline-none">

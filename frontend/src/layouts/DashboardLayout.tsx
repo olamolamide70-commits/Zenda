@@ -34,27 +34,18 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       ];
     }
 
-    if (role === 'admin' || role === 'super_admin') {
-      const adminItems = [
-        { label: 'Admin Panel', to: '/admin', icon: LayoutDashboard },
-        { label: 'All Products', to: '/admin/products', icon: ShoppingBag },
-        { label: 'All Users', to: '/admin/users', icon: User },
-      ];
-      if (role === 'super_admin') {
-        adminItems.push({ label: 'Owner Hub', to: '/admin/super', icon: ShieldAlert });
-      }
+    if (['admin', 'super_admin', 'manager', 'customer_care', 'customer_service', 'staff'].includes(role)) {
       return [
-        ...adminItems,
-        ...common.filter(i => i.label !== 'My Page' && i.label !== 'My Profile')
-      ];
-    }
-
-    if (role === 'customer_care') {
-      return [
-        { label: 'Support Home', to: '/dashboard/support', icon: LayoutDashboard },
-        { label: 'Find User', to: '/admin/users', icon: User },
-        { label: 'Track Orders', to: '/admin/orders', icon: ShoppingBag },
-        ...common
+        { label: 'Admin Portal', to: '/admin', icon: ShieldAlert },
+        { label: 'User Home', to: '/dashboard', icon: LayoutDashboard },
+        { label: 'My Orders', to: '/dashboard/orders', icon: ShoppingBag },
+        { label: 'Payment Plans', to: '/dashboard/installments', icon: CreditCard },
+        { label: 'History', to: '/dashboard/payments', icon: Clock },
+        { label: 'Receipts', to: '/dashboard/receipts', icon: Receipt },
+        { label: 'Wishlist', to: '/dashboard/wishlist', icon: Heart },
+        { label: 'My Profile', to: '/dashboard/profile', icon: User },
+        { label: 'Wallet', to: '/dashboard/payment-methods', icon: Wallet },
+        { label: 'Alerts', to: '/dashboard/notifications', icon: Bell },
       ];
     }
 
