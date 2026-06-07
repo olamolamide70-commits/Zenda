@@ -62,6 +62,7 @@ export const giftCardService = {
   generate: (data: { amount: number }) => api.post('/gift-cards/generate', data).then(res => res.data),
   redeem: (data: { code: string }) => api.post('/gift-cards/redeem', data).then(res => res.data),
   list: () => api.get('/gift-cards').then(res => res.data),
+  deactivate: (id: string) => api.put(`/gift-cards/deactivate/${id}`).then(res => res.data),
 };
 
 export const wishlistService = {

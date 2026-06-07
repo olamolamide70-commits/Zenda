@@ -154,3 +154,47 @@ exports.listGiftCards = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// 4. Deactivate/Revoke Zenda Gift Card (Admin / Super Admin / Merchant who created it)
+exports.deactivateGiftCard = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const { data: card, error: cardError } = await supabase
+      .from('gift_cards')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (cardError || !card) {
+      return res.status(404).json({ error: 'Gift card not found' });
+    }
+
+    const isAdmin = req.user.role === 'admin' || req.user.role === 'super_admin';
+    const isCreator = card.created_by === req.user.id;
+
+    if (!isAdmin && !isCreator) {
+      return res.status(403).json({ error: 'Not authorized to deactivate this gift card' });
+    }
+
+    if (!card.is_active) {
+      return res.status(400).json({ error: 'This gift card is already inactive or claimed' });
+    }
+
+    const { data: updatedCard, error: updateError } = await supabase
+      .from('gift_cards')
+      .update({ is_active: false })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (updateError) throw updateError;
+
+    res.json({
+      message: 'Gift card deactivated successfully',
+      giftCard: updatedCard
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+

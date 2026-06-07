@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminService, giftCardService } from '@/services';
-import { Users, Gift, ShieldAlert, Zap, Loader2, Edit2, CheckCircle2, AlertTriangle, Plus, Badge } from 'lucide-react';
+import { Users, Gift, ShieldAlert, Zap, Loader2, Edit2, AlertTriangle, Badge, TrendingUp, AlertCircle, DollarSign, ShieldOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'react-toastify';
-import { formatCurrency } from '@/utils/helpers';
 import { formatCurrency } from '@/utils/helpers';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '@/services/api';
 
 export default function SuperAdminDashboard() {
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState<'users' | 'giftcards'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'giftcards' | 'policy'>('users');
   
   // States for role/limit editing
   const [editingUser, setEditingUser] = useState<any | null>(null);
@@ -22,6 +21,22 @@ export default function SuperAdminDashboard() {
 
   // States for gift card generation
   const [mintAmount, setMintAmount] = useState('');
+
+  // Maintenance Mode local simulation state
+  const [maintenanceMode, setMaintenanceMode] = useState<boolean>(() => {
+    return localStorage.getItem('maintenance_mode') === 'true';
+  });
+
+  const toggleMaintenanceMode = () => {
+    const nextVal = !maintenanceMode;
+    setMaintenanceMode(nextVal);
+    localStorage.setItem('maintenance_mode', String(nextVal));
+    if (nextVal) {
+      toast.warning('System placed under Maintenance Mode.');
+    } else {
+      toast.success('System is fully operational again.');
+    }
+  };
 
   // 1. Fetch Users List
   const { data: users = [], isLoading: usersLoading } = useQuery<any[]>({
@@ -53,7 +68,16 @@ export default function SuperAdminDashboard() {
     }
   });
 
-  // 3. User Update Mutation
+  // 5. Fetch Detailed Financial Analytics
+  const { data: detailedAnalytics, isLoading: financialsLoading } = useQuery({
+    queryKey: ['admin-detailed-analytics'],
+    queryFn: async () => {
+      const { data } = await api.get('/analytics/detailed');
+      return data;
+    }
+  });
+
+  // 6. User Update Mutation
   const updateUserMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: any }) => adminService.updateUser(id, data),
     onSuccess: () => {
@@ -66,7 +90,7 @@ export default function SuperAdminDashboard() {
     }
   });
 
-  // 4. Gift Card Mint Mutation
+  // 7. Gift Card Mint Mutation
   const mintCardMutation = useMutation({
     mutationFn: (amount: number) => giftCardService.generate({ amount }),
     onSuccess: (res: any) => {
@@ -78,6 +102,24 @@ export default function SuperAdminDashboard() {
       toast.error(err.response?.data?.error || 'Failed to generate gift card');
     }
   });
+
+  // 8. Gift Card Deactivate Mutation
+  const deactivateCardMutation = useMutation({
+    mutationFn: (id: string) => giftCardService.deactivate(id),
+    onSuccess: (res: any) => {
+      queryClient.invalidateQueries({ queryKey: ['admin-giftcards'] });
+      toast.success(res.message || 'Voucher deactivated successfully!');
+    },
+    onError: (err: any) => {
+      toast.error(err.response?.data?.error || 'Failed to deactivate voucher');
+    }
+  });
+
+  const handleDeactivateCard = (id: string) => {
+    if (confirm('Are you sure you want to revoke/deactivate this voucher? It will no longer be redeemable.')) {
+      deactivateCardMutation.mutate(id);
+    }
+  };
 
   const handleOpenEdit = (user: any) => {
     setEditingUser(user);
@@ -112,7 +154,7 @@ export default function SuperAdminDashboard() {
     mintCardMutation.mutate(amount);
   };
 
-  if (usersLoading || cardsLoading || analyticsLoading || staffLoading) {
+  if (usersLoading || cardsLoading || analyticsLoading || staffLoading || financialsLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -123,13 +165,13 @@ export default function SuperAdminDashboard() {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">Owner Console</p>
           <h1 className="text-4xl font-black text-foreground tracking-tight">Zenda Master Hub</h1>
           <p className="mt-1 text-muted-foreground font-medium text-sm">Elevate roles, mint capital cards, and manage the system limits.</p>
         </div>
-        <div className="flex bg-slate-100 p-1.5 rounded-xl gap-2 border border-border">
+        <div className="flex bg-slate-100 p-1.5 rounded-xl gap-2 border border-border shrink-0 self-start md:self-auto">
           <button 
             onClick={() => setActiveTab('users')}
             className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'users' ? 'bg-white text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
@@ -142,64 +184,154 @@ export default function SuperAdminDashboard() {
           >
             Gift Card Minter
           </button>
+          <button 
+            onClick={() => setActiveTab('policy')}
+            className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'policy' ? 'bg-white text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+          >
+            System Policy Rules
+          </button>
         </div>
       </div>
 
       {/* System Status Banner */}
-      <div className="rounded-2xl bg-slate-900 text-white p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl relative overflow-hidden">
-        <div className="absolute -right-8 -top-8 h-32 w-32 bg-primary/20 rounded-full blur-3xl" />
+      <div className={`rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl relative overflow-hidden border transition-all duration-300 ${
+        maintenanceMode 
+          ? 'bg-amber-950 text-amber-50 border-amber-500/40 shadow-amber-950/20' 
+          : 'bg-slate-900 text-white border-slate-800'
+      }`}>
+        <div className={`absolute -right-8 -top-8 h-32 w-32 rounded-full blur-3xl transition-all ${
+          maintenanceMode ? 'bg-amber-500/20' : 'bg-primary/20'
+        }`} />
         <div className="relative z-10 flex items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
-            <Zap className="h-6 w-6 text-emerald-400" />
+          <div className={`h-12 w-12 rounded-full flex items-center justify-center border transition-all ${
+            maintenanceMode 
+              ? 'bg-amber-500/20 border-amber-500/30 text-amber-400' 
+              : 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400'
+          }`}>
+            {maintenanceMode ? <AlertTriangle className="h-6 w-6" /> : <Zap className="h-6 w-6" />}
           </div>
           <div>
             <h3 className="text-xl font-black tracking-tight flex items-center gap-2">
-              System Operational <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              {maintenanceMode ? 'Maintenance Mode Active' : 'System Operational'} 
+              <span className={`h-2 w-2 rounded-full animate-pulse ${
+                maintenanceMode ? 'bg-amber-500' : 'bg-emerald-500'
+              }`} />
             </h3>
-            <p className="text-sm font-medium text-slate-400">All services, payment gateways, and databases are running smoothly.</p>
+            <p className={`text-sm font-medium ${
+              maintenanceMode ? 'text-amber-300/80' : 'text-slate-400'
+            }`}>
+              {maintenanceMode 
+                ? 'Platform registrations and automated credit limits are temporarily restricted.' 
+                : 'All services, payment gateways, and databases are running smoothly.'}
+            </p>
           </div>
         </div>
         <div className="relative z-10 shrink-0">
-          <Button variant="outline" className="border-slate-700 bg-slate-800/50 hover:bg-slate-800 text-slate-300 font-bold text-xs uppercase tracking-widest">
-            Enter Maintenance Mode
+          <Button 
+            onClick={toggleMaintenanceMode}
+            variant="outline" 
+            className={`font-bold text-xs uppercase tracking-widest transition-all ${
+              maintenanceMode 
+                ? 'border-amber-500/30 bg-amber-900/50 hover:bg-amber-900 text-amber-100 hover:text-white' 
+                : 'border-slate-700 bg-slate-800/50 hover:bg-slate-800 text-slate-300'
+            }`}
+          >
+            {maintenanceMode ? 'Restore Live Operations' : 'Enter Maintenance Mode'}
           </Button>
         </div>
       </div>
 
-      {/* System-Wide Demographics Board */}
-      <div className="grid gap-6 md:grid-cols-3">
-        <div className="rounded-2xl border border-border bg-white shadow-sm p-6 group hover:border-indigo-500/30 transition-all">
-          <div className="flex items-center gap-4 mb-2">
-            <div className="rounded-xl bg-indigo-50 p-2.5 text-indigo-500"><Users className="h-5 w-5" /></div>
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Platform Customers</p>
+      {/* System-Wide Demographics & Portfolio Ledger Boards */}
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-sm font-black uppercase tracking-wider text-muted-foreground mb-4 flex items-center gap-2">
+            <Users className="h-4 w-4 text-primary" /> Demographics & Workforce Overview
+          </h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="rounded-2xl border border-border bg-white shadow-sm p-6 group hover:border-indigo-500/30 transition-all">
+              <div className="flex items-center gap-4 mb-2">
+                <div className="rounded-xl bg-indigo-50 p-2.5 text-indigo-500"><Users className="h-5 w-5" /></div>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Platform Customers</p>
+              </div>
+              <h3 className="text-3xl font-black text-foreground">{(userAnalytics?.roleBreakdown?.user || 0).toLocaleString()}</h3>
+              <p className="text-xs text-emerald-600 font-bold mt-2">+{userAnalytics?.velocity?.trend}% from last week</p>
+            </div>
+
+            <div className="rounded-2xl border border-border bg-white shadow-sm p-6 group hover:border-emerald-500/30 transition-all">
+              <div className="flex items-center gap-4 mb-2">
+                <div className="rounded-xl bg-emerald-50 p-2.5 text-emerald-500"><Badge className="h-5 w-5" /></div>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Active Merchants</p>
+              </div>
+              <h3 className="text-3xl font-black text-foreground">{(userAnalytics?.roleBreakdown?.merchant || 0).toLocaleString()}</h3>
+              <p className="text-xs text-muted-foreground font-semibold mt-2">B2B Partners integrated</p>
+            </div>
+
+            <div className="rounded-2xl border border-border bg-white shadow-sm p-6 group hover:border-amber-500/30 transition-all">
+              <div className="flex items-center gap-4 mb-2">
+                <div className="rounded-xl bg-amber-50 p-2.5 text-amber-500"><ShieldAlert className="h-5 w-5" /></div>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Internal Workforce</p>
+              </div>
+              <h3 className="text-3xl font-black text-foreground">{staffAnalytics?.total?.toLocaleString()}</h3>
+              <p className="text-xs text-muted-foreground font-semibold mt-2">Admins, Managers & Support staff</p>
+            </div>
           </div>
-          <h3 className="text-3xl font-black text-foreground">{(userAnalytics?.roleBreakdown?.user || 0).toLocaleString()}</h3>
-          <p className="text-xs text-emerald-600 font-bold mt-2">+{userAnalytics?.velocity?.trend}% from last week</p>
         </div>
 
-        <div className="rounded-2xl border border-border bg-white shadow-sm p-6 group hover:border-emerald-500/30 transition-all">
-          <div className="flex items-center gap-4 mb-2">
-            <div className="rounded-xl bg-emerald-50 p-2.5 text-emerald-500"><Badge className="h-5 w-5" /></div>
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Active Merchants</p>
-          </div>
-          <h3 className="text-3xl font-black text-foreground">{(userAnalytics?.roleBreakdown?.merchant || 0).toLocaleString()}</h3>
-          <p className="text-xs text-muted-foreground font-semibold mt-2">B2B Partners integrated</p>
-        </div>
+        <div>
+          <h2 className="text-sm font-black uppercase tracking-wider text-muted-foreground mb-4 flex items-center gap-2">
+            <TrendingUp className="h-4 w-4 text-emerald-500" /> Active Credit Portfolio & Ledger
+          </h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="rounded-2xl border border-border bg-white shadow-sm p-6 group hover:border-primary/30 transition-all">
+              <div className="flex items-center gap-4 mb-2">
+                <div className="rounded-xl bg-primary/10 p-2.5 text-primary">
+                  <TrendingUp className="h-5 w-5" />
+                </div>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Active Credit Portfolio</p>
+              </div>
+              <h3 className="text-3xl font-black text-foreground">
+                {formatCurrency(detailedAnalytics?.financials?.totalPortfolio || 0)}
+              </h3>
+              <p className="text-xs text-muted-foreground font-semibold mt-2">Total credit value extended</p>
+            </div>
 
-        <div className="rounded-2xl border border-border bg-white shadow-sm p-6 group hover:border-amber-500/30 transition-all">
-          <div className="flex items-center gap-4 mb-2">
-            <div className="rounded-xl bg-amber-50 p-2.5 text-amber-500"><ShieldAlert className="h-5 w-5" /></div>
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Internal Workforce</p>
+            <div className="rounded-2xl border border-border bg-white shadow-sm p-6 group hover:border-red-500/30 transition-all">
+              <div className="flex items-center gap-4 mb-2">
+                <div className="rounded-xl bg-red-50 p-2.5 text-red-500">
+                  <AlertCircle className="h-5 w-5" />
+                </div>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Outstanding Credit Debt</p>
+              </div>
+              <h3 className="text-3xl font-black text-foreground">
+                {formatCurrency(detailedAnalytics?.financials?.outstandingDebt || 0)}
+              </h3>
+              <p className="text-xs text-red-600 font-bold mt-2">
+                {Math.round(((detailedAnalytics?.financials?.outstandingDebt || 0) / (detailedAnalytics?.financials?.totalPortfolio || 1)) * 100)}% unpaid balance
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-border bg-white shadow-sm p-6 group hover:border-emerald-500/30 transition-all">
+              <div className="flex items-center gap-4 mb-2">
+                <div className="rounded-xl bg-emerald-50 p-2.5 text-emerald-500">
+                  <DollarSign className="h-5 w-5" />
+                </div>
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Recovered Capital Revenue</p>
+              </div>
+              <h3 className="text-3xl font-black text-foreground">
+                {formatCurrency(detailedAnalytics?.financials?.recoveredRevenue || 0)}
+              </h3>
+              <p className="text-xs text-emerald-600 font-bold mt-2">
+                {Math.round(((detailedAnalytics?.financials?.recoveredRevenue || 0) / (detailedAnalytics?.financials?.totalPortfolio || 1)) * 100)}% recovery rate
+              </p>
+            </div>
           </div>
-          <h3 className="text-3xl font-black text-foreground">{staffAnalytics?.total?.toLocaleString()}</h3>
-          <p className="text-xs text-muted-foreground font-semibold mt-2">Admins, Managers & Support staff</p>
         </div>
       </div>
 
       {/* Tab 1: User Management Roster */}
       {activeTab === 'users' && (
         <div className="space-y-6">
-          <div className="rounded-2xl border border-border bg-white shadow-sm overflow-hidden">
+          <div className="rounded-2xl border border-border bg-white shadow-sm overflow-hidden animate-in fade-in duration-500">
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
@@ -271,7 +403,7 @@ export default function SuperAdminDashboard() {
 
       {/* Tab 2: Gift Card Minter */}
       {activeTab === 'giftcards' && (
-        <div className="grid gap-8 lg:grid-cols-5 items-start">
+        <div className="grid gap-8 lg:grid-cols-5 items-start animate-in fade-in duration-500">
           {/* Minter Form */}
           <div className="lg:col-span-2 rounded-[2rem] border border-border bg-white p-8 shadow-sm space-y-6">
             <div>
@@ -330,6 +462,7 @@ export default function SuperAdminDashboard() {
                       <th className="py-4">Voucher Capital</th>
                       <th className="py-4">Voucher Status</th>
                       <th className="py-4 pr-8">Redeemed By</th>
+                      <th className="py-4 pr-8 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
@@ -341,10 +474,12 @@ export default function SuperAdminDashboard() {
                           <td className="py-4">
                             <span className={`inline-flex items-center rounded-lg px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest border ${
                               c.is_active 
-                                ? 'bg-green-50 text-green-700 border-green-150' 
-                                : 'bg-slate-50 text-slate-400 border-slate-150'
+                                ? 'bg-green-50 text-green-700 border-green-100' 
+                                : c.redeemed_users 
+                                  ? 'bg-slate-50 text-slate-400 border-slate-200' 
+                                  : 'bg-red-50 text-red-600 border-red-100'
                             }`}>
-                              {c.is_active ? 'Active' : 'Claimed'}
+                              {c.is_active ? 'Active' : c.redeemed_users ? 'Claimed' : 'Revoked'}
                             </span>
                           </td>
                           <td className="py-4 pr-8 text-muted-foreground font-semibold">
@@ -357,17 +492,139 @@ export default function SuperAdminDashboard() {
                               <span className="italic text-slate-350">—</span>
                             )}
                           </td>
+                          <td className="py-4 pr-8 text-right">
+                            {c.is_active ? (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 rounded-lg text-red-500 hover:bg-red-50 hover:text-red-700 transition-colors animate-in fade-in"
+                                onClick={() => handleDeactivateCard(c.id)}
+                                disabled={deactivateCardMutation.isPending}
+                              >
+                                <ShieldOff className="h-4 w-4" />
+                              </Button>
+                            ) : (
+                              <span className="text-xs text-muted-foreground italic font-medium">
+                                {c.redeemed_users ? 'Claimed' : 'Voided'}
+                              </span>
+                            )}
+                          </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={4} className="py-12 text-center text-muted-foreground font-medium">
+                        <td colSpan={5} className="py-12 text-center text-muted-foreground font-medium">
                           No voucher gift cards minted yet.
                         </td>
                       </tr>
                     )}
                   </tbody>
                 </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 3: System Policy & Configurations */}
+      {activeTab === 'policy' && (
+        <div className="grid gap-8 lg:grid-cols-2 items-start animate-in fade-in slide-in-from-bottom-4 duration-500">
+          {/* Card 1: Core Installment Rules */}
+          <div className="rounded-[2rem] border border-border bg-white p-8 shadow-sm space-y-6">
+            <div>
+              <h3 className="text-xl font-black text-foreground tracking-tight flex items-center gap-2">
+                <ShieldAlert className="h-5 w-5 text-primary" /> Core Installment Policy
+              </h3>
+              <p className="text-xs text-muted-foreground font-medium mt-1">
+                Platform-wide parameters that govern order creations, automatic schedules, and interest rates.
+              </p>
+            </div>
+
+            <div className="divide-y divide-border border-y border-border">
+              <div className="py-4 flex justify-between items-center">
+                <div>
+                  <h4 className="font-bold text-foreground text-sm">Base Interest Rate</h4>
+                  <p className="text-xs text-muted-foreground">Standard flat interest rate applied to installment plans.</p>
+                </div>
+                <span className="font-black text-lg text-primary">5.0% flat / month</span>
+              </div>
+
+              <div className="py-4 flex justify-between items-center">
+                <div>
+                  <h4 className="font-bold text-foreground text-sm">Standard Late Payment Fine</h4>
+                  <p className="text-xs text-muted-foreground">Fine applied to installment balances upon payment default.</p>
+                </div>
+                <span className="font-black text-lg text-red-500">10.0% standard charge</span>
+              </div>
+
+              <div className="py-4 flex justify-between items-center">
+                <div>
+                  <h4 className="font-bold text-foreground text-sm">Minimum Down Payment</h4>
+                  <p className="text-xs text-muted-foreground">The mandatory initial payment requirement on checkout.</p>
+                </div>
+                <span className="font-black text-lg text-emerald-600">20.0% upfront</span>
+              </div>
+
+              <div className="py-4 flex justify-between items-center">
+                <div>
+                  <h4 className="font-bold text-foreground text-sm">Grace Payment Period</h4>
+                  <p className="text-xs text-muted-foreground">Number of days allowed before accounts are flagged as default.</p>
+                </div>
+                <span className="font-black text-lg text-foreground">3 Days</span>
+              </div>
+            </div>
+
+            <div className="bg-slate-50 rounded-xl p-4 border border-border">
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                💡 <span className="font-bold text-foreground">Note:</span> These policy coefficients are standard platform defaults. User-specific interest rate overrides can be managed by assigning tiers (Bronze, Silver, Gold) which offer discounts on base interest.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 2: AI Credit Allocation & Risk Scores */}
+          <div className="rounded-[2rem] border border-border bg-white p-8 shadow-sm space-y-6">
+            <div>
+              <h3 className="text-xl font-black text-foreground tracking-tight flex items-center gap-2">
+                <Users className="h-5 w-5 text-indigo-500" /> AI Risk Allocations
+              </h3>
+              <p className="text-xs text-muted-foreground font-medium mt-1">
+                Tiers and automated limits designated to users based on credit checks and KYC verification.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="p-4 rounded-xl border border-border hover:border-primary/20 transition-all">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">Bronze Tier</span>
+                  <span className="text-xs font-bold text-primary bg-primary/5 px-2 py-0.5 rounded-lg">Up to ₦100,000 limit</span>
+                </div>
+                <p className="text-xs text-muted-foreground">Standard rating for unverified or newly registered accounts. Base interest rate applies (0% discount).</p>
+              </div>
+
+              <div className="p-4 rounded-xl border border-border hover:border-teal-500/20 transition-all">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">Silver Tier</span>
+                  <span className="text-xs font-bold text-teal-600 bg-teal-50 px-2 py-0.5 rounded-lg">Up to ₦250,000 limit</span>
+                </div>
+                <p className="text-xs text-muted-foreground">Unlocked after KYC approval and 1 successful installment cycle. Offers a 10% discount on base interest.</p>
+              </div>
+
+              <div className="p-4 rounded-xl border border-border hover:border-amber-500/20 transition-all">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">Gold Tier</span>
+                  <span className="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-lg">Up to ₦500,000 limit</span>
+                </div>
+                <p className="text-xs text-muted-foreground">Premium tier for high risk-graded users with excellent repayment behavior. Offers a 20% discount on base interest.</p>
+              </div>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-indigo-950 text-white relative overflow-hidden">
+              <div className="relative z-10">
+                <h4 className="font-black text-sm tracking-tight mb-1">Algorithmic Risk Scoring (0-100)</h4>
+                <p className="text-xs text-indigo-200 leading-relaxed">
+                  The system automatically calculates a user's risk score upon profile updates. 
+                  Scores between 0-30 are flagged as Low Risk, while scores above 60 trigger manual kyc audit requirements.
+                </p>
               </div>
             </div>
           </div>
