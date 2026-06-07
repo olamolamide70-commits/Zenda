@@ -19,7 +19,7 @@ module.exports = {
   supabase,
   // Placeholder for any raw SQL queries that might still be using this export
   query: async (text, params) => {
-    console.error('❌ Legacy query() called. Please refactor to use supabase client or rpc.');
+    console.error('. Legacy query() called. Please refactor to use supabase client or rpc.');
     console.error('Query:', text);
     throw new Error('Direct SQL queries via config/db are deprecated. Use supabase client.');
   }

@@ -61,9 +61,9 @@ async function seedDatabase() {
 
     if (error) throw error;
 
-    console.log('✅ Marketplace seeded successfully with premium gadgets!');
+    console.log('. Marketplace seeded successfully with premium gadgets!');
   } catch (error) {
-    console.error('❌ Error seeding database:', error.message);
+    console.error('. Error seeding database:', error.message);
   }
 }
 

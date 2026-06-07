@@ -54,9 +54,9 @@ const verifyKYC = async () => {
     // 4. Verify
     const { rows: res } = await pool.query('SELECT kyc_status, credit_limit, nin FROM users WHERE id = $1', [userId]);
     if (res[0].kyc_status === 'verified' && res[0].nin === nin) {
-      console.log('✅ KYC VERIFICATION PASSED');
+      console.log('. KYC VERIFICATION PASSED');
     } else {
-      console.error('❌ KYC VERIFICATION FAILED', res[0]);
+      console.error('. KYC VERIFICATION FAILED', res[0]);
     }
 
   } catch (err) {

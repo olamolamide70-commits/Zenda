@@ -41,9 +41,9 @@ exports.processEscrowSettlements = async () => {
           .update({ is_settled_to_vendor: true })
           .eq('id', trx.id);
 
-        console.log(`✅ Settlement successful for transaction ${trx.id}`);
+        console.log(`. Settlement successful for transaction ${trx.id}`);
       } catch (err) {
-        console.error(`❌ Failed to settle transaction ${trx.id}:`, err.message);
+        console.error(`. Failed to settle transaction ${trx.id}:`, err.message);
       }
     }
 

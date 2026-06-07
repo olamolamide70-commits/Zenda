@@ -43,9 +43,9 @@ const verifyCACUpload = async () => {
     const { rows: resKV } = await pool.query('SELECT status, cac_url FROM kyc_verifications WHERE user_id = $1', [userId]);
 
     if (res[0].kyc_status === 'verified' && res[0].cac_url === cacUrl && resKV[0].cac_url === cacUrl) {
-      console.log('✅ CAC UPLOAD VERIFICATION PASSED');
+      console.log('. CAC UPLOAD VERIFICATION PASSED');
     } else {
-      console.error('❌ CAC UPLOAD VERIFICATION FAILED', { user: res[0], kyc: resKV[0] });
+      console.error('. CAC UPLOAD VERIFICATION FAILED', { user: res[0], kyc: resKV[0] });
     }
 
   } catch (err) {

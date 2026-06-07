@@ -85,3 +85,69 @@ exports.getGrowthData = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getUserAnalytics = async (req, res) => {
+  try {
+    const { data: users, error } = await supabase
+      .from('users')
+      .select('role, kyc_status, created_at');
+
+    if (error) throw error;
+
+    const roleBreakdown = (users || []).reduce((acc, u) => {
+      acc[u.role] = (acc[u.role] || 0) + 1;
+      return acc;
+    }, {});
+
+    const kycBreakdown = (users || []).reduce((acc, u) => {
+      acc[u.kyc_status] = (acc[u.kyc_status] || 0) + 1;
+      return acc;
+    }, {});
+
+    // Recent velocity (last 7 days vs previous 7 days)
+    const now = new Date();
+    const lastWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const twoWeeksAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+
+    const thisWeekSignups = users.filter(u => new Date(u.created_at) >= lastWeek).length;
+    const lastWeekSignups = users.filter(u => {
+      const d = new Date(u.created_at);
+      return d >= twoWeeksAgo && d < lastWeek;
+    }).length;
+
+    res.json({
+      roleBreakdown,
+      kycBreakdown,
+      velocity: {
+        thisWeek: thisWeekSignups,
+        lastWeek: lastWeekSignups,
+        trend: lastWeekSignups === 0 ? 100 : Math.round(((thisWeekSignups - lastWeekSignups) / lastWeekSignups) * 100)
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getStaffAnalytics = async (req, res) => {
+  try {
+    const { data: staff, error } = await supabase
+      .from('users')
+      .select('role')
+      .in('role', ['admin', 'super_admin', 'manager', 'staff', 'customer_care', 'customer_service']);
+
+    if (error) throw error;
+
+    const breakdown = (staff || []).reduce((acc, s) => {
+      acc[s.role] = (acc[s.role] || 0) + 1;
+      return acc;
+    }, {});
+
+    res.json({
+      total: staff?.length || 0,
+      breakdown
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

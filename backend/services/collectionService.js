@@ -74,13 +74,13 @@ exports.processCollection = async () => {
           try {
             const success = await chargeAuthorization(user.email, inst.remaining_balance, authCode);
             if (success) {
-              console.log(`✅ Auto-retry successful for ${inst.id}`);
+              console.log(`. Auto-retry successful for ${inst.id}`);
               await supabase
                 .from('installments')
                 .update({ remaining_balance: 0, status: 'completed' })
                 .eq('id', inst.id);
             } else {
-              console.warn(`❌ Auto-retry failed for ${inst.id}`);
+              console.warn(`. Auto-retry failed for ${inst.id}`);
               await supabase
                 .from('installments')
                 .update({ last_collection_retry: new Date().toISOString() })

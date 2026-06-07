@@ -5,7 +5,9 @@ import { Users, Gift, ShieldAlert, Zap, Loader2, Edit2, CheckCircle2, AlertTrian
 import { Button } from '@/components/ui/button';
 import { toast } from 'react-toastify';
 import { formatCurrency } from '@/utils/helpers';
+import { formatCurrency } from '@/utils/helpers';
 import { motion, AnimatePresence } from 'framer-motion';
+import api from '@/services/api';
 
 export default function SuperAdminDashboard() {
   const queryClient = useQueryClient();
@@ -31,6 +33,24 @@ export default function SuperAdminDashboard() {
   const { data: giftCards = [], isLoading: cardsLoading } = useQuery<any[]>({
     queryKey: ['admin-giftcards'],
     queryFn: () => giftCardService.list()
+  });
+
+  // 3. Fetch User Analytics (Demographics)
+  const { data: userAnalytics, isLoading: analyticsLoading } = useQuery({
+    queryKey: ['admin-user-analytics'],
+    queryFn: async () => {
+      const { data } = await api.get('/analytics/users');
+      return data;
+    }
+  });
+
+  // 4. Fetch Staff Analytics
+  const { data: staffAnalytics, isLoading: staffLoading } = useQuery({
+    queryKey: ['admin-staff-analytics'],
+    queryFn: async () => {
+      const { data } = await api.get('/analytics/staff');
+      return data;
+    }
   });
 
   // 3. User Update Mutation
@@ -92,7 +112,7 @@ export default function SuperAdminDashboard() {
     mintCardMutation.mutate(amount);
   };
 
-  if (usersLoading || cardsLoading) {
+  if (usersLoading || cardsLoading || analyticsLoading || staffLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -125,6 +145,57 @@ export default function SuperAdminDashboard() {
         </div>
       </div>
 
+      {/* System Status Banner */}
+      <div className="rounded-2xl bg-slate-900 text-white p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl relative overflow-hidden">
+        <div className="absolute -right-8 -top-8 h-32 w-32 bg-primary/20 rounded-full blur-3xl" />
+        <div className="relative z-10 flex items-center gap-4">
+          <div className="h-12 w-12 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
+            <Zap className="h-6 w-6 text-emerald-400" />
+          </div>
+          <div>
+            <h3 className="text-xl font-black tracking-tight flex items-center gap-2">
+              System Operational <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            </h3>
+            <p className="text-sm font-medium text-slate-400">All services, payment gateways, and databases are running smoothly.</p>
+          </div>
+        </div>
+        <div className="relative z-10 shrink-0">
+          <Button variant="outline" className="border-slate-700 bg-slate-800/50 hover:bg-slate-800 text-slate-300 font-bold text-xs uppercase tracking-widest">
+            Enter Maintenance Mode
+          </Button>
+        </div>
+      </div>
+
+      {/* System-Wide Demographics Board */}
+      <div className="grid gap-6 md:grid-cols-3">
+        <div className="rounded-2xl border border-border bg-white shadow-sm p-6 group hover:border-indigo-500/30 transition-all">
+          <div className="flex items-center gap-4 mb-2">
+            <div className="rounded-xl bg-indigo-50 p-2.5 text-indigo-500"><Users className="h-5 w-5" /></div>
+            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Platform Customers</p>
+          </div>
+          <h3 className="text-3xl font-black text-foreground">{(userAnalytics?.roleBreakdown?.user || 0).toLocaleString()}</h3>
+          <p className="text-xs text-emerald-600 font-bold mt-2">+{userAnalytics?.velocity?.trend}% from last week</p>
+        </div>
+
+        <div className="rounded-2xl border border-border bg-white shadow-sm p-6 group hover:border-emerald-500/30 transition-all">
+          <div className="flex items-center gap-4 mb-2">
+            <div className="rounded-xl bg-emerald-50 p-2.5 text-emerald-500"><Badge className="h-5 w-5" /></div>
+            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Active Merchants</p>
+          </div>
+          <h3 className="text-3xl font-black text-foreground">{(userAnalytics?.roleBreakdown?.merchant || 0).toLocaleString()}</h3>
+          <p className="text-xs text-muted-foreground font-semibold mt-2">B2B Partners integrated</p>
+        </div>
+
+        <div className="rounded-2xl border border-border bg-white shadow-sm p-6 group hover:border-amber-500/30 transition-all">
+          <div className="flex items-center gap-4 mb-2">
+            <div className="rounded-xl bg-amber-50 p-2.5 text-amber-500"><ShieldAlert className="h-5 w-5" /></div>
+            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Internal Workforce</p>
+          </div>
+          <h3 className="text-3xl font-black text-foreground">{staffAnalytics?.total?.toLocaleString()}</h3>
+          <p className="text-xs text-muted-foreground font-semibold mt-2">Admins, Managers & Support staff</p>
+        </div>
+      </div>
+
       {/* Tab 1: User Management Roster */}
       {activeTab === 'users' && (
         <div className="space-y-6">
@@ -154,8 +225,10 @@ export default function SuperAdminDashboard() {
                         <span className={`inline-flex items-center rounded-lg px-2 py-1 text-[10px] font-bold uppercase tracking-widest ${
                           u.role === 'super_admin' ? 'bg-red-50 text-red-600 border border-red-100' :
                           u.role === 'admin' ? 'bg-indigo-50 text-indigo-600 border border-indigo-100' :
-                          u.role === 'vendor' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
-                          u.role === 'customer_care' ? 'bg-amber-50 text-amber-600 border border-amber-100' :
+                          u.role === 'manager' ? 'bg-teal-50 text-teal-600 border border-teal-100' :
+                          u.role === 'merchant' || u.role === 'vendor' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
+                          u.role === 'customer_care' || u.role === 'customer_service' ? 'bg-amber-50 text-amber-600 border border-amber-100' :
+                          u.role === 'staff' ? 'bg-slate-100 text-slate-700 border border-slate-200' :
                           'bg-slate-50 text-slate-600 border border-slate-100'
                         }`}>
                           {u.role.replace('_', ' ')}
@@ -333,8 +406,11 @@ export default function SuperAdminDashboard() {
                     className="w-full h-12 px-4 rounded-xl border border-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary font-bold text-xs uppercase tracking-widest transition-all"
                   >
                     <option value="user">User (Customer)</option>
-                    <option value="vendor">Vendor (Merchant)</option>
+                    <option value="merchant">Merchant</option>
+                    <option value="customer_service">Customer Service</option>
                     <option value="customer_care">Customer Care</option>
+                    <option value="staff">Staff (Ops)</option>
+                    <option value="manager">Manager</option>
                     <option value="admin">Admin</option>
                     <option value="super_admin">Super Admin</option>
                   </select>

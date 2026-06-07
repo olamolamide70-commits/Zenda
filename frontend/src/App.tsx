@@ -47,7 +47,7 @@ import ReferralHistory from "@/pages/dashboard/ReferralHistory";
 import VendorDashboard from "@/pages/dashboard/VendorDashboard";
 
 // Admin pages
-import AdminDashboard from "@/pages/admin/AdminDashboard";
+import AdminDashboardRouter from "@/pages/admin/AdminDashboardRouter";
 import AdminProducts from "@/pages/admin/AdminProducts";
 import AdminUsers from "@/pages/admin/AdminUsers";
 import AdminOrders from "@/pages/admin/AdminOrders";
@@ -56,6 +56,7 @@ import AdminTransactions from "@/pages/admin/AdminTransactions";
 import SuperAdminDashboard from "@/pages/admin/SuperAdminDashboard";
 import SupportDashboard from "@/pages/dashboard/SupportDashboard";
 import AdminAnalytics from "@/pages/admin/AdminAnalytics";
+import AdminProfile from "@/pages/admin/AdminProfile";
 import Developers from "@/pages/public/Developers";
 import ApiSettings from "@/pages/dashboard/ApiSettings";
 import B2BProcurementDashboard from "@/pages/dashboard/B2BProcurementDashboard";
@@ -114,24 +115,25 @@ const App = () => (
           <Route path="/dashboard/payment-methods" element={<ProtectedRoute><DashboardLayout><PaymentMethods /></DashboardLayout></ProtectedRoute>} />
           <Route path="/dashboard/notifications" element={<ProtectedRoute><DashboardLayout><Notifications /></DashboardLayout></ProtectedRoute>} />
           <Route path="/dashboard/referrals" element={<ProtectedRoute><DashboardLayout><ReferralHistory /></DashboardLayout></ProtectedRoute>} />
-           <Route path="/dashboard/api" element={<ProtectedRoute allowedRoles={['vendor', 'super_admin']}><DashboardLayout><ApiSettings /></DashboardLayout></ProtectedRoute>} />
+            <Route path="/dashboard/api" element={<ProtectedRoute allowedRoles={['vendor', 'merchant', 'super_admin']}><DashboardLayout><ApiSettings /></DashboardLayout></ProtectedRoute>} />
           <Route path="/dashboard/procurement" element={<ProtectedRoute><DashboardLayout><B2BProcurementDashboard /></DashboardLayout></ProtectedRoute>} />
-          <Route path="/dashboard/vendor" element={<ProtectedRoute allowedRoles={['vendor', 'super_admin']}><DashboardLayout><VendorDashboard /></DashboardLayout></ProtectedRoute>} />
-          <Route path="/dashboard/support" element={<ProtectedRoute allowedRoles={['customer_care', 'super_admin']}><DashboardLayout><SupportDashboard /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dashboard/vendor" element={<ProtectedRoute allowedRoles={['vendor', 'merchant', 'super_admin']}><DashboardLayout><VendorDashboard /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dashboard/support" element={<ProtectedRoute allowedRoles={['customer_care', 'customer_service', 'super_admin']}><DashboardLayout><SupportDashboard /></DashboardLayout></ProtectedRoute>} />
           <Route path="/admin/super" element={<ProtectedRoute allowedRoles={['super_admin']}><AdminLayout><SuperAdminDashboard /></AdminLayout></ProtectedRoute>} />
 
           {/* Merchant routes */}
-          <Route path="/merchant/products" element={<ProtectedRoute allowedRoles={['vendor', 'admin', 'super_admin']}><DashboardLayout><AdminProducts /></DashboardLayout></ProtectedRoute>} />
-          <Route path="/merchant/analytics" element={<ProtectedRoute allowedRoles={['vendor', 'admin', 'super_admin']}><DashboardLayout><AdminAnalytics /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/merchant/products" element={<ProtectedRoute allowedRoles={['vendor', 'merchant', 'admin', 'super_admin']}><DashboardLayout><AdminProducts /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/merchant/analytics" element={<ProtectedRoute allowedRoles={['vendor', 'merchant', 'admin', 'super_admin']}><DashboardLayout><AdminAnalytics /></DashboardLayout></ProtectedRoute>} />
 
           {/* Admin routes */}
-          <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminDashboard /></AdminLayout></ProtectedRoute>} />
-          <Route path="/admin/products" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminProducts /></AdminLayout></ProtectedRoute>} />
-          <Route path="/admin/users" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminUsers /></AdminLayout></ProtectedRoute>} />
-          <Route path="/admin/orders" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminOrders /></AdminLayout></ProtectedRoute>} />
-          <Route path="/admin/installments" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminInstallments /></AdminLayout></ProtectedRoute>} />
-          <Route path="/admin/transactions" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminTransactions /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'manager', 'customer_care', 'customer_service', 'staff']}><AdminLayout><AdminDashboardRouter /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/products" element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'manager', 'staff']}><AdminLayout><AdminProducts /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/users" element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'customer_care', 'customer_service']}><AdminLayout><AdminUsers /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/orders" element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'manager', 'staff']}><AdminLayout><AdminOrders /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/installments" element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'customer_care', 'customer_service']}><AdminLayout><AdminInstallments /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/transactions" element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'manager']}><AdminLayout><AdminTransactions /></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/analytics" element={<ProtectedRoute allowedRoles={['admin', 'super_admin']}><AdminLayout><AdminAnalytics /></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/profile" element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'manager', 'customer_care', 'customer_service', 'staff']}><AdminLayout><AdminProfile /></AdminLayout></ProtectedRoute>} />
           <Route path="*" element={<MainLayout><NotFound /></MainLayout>} />
         </Routes>
         <AssistantChat />

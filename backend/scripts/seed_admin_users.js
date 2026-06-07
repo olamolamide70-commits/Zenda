@@ -32,17 +32,50 @@ const supabase = createClient(
 const TEST_PASSWORD = 'Password123@';
 
 const USERS = [
-  { email: 'makindeolasubomi5@gmail.com',   name: 'Olasubomi Makinde', role: 'super_admin' },
-  { email: 'olamide@gmail.com',             name: 'Olamide Admin',     role: 'super_admin' },
-  { email: 'tunde.admin@gadgetflex.com.ng', name: 'Tunde Afolayan',   role: 'admin' },
-  { email: 'john.admin@zenda.co',           name: 'John Olamide',     role: 'admin' },
-  { email: 'grace.admin@zenda.co',          name: 'Grace Bello',      role: 'admin' },
-  { email: 'sarah.cs@gadgetflex.com.ng',    name: 'Sarah Ifeanyi',    role: 'customer_care' },
-  { email: 'ahmed.cs@gadgetflex.com.ng',    name: 'Ahmed Lawal',      role: 'customer_care' },
-  { email: 'uche.cs@gadgetflex.com.ng',     name: 'Uche Okafor',      role: 'customer_care' },
-  { email: 'tosin.cs@gadgetflex.com.ng',    name: 'Tosin Balogun',    role: 'customer_care' },
-  { email: 'miracle.cs@gadgetflex.com.ng',  name: 'Miracle Ebube',    role: 'customer_care' },
+  { email: 'superadminflex@gmail.com', name: 'Super Admin Flex', role: 'super_admin' },
+  { email: 'adminflex@gmail.com', name: 'Admin Flex', role: 'admin' }
 ];
+
+// Add 5 Managers
+for (let i = 1; i <= 5; i++) {
+  USERS.push({
+    email: `manager${i}@gadgetflex.com.ng`,
+    name: `Manager Flex ${i}`,
+    role: 'manager'
+  });
+}
+
+// Add 30 Staff
+for (let i = 1; i <= 30; i++) {
+  USERS.push({
+    email: `staff${i}@gadgetflex.com.ng`,
+    name: `Staff Flex ${i}`,
+    role: 'staff'
+  });
+}
+
+// Add 8 Customer Services
+for (let i = 1; i <= 8; i++) {
+  USERS.push({
+    email: `cs${i}@gadgetflex.com.ng`,
+    name: `Customer Service Flex ${i}`,
+    role: 'customer_service'
+  });
+}
+
+// Add 10 Customer Care with distinct info
+const careNames = [
+  'Sarah Ifeanyi', 'Ahmed Lawal', 'Uche Okafor', 'Tosin Balogun', 'Miracle Ebube',
+  'Grace Bello', 'Olamide Ojo', 'Bisi Akande', 'Chinedu Eze', 'Fatima Musa'
+];
+for (let i = 1; i <= 10; i++) {
+  USERS.push({
+    email: `care${i}@gadgetflex.com.ng`,
+    name: careNames[i - 1] || `Customer Care Flex ${i}`,
+    role: 'customer_care'
+  });
+}
+
 
 async function deleteAllExistingUsers() {
   console.log('🗑️  Cleaning up old/broken user records via Admin API...');
@@ -121,24 +154,24 @@ async function seedUsers() {
 
       if (profileError) throw profileError;
 
-      console.log(`  ✅ ${u.role.padEnd(14)} | ${u.name.padEnd(22)} | ${u.email}`);
+      console.log(`  . ${u.role.padEnd(14)} | ${u.name.padEnd(22)} | ${u.email}`);
       created++;
 
     } catch (err) {
-      console.error(`  ❌ FAILED   | ${u.name.padEnd(22)} | ${u.email}`);
+      console.error(`  . FAILED   | ${u.name.padEnd(22)} | ${u.email}`);
       console.error(`              Error: ${err.message}`);
       failed++;
     }
   }
 
   console.log('\n════════════════════════════');
-  console.log(`✅ Created: ${created}  |  ❌ Failed: ${failed}`);
+  console.log(`. Created: ${created}  |  . Failed: ${failed}`);
 
   if (created > 0) {
     console.log('\n📋 All accounts use password: ' + TEST_PASSWORD);
-    console.log('\nSuper Admins: makindeolasubomi5@gmail.com | olamide@gmail.com');
-    console.log('Admins: tunde.admin@gadgetflex.com.ng | john.admin@zenda.co | grace.admin@zenda.co');
-    console.log('CS: sarah/ahmed/uche/tosin/miracle.cs@gadgetflex.com.ng\n');
+    console.log('\nSuper Admin: superadminflex@gmail.com');
+    console.log('Admin: adminflex@gmail.com');
+    console.log('Added 5 Managers, 30 Staff, 8 Customer Services, and 10 Customer Care accounts.\n');
   }
 
   if (failed > 0) {

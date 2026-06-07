@@ -61,9 +61,9 @@ const verifySettlement = async () => {
     const { rows: cards } = await pool.query('SELECT * FROM auto_debit_subscriptions WHERE user_id = $1', [userId]);
 
     if (inst[0].remaining_balance == 150000 && cards.length > 0) {
-      console.log('✅ SETTLEMENT VERIFICATION PASSED');
+      console.log('. SETTLEMENT VERIFICATION PASSED');
     } else {
-      console.error('❌ SETTLEMENT VERIFICATION FAILED', inst[0]);
+      console.error('. SETTLEMENT VERIFICATION FAILED', inst[0]);
     }
 
   } catch (err) {

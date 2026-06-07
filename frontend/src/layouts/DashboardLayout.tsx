@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, ShoppingBag, CreditCard, Receipt, Clock, Heart, User, Bell, Wallet, LogOut, Laptop, Menu, ShieldAlert } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, CreditCard, Receipt, Clock, Heart, User, Bell, Wallet, LogOut, Laptop, Menu, ShieldAlert, ChevronDown } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
 
 const sidebarOpenPlaceholder = false; 
@@ -127,15 +128,31 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               <Bell className="h-6 w-6" />
               <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-primary ring-2 ring-white" />
             </Link>
-            <div className="flex items-center gap-3 pl-4 border-l border-border">
-              <div className="text-right hidden sm:block">
-                <p className="text-sm font-bold text-foreground leading-none">{user?.name || user?.email}</p>
-              </div>
-
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary text-sm font-bold shadow-sm">
-                {(user?.name || user?.email)?.charAt(0).toUpperCase()}
-              </div>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-3 pl-4 border-l border-border hover:opacity-80 transition-opacity outline-none">
+                  <div className="text-right hidden sm:block">
+                    <p className="text-sm font-bold text-foreground leading-none">{user?.name || user?.email}</p>
+                  </div>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary text-sm font-bold shadow-sm">
+                    {(user?.name || user?.email)?.charAt(0).toUpperCase()}
+                  </div>
+                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 mt-2 rounded-xl border border-border p-2">
+                <DropdownMenuItem asChild className="rounded-lg cursor-pointer py-2.5">
+                  <Link to="/dashboard/profile" className="flex items-center gap-2 font-bold text-sm">
+                    <User className="h-4 w-4" /> My Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout} className="rounded-lg cursor-pointer py-2.5 text-destructive focus:bg-destructive/10 focus:text-destructive mt-1">
+                  <div className="flex items-center gap-2 font-bold text-sm w-full">
+                    <LogOut className="h-4 w-4" /> Logout
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
           </div>
         </header>

@@ -15,24 +15,32 @@ import { motion } from "framer-motion";
 export default function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const { login: contextLogin } = useApp();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
     try {
       const response = await authService.login({ email, password });
       contextLogin(response.user, response.token);
       toast.success("Welcome back!");
-      navigate("/dashboard");
+      
+      const role = response.user.role;
+      if (['super_admin', 'admin', 'manager', 'customer_care', 'customer_service', 'staff'].includes(role)) {
+        navigate("/admin");
+      } else if (role === 'vendor' || role === 'merchant') {
+        navigate("/dashboard/vendor");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Login failed.");
     }
   };
+
+
 
   return (
     <div className="flex min-h-screen bg-background overflow-hidden">
@@ -109,16 +117,16 @@ export default function Login() {
       </div>
 
       {/* Right Side: Login Form */}
-      <div className="relative flex flex-1 items-center justify-center p-8 bg-background">
+      <div className="relative flex flex-1 items-center justify-center p-8 bg-background overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-[420px] bg-white border border-border p-10 lg:p-12 rounded-2xl shadow-sm"
+          className="w-full max-w-[440px] bg-white border border-border p-8 lg:p-10 rounded-2xl shadow-sm my-8"
         >
           {/* Mobile Logo */}
           <Link
             to="/"
-            className="mb-10 flex items-center justify-center gap-3 lg:hidden"
+            className="mb-8 flex items-center justify-center gap-3 lg:hidden"
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-white shadow-md">
               <Laptop className="h-6 w-6" />
@@ -128,68 +136,74 @@ export default function Login() {
             </span>
           </Link>
 
-            <div className="mb-10 text-center lg:text-left">
-              <h1 className="text-3xl font-bold text-foreground tracking-tight mb-3">
-                Welcome back
-              </h1>
-              <p className="text-muted-foreground font-medium">
-                Enter your credentials to access your Zenda dashboard.
-              </p>
+          <div className="mb-8 text-center lg:text-left">
+            <h1 className="text-3xl font-bold text-foreground tracking-tight mb-2">
+              Welcome back
+            </h1>
+            <p className="text-muted-foreground font-medium text-sm">
+              Enter your credentials to access your Zenda dashboard.
+            </p>
+          </div>
+
+
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                Email Address
+              </Label>
+              <Input
+                name="email"
+                type="email"
+                placeholder="yourname@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-12 px-4 bg-secondary/20 border-border rounded-xl focus:ring-primary/20 transition-all font-medium"
+                required
+              />
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                  Email Address
-                </Label>
+            <div className="space-y-2">
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                Password
+              </Label>
+              <div className="relative">
                 <Input
-                  name="email"
-                  type="email"
-                  placeholder="yourname@gmail.com"
-                  className="h-12 px-4 bg-secondary/20 border-border rounded-xl focus:ring-primary/20 transition-all font-medium"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="h-12 pl-4 pr-12 bg-secondary/20 border-border rounded-xl focus:ring-primary/20 transition-all font-medium w-full"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
-                  Password
+            <div className="flex items-center justify-between px-1">
+              <div className="flex items-center gap-2">
+                <Checkbox id="remember" name="remember" className="h-4 w-4 rounded-md border-border text-primary focus:ring-primary" />
+                <Label htmlFor="remember" className="text-xs font-semibold text-muted-foreground cursor-pointer select-none">
+                  Remember me
                 </Label>
-                <div className="relative">
-                  <Input
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    className="h-12 pl-4 pr-12 bg-secondary/20 border-border rounded-xl focus:ring-primary/20 transition-all font-medium w-full"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none transition-colors"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-5 w-5" />
-                    ) : (
-                      <Eye className="h-5 w-5" />
-                    )}
-                  </button>
-                </div>
               </div>
+              <Link to="/forgot-password" className="text-xs font-bold text-primary hover:underline transition-all">
+                Forgot Password?
+              </Link>
+            </div>
 
-              <div className="flex items-center justify-between px-1">
-                <div className="flex items-center gap-2">
-                  <Checkbox id="remember" name="remember" className="h-4 w-4 rounded-md border-border text-primary focus:ring-primary" />
-                  <Label htmlFor="remember" className="text-xs font-semibold text-muted-foreground cursor-pointer select-none">
-                    Remember me
-                  </Label>
-                </div>
-                <Link to="/forgot-password" className="text-xs font-bold text-primary hover:underline transition-all">
-                  Forgot Password?
-                </Link>
-              </div>
-
-            <div className="pt-4">
+            <div className="pt-2">
               <Button
                 type="submit"
                 className="h-14 w-full rounded-xl bg-primary text-lg font-bold text-white transition-all hover:bg-primary/90 shadow-md"
@@ -199,7 +213,7 @@ export default function Login() {
             </div>
           </form>
 
-          <div className="mt-10 text-center">
+          <div className="mt-8 text-center">
             <p className="text-sm font-medium text-muted-foreground">
               Don't have an account?{" "}
               <Link

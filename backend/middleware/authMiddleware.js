@@ -93,18 +93,38 @@ exports.superAdmin = (req, res, next) => {
 };
 
 exports.vendor = (req, res, next) => {
-  if (req.user && (req.user.role === 'vendor' || req.user.role === 'super_admin')) {
+  if (req.user && (req.user.role === 'vendor' || req.user.role === 'merchant' || req.user.role === 'super_admin')) {
     next();
   } else {
     res.status(403).json({ error: 'Not authorized as a merchant' });
   }
 };
 
+exports.merchant = exports.vendor; // Alias for backward compatibility
+
 exports.customerCare = (req, res, next) => {
-  if (req.user && (req.user.role === 'customer_care' || req.user.role === 'admin' || req.user.role === 'super_admin')) {
+  if (req.user && (req.user.role === 'customer_care' || req.user.role === 'customer_service' || req.user.role === 'admin' || req.user.role === 'super_admin')) {
     next();
   } else {
     res.status(403).json({ error: 'Not authorized as a customer care agent' });
+  }
+};
+
+exports.customerService = exports.customerCare; // Alias
+
+exports.manager = (req, res, next) => {
+  if (req.user && (req.user.role === 'manager' || req.user.role === 'admin' || req.user.role === 'super_admin')) {
+    next();
+  } else {
+    res.status(403).json({ error: 'Not authorized as a manager' });
+  }
+};
+
+exports.staff = (req, res, next) => {
+  if (req.user && (req.user.role === 'staff' || req.user.role === 'manager' || req.user.role === 'admin' || req.user.role === 'super_admin')) {
+    next();
+  } else {
+    res.status(403).json({ error: 'Not authorized as staff' });
   }
 };
 
