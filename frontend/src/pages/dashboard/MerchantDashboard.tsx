@@ -27,15 +27,15 @@ import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 
-export default function VendorDashboard() {
+export default function MerchantDashboard() {
   const { data: stats, isLoading: statsLoading } = useQuery({
-    queryKey: ['vendorStats'],
-    queryFn: () => api.get('/vendor/stats').then(res => res.data)
+    queryKey: ['merchantStats'],
+    queryFn: () => api.get('/merchant/stats').then(res => res.data)
   });
 
   const { data: history, isLoading: historyLoading } = useQuery({
-    queryKey: ['vendorSalesHistory'],
-    queryFn: () => api.get('/vendor/sales-history').then(res => res.data)
+    queryKey: ['merchantSalesHistory'],
+    queryFn: () => api.get('/merchant/sales-history').then(res => res.data)
   });
 
   const handleRequestPayout = async () => {
@@ -43,7 +43,7 @@ export default function VendorDashboard() {
     if (amount <= 0) return toast.error('No settled funds available for withdrawal.');
 
     try {
-      const { data } = await api.post('/vendor/withdraw', { amount });
+      const { data } = await api.post('/merchant/withdraw', { amount });
       toast.success(data.message || 'Payout initiated!');
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Payout failed');
@@ -96,7 +96,7 @@ export default function VendorDashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">Vendor Portal</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">merchant Portal</p>
           <h1 className="text-4xl font-black text-foreground tracking-tight">Business Insights</h1>
           <p className="mt-1 text-muted-foreground font-medium">Track your performance and manage your payouts.</p>
         </div>
@@ -229,3 +229,4 @@ export default function VendorDashboard() {
     </div>
   );
 }
+

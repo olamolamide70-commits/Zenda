@@ -70,7 +70,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             Pay in bits
           </div>
         )}
-        {product.vendor_id && (
+        {product.merchant_id && (
           <div className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg shadow-emerald-500/20">
             <CheckCircle className="h-4 w-4" />
           </div>
@@ -79,7 +79,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Wishlist button — always visible on hover */}
         <button
           onClick={handleWishlist}
-          className={`absolute right-4 ${product.vendor_id ? 'top-14' : 'top-4'} h-9 w-9 rounded-xl flex items-center justify-center border transition-all duration-200 opacity-0 group-hover:opacity-100 shadow-sm ${
+          className={`absolute right-4 ${product.merchant_id ? 'top-14' : 'top-4'} h-9 w-9 rounded-xl flex items-center justify-center border transition-all duration-200 opacity-0 group-hover:opacity-100 shadow-sm ${
             isWishlisted
               ? 'bg-red-50 border-red-200 text-red-500'
               : 'bg-white/90 border-slate-200 text-slate-400 hover:bg-red-50 hover:border-red-200 hover:text-red-500'
@@ -126,3 +126,4 @@ export default function ProductCard({ product }: ProductCardProps) {
     </div>
   );
 }
+

@@ -25,7 +25,7 @@ export default function AdminProfile() {
     try {
       setIsLoadingStaff(true);
       const { data } = await api.get('/admin/users');
-      // Filter out standard users and vendors, show only internal roles
+      // Filter out standard users and merchants, show only internal roles
       const filtered = data.users.filter((u: any) => 
         ['admin', 'manager', 'customer_care', 'customer_service', 'staff', 'super_admin'].includes(u.role)
       );
@@ -270,3 +270,4 @@ export default function AdminProfile() {
     </div>
   );
 }
+

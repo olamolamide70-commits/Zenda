@@ -11,7 +11,7 @@ export interface Product {
   description: string;
   specs: Record<string, string>;
   installment_eligible: boolean;
-  vendor_id?: string;
+  merchant_id?: string;
   installmentEligible?: boolean;
   monthly_installment?: number;
   monthlyInstallment?: number;
@@ -22,7 +22,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  role: 'user' | 'admin' | 'vendor' | 'super_admin' | 'customer_care';
+  role: 'user' | 'admin' | 'merchant' | 'super_admin' | 'customer_care';
   tier?: string;
   risk_score?: number;
   credit_limit?: number;
@@ -38,3 +38,4 @@ export interface CartItem {
   product: Product;
   quantity: number;
 }
+

@@ -76,9 +76,9 @@ export default function ManagerDashboard() {
     setIsUpdatingCommission(true);
     try {
       // Direct update in all merchants
-      const merchants = users.filter(u => u.role === 'merchant' || u.role === 'vendor');
+      const merchants = users.filter(u => u.role === 'merchant' || u.role === 'merchant');
       await Promise.all(merchants.map(m => 
-        adminService.updateUser(m.id, { vendor_commission_rate: rate })
+        adminService.updateUser(m.id, { merchant_commission_rate: rate })
       ));
       toast.success(`Default merchant commission rate updated to ${rate}%!`);
     } catch (err) {
@@ -350,3 +350,4 @@ export default function ManagerDashboard() {
     </div>
   );
 }
+

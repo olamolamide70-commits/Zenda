@@ -9,7 +9,7 @@ const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'];
 
 export default function AdminAnalytics() {
   const { user } = useApp();
-  const isVendor = user?.role === 'vendor';
+  const ismerchant = user?.role === 'merchant' || user?.role === 'merchant';
 
   const { data: detailed, isLoading: detailedLoading } = useQuery({
     queryKey: ['admin-detailed-analytics'],
@@ -39,8 +39,8 @@ export default function AdminAnalytics() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">{isVendor ? 'Performance' : 'Intelligence'}</p>
-          <h1 className="text-4xl font-black text-foreground tracking-tight">{isVendor ? 'Sales Analytics' : 'System Analytics'}</h1>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">{ismerchant ? 'Performance' : 'Intelligence'}</p>
+          <h1 className="text-4xl font-black text-foreground tracking-tight">{ismerchant ? 'Sales Analytics' : 'System Analytics'}</h1>
         </div>
         <div className="rounded-xl bg-slate-50 border border-border px-4 py-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
           Live Updates
@@ -139,3 +139,4 @@ export default function AdminAnalytics() {
     </div>
   );
 }
+

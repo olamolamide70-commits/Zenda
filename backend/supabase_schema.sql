@@ -6,7 +6,7 @@ CREATE TABLE users (
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
-  role TEXT DEFAULT 'student' CHECK (role IN ('student', 'admin')),
+  role TEXT DEFAULT 'user' CHECK (role IN ('student', 'admin', 'user', 'vendor', 'super_admin', 'merchant', 'staff', 'manager', 'customer_care')),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 

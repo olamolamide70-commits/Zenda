@@ -30,8 +30,8 @@ export default function Login() {
       const role = response.user.role;
       if (['super_admin', 'admin', 'manager', 'customer_care', 'customer_service', 'staff'].includes(role)) {
         navigate("/admin");
-      } else if (role === 'vendor' || role === 'merchant') {
-        navigate("/dashboard/vendor");
+      } else if (role === 'merchant' || role === 'merchant') {
+        navigate("/dashboard/merchant");
       } else {
         navigate("/dashboard");
       }
@@ -229,3 +229,4 @@ export default function Login() {
     </div>
   );
 }
+

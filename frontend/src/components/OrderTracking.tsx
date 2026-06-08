@@ -17,7 +17,7 @@ interface TrackingStep {
 
 const STEPS: TrackingStep[] = [
   { status: 'pending', label: 'Order Placed', description: 'Your order has been received.', icon: Clock },
-  { status: 'processing', label: 'Processing', description: 'Vendor is preparing your gadget.', icon: ShieldCheck },
+  { status: 'processing', label: 'Processing', description: 'merchant is preparing your gadget.', icon: ShieldCheck },
   { status: 'shipped', label: 'In Transit', description: 'Package is on its way to you.', icon: Truck },
   { status: 'delivered', label: 'Delivered', description: 'Enjoy your new gadget!', icon: CheckCircle2 }
 ];
@@ -121,3 +121,4 @@ export default function OrderTracking({ currentStatus }: { currentStatus: string
     </div>
   );
 }
+

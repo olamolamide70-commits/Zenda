@@ -17,7 +17,7 @@ import {
   FileText
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
-import { authService, vendorService } from '@/services';
+import { authService, merchantService } from '@/services';
 import api from '@/services/api';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -157,8 +157,8 @@ export default function Profile() {
 
       toast.success('Business successfully onboarded! Upgrading profile...');
       
-      // Upgrade to vendor/merchant role
-      await vendorService.register();
+      // Upgrade to merchant/merchant role
+      await merchantService.register();
       
       // Refresh local profile
       const updatedUser = await authService.getProfile();
@@ -233,7 +233,7 @@ export default function Profile() {
                   <div className="pb-2">
                     <h2 className="text-2xl font-black text-foreground tracking-tight">{user?.name || 'Incomplete Profile'}</h2>
                     <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mt-1">
-                      {user?.role === 'super_admin' ? 'System Administrator' : user?.role === 'vendor' ? 'Merchant Partner' : 'Verified Member'}
+                      {user?.role === 'super_admin' ? 'System Administrator' : (user?.role === 'merchant' || user?.role === 'merchant') ? 'Merchant Partner' : 'Verified Member'}
                     </p>
                     <p className="text-[10px] text-muted-foreground/50 font-bold mt-1 uppercase tracking-widest">Click photo to change</p>
                   </div>
@@ -312,7 +312,7 @@ export default function Profile() {
                   </div>
 
                   {/* MERCHANT PARTNER UPGRADE TRIGGERS CARD */}
-                  {user?.role !== 'vendor' && user?.role !== 'admin' && user?.role !== 'super_admin' && (
+                  {user?.role !== 'merchant' && user?.role !== 'admin' && user?.role !== 'super_admin' && (
                     <div className="mt-12 p-8 rounded-[2rem] border border-indigo-100 bg-indigo-50/20 space-y-4 text-left">
                       <div className="flex gap-4 items-start">
                         <div className="h-12 w-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
@@ -521,3 +521,4 @@ export default function Profile() {
     </div>
   );
 }
+

@@ -19,22 +19,22 @@ const seedUsers = async () => {
     { name: 'Tunde Afolayan', email: 'tunde.admin@gadgetflex.com.ng', role: 'admin' }
   ];
 
-  const vendors = [
-    { name: 'Slot Systems', email: 'info@slot.ng', role: 'vendor' },
-    { name: 'Pointek Nigeria', email: 'sales@pointek.ng', role: 'vendor' },
-    { name: 'Jumia Nigeria', email: 'vendor@jumia.com.ng', role: 'vendor' },
-    { name: 'Konga Online', email: 'marketplace@konga.com', role: 'vendor' },
-    { name: 'MicroStation', email: 'support@microstation.ng', role: 'vendor' },
-    { name: 'Finet Mobile', email: 'hello@finet.ng', role: 'vendor' },
-    { name: '3C Hub', email: 'contact@3chub.ng', role: 'vendor' },
-    { name: 'Best Buy Nigeria', email: 'store@bestbuy.com.ng', role: 'vendor' },
-    { name: 'Kara Nigeria', email: 'sales@kara.com.ng', role: 'vendor' },
-    { name: 'Dreamworks', email: 'info@dreamworks.ng', role: 'vendor' },
-    { name: 'Spar Nigeria', email: 'tech@spar.com.ng', role: 'vendor' },
-    { name: 'Game Nigeria', email: 'gaming@game.com.ng', role: 'vendor' },
-    { name: 'Shoprite Tech', email: 'electronics@shoprite.ng', role: 'vendor' },
-    { name: 'Hubmart Gadgets', email: 'gadgets@hubmart.com', role: 'vendor' },
-    { name: 'Rhythems Mobile', email: 'rhythems@gmail.com', role: 'vendor' }
+  const Merchants = [
+    { name: 'Slot Systems', email: 'info@slot.ng', role: 'merchant' },
+    { name: 'Pointek Nigeria', email: 'sales@pointek.ng', role: 'merchant' },
+    { name: 'Jumia Nigeria', email: 'merchant@jumia.com.ng', role: 'merchant' },
+    { name: 'Konga Online', email: 'marketplace@konga.com', role: 'merchant' },
+    { name: 'MicroStation', email: 'support@microstation.ng', role: 'merchant' },
+    { name: 'Finet Mobile', email: 'hello@finet.ng', role: 'merchant' },
+    { name: '3C Hub', email: 'contact@3chub.ng', role: 'merchant' },
+    { name: 'Best Buy Nigeria', email: 'store@bestbuy.com.ng', role: 'merchant' },
+    { name: 'Kara Nigeria', email: 'sales@kara.com.ng', role: 'merchant' },
+    { name: 'Dreamworks', email: 'info@dreamworks.ng', role: 'merchant' },
+    { name: 'Spar Nigeria', email: 'tech@spar.com.ng', role: 'merchant' },
+    { name: 'Game Nigeria', email: 'gaming@game.com.ng', role: 'merchant' },
+    { name: 'Shoprite Tech', email: 'electronics@shoprite.ng', role: 'merchant' },
+    { name: 'Hubmart Gadgets', email: 'gadgets@hubmart.com', role: 'merchant' },
+    { name: 'Rhythems Mobile', email: 'rhythems@gmail.com', role: 'merchant' }
   ];
 
   const genericUsers = [
@@ -75,7 +75,7 @@ const seedUsers = async () => {
     const allUsers = [
       ...superAdmins,
       ...admins,
-      ...vendors,
+      ...Merchants,
       ...genericUsers.map(u => ({ ...u, role: 'user' })),
       ...customerService
     ];
@@ -100,7 +100,7 @@ const seedUsers = async () => {
     console.log('\n--- SEEDING COMPLETE ---');
     console.log(`Superadmins: ${superAdmins.length}`);
     console.log(`Admins: ${admins.length}`);
-    console.log(`Vendors: ${vendors.length}`);
+    console.log(`Merchants: ${Merchants.length}`);
     console.log(`Users: ${genericUsers.length}`);
     console.log(`Customer Service: ${customerService.length}`);
     console.log('--------------------------');

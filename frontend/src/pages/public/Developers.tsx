@@ -149,7 +149,7 @@ print("Checkout URL:", response.json()["checkoutUrl"])`
                 transition={{ delay: 0.15 }}
                 className="flex flex-wrap gap-4"
               >
-                <Link to="/register?type=vendor">
+                <Link to="/register?type=merchant">
                   <Button className="h-14 px-8 rounded-2xl bg-primary text-white font-black hover:bg-primary/95 shadow-xl shadow-primary/30 text-xs uppercase tracking-widest active:scale-95 transition-all">
                     Get Credentials
                   </Button>
@@ -519,7 +519,7 @@ print("Checkout URL:", response.json()["checkoutUrl"])`
           <p className="text-lg text-slate-400 font-medium max-w-xl mx-auto">
             Create your business merchant account and obtain API tokens in seconds.
           </p>
-          <Link to="/register?type=vendor">
+          <Link to="/register?type=merchant">
             <Button size="lg" className="h-16 rounded-2xl bg-primary px-12 text-sm font-black text-white hover:bg-primary/95 transition-all shadow-xl shadow-primary/20 uppercase tracking-widest">
               Create Partner Account <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -529,3 +529,4 @@ print("Checkout URL:", response.json()["checkoutUrl"])`
     </div>
   );
 }
+

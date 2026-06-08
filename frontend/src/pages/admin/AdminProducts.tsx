@@ -15,7 +15,7 @@ const CATEGORIES = ['Laptops', 'Phones', 'Tablets', 'Audio', 'Accessories', 'Wea
 
 export default function AdminProducts() {
   const { user } = useApp();
-  const isVendor = user?.role === 'vendor';
+  const ismerchant = user?.role === 'merchant' || user?.role === 'merchant';
   const queryClient = useQueryClient();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -38,8 +38,8 @@ export default function AdminProducts() {
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ['products', user?.id],
     queryFn: () => {
-      // Vendors only query their own products
-      const params = isVendor ? { vendor_id: user.id } : {};
+      // merchants only query their own products
+      const params = ismerchant ? { merchant_id: user.id } : {};
       return productService.getAll(params);
     }
   });
@@ -213,8 +213,8 @@ export default function AdminProducts() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">{isVendor ? 'Seller Store' : 'Inventory'}</p>
-          <h1 className="text-4xl font-black text-foreground tracking-tight">{isVendor ? 'My Store' : 'Product Catalog'}</h1>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">{ismerchant ? 'Seller Store' : 'Inventory'}</p>
+          <h1 className="text-4xl font-black text-foreground tracking-tight">{ismerchant ? 'My Store' : 'Product Catalog'}</h1>
         </div>
         <Button 
           className="h-12 px-6 rounded-xl bg-primary text-white font-bold uppercase tracking-widest text-[10px] gap-2 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]" 
@@ -244,7 +244,7 @@ export default function AdminProducts() {
                     <td className="py-6 pl-8 font-bold text-foreground">
                       <div className="flex flex-col">
                         <span>{p.name}</span>
-                        {isVendor && p.vendor_id !== user?.id && (
+                        {ismerchant && p.merchant_id !== user?.id && (
                           <span className="text-[9px] font-bold text-amber-600 uppercase tracking-widest">Platform Stock</span>
                         )}
                       </div>
@@ -264,7 +264,7 @@ export default function AdminProducts() {
                       />
                     </td>
                     <td className="py-6 pr-8 text-right">
-                      {(!isVendor || p.vendor_id === user?.id) ? (
+                      {(!ismerchant || p.merchant_id === user?.id) ? (
                         <div className="flex justify-end gap-2">
                           <Button 
                             variant="ghost" 
@@ -530,3 +530,4 @@ export default function AdminProducts() {
     </div>
   );
 }
+

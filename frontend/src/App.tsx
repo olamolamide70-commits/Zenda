@@ -44,7 +44,7 @@ import Profile from "@/pages/dashboard/Profile";
 import PaymentMethods from "@/pages/dashboard/PaymentMethods";
 import Notifications from "@/pages/dashboard/Notifications";
 import ReferralHistory from "@/pages/dashboard/ReferralHistory";
-import VendorDashboard from "@/pages/dashboard/VendorDashboard";
+import merchantDashboard from "@/pages/dashboard/merchantDashboard";
 
 // Admin pages
 import AdminDashboardRouter from "@/pages/admin/AdminDashboardRouter";
@@ -115,15 +115,15 @@ const App = () => (
           <Route path="/dashboard/payment-methods" element={<ProtectedRoute><DashboardLayout><PaymentMethods /></DashboardLayout></ProtectedRoute>} />
           <Route path="/dashboard/notifications" element={<ProtectedRoute><DashboardLayout><Notifications /></DashboardLayout></ProtectedRoute>} />
           <Route path="/dashboard/referrals" element={<ProtectedRoute><DashboardLayout><ReferralHistory /></DashboardLayout></ProtectedRoute>} />
-            <Route path="/dashboard/api" element={<ProtectedRoute allowedRoles={['vendor', 'merchant', 'super_admin']}><DashboardLayout><ApiSettings /></DashboardLayout></ProtectedRoute>} />
+            <Route path="/dashboard/api" element={<ProtectedRoute allowedRoles={['merchant', 'merchant', 'super_admin']}><DashboardLayout><ApiSettings /></DashboardLayout></ProtectedRoute>} />
           <Route path="/dashboard/procurement" element={<ProtectedRoute><DashboardLayout><B2BProcurementDashboard /></DashboardLayout></ProtectedRoute>} />
-          <Route path="/dashboard/vendor" element={<ProtectedRoute allowedRoles={['vendor', 'merchant', 'super_admin']}><DashboardLayout><VendorDashboard /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dashboard/merchant" element={<ProtectedRoute allowedRoles={['merchant', 'merchant', 'super_admin']}><DashboardLayout><merchantDashboard /></DashboardLayout></ProtectedRoute>} />
           <Route path="/dashboard/support" element={<ProtectedRoute allowedRoles={['customer_care', 'customer_service', 'super_admin']}><DashboardLayout><SupportDashboard /></DashboardLayout></ProtectedRoute>} />
           <Route path="/admin/super" element={<ProtectedRoute allowedRoles={['super_admin']}><AdminLayout><SuperAdminDashboard /></AdminLayout></ProtectedRoute>} />
 
           {/* Merchant routes */}
-          <Route path="/merchant/products" element={<ProtectedRoute allowedRoles={['vendor', 'merchant', 'admin', 'super_admin']}><DashboardLayout><AdminProducts /></DashboardLayout></ProtectedRoute>} />
-          <Route path="/merchant/analytics" element={<ProtectedRoute allowedRoles={['vendor', 'merchant', 'admin', 'super_admin']}><DashboardLayout><AdminAnalytics /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/merchant/products" element={<ProtectedRoute allowedRoles={['merchant', 'merchant', 'admin', 'super_admin']}><DashboardLayout><AdminProducts /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/merchant/analytics" element={<ProtectedRoute allowedRoles={['merchant', 'merchant', 'admin', 'super_admin']}><DashboardLayout><AdminAnalytics /></DashboardLayout></ProtectedRoute>} />
 
           {/* Admin routes */}
           <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin', 'super_admin', 'manager', 'customer_care', 'customer_service', 'staff']}><AdminLayout><AdminDashboardRouter /></AdminLayout></ProtectedRoute>} />
@@ -145,3 +145,4 @@ const App = () => (
 );
 
 export default App;
+

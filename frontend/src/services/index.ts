@@ -77,11 +77,11 @@ export const cartService = {
   remove: (productId: string) => api.delete(`/cart/${productId}`).then(res => res.data),
 };
 
-export const vendorService = {
-  register: () => api.post('/vendor/register').then(res => res.data),
-  getProducts: () => api.get('/vendor/products').then(res => res.data),
-  getStats: () => api.get('/vendor/stats').then(res => res.data),
-  getSalesHistory: () => api.get('/vendor/sales-history').then(res => res.data),
+export const merchantService = {
+  register: () => api.post('/merchant/register').then(res => res.data),
+  getProducts: () => api.get('/merchant/products').then(res => res.data),
+  getStats: () => api.get('/merchant/stats').then(res => res.data),
+  getSalesHistory: () => api.get('/merchant/sales-history').then(res => res.data),
 };
  
 export const notificationService = {
@@ -90,3 +90,4 @@ export const notificationService = {
 };
 
 export * from './referralService';
+

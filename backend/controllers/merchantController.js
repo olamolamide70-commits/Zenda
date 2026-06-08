@@ -1,30 +1,30 @@
 const supabase = require('../config/supabase');
 const flutterwaveService = require('../services/FlutterwaveService');
 
-exports.registerVendor = async (req, res) => {
+exports.registerMerchant = async (req, res) => {
   const userId = req.user.id;
   try {
     const { data: user, error } = await supabase
       .from('users')
-      .update({ role: 'vendor' })
+      .update({ role: 'merchant' })
       .eq('id', userId)
       .select()
       .single();
 
     if (error) throw error;
-    res.json({ message: 'Welcome to the Vendor Community!', user });
+    res.json({ message: 'Welcome to the merchant Community!', user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-exports.getVendorProducts = async (req, res) => {
-  const vendorId = req.user.id;
+exports.getMerchantProducts = async (req, res) => {
+  const merchantId = req.user.id;
   try {
     const { data: products, error } = await supabase
       .from('products')
       .select('*')
-      .eq('vendor_id', vendorId)
+      .eq('merchant_id', merchantId)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -34,17 +34,17 @@ exports.getVendorProducts = async (req, res) => {
   }
 };
 
-exports.getVendorStats = async (req, res) => {
-  const vendorId = req.user.id;
+exports.getMerchantStats = async (req, res) => {
+  const merchantId = req.user.id;
   try {
     const [
       { data: user, error: uError },
       { count: productCount, error: pError },
       { data: orders, error: oError }
     ] = await Promise.all([
-      supabase.from('users').select('*').eq('id', vendorId).single(),
-      supabase.from('products').select('*', { count: 'exact', head: true }).eq('vendor_id', vendorId),
-      supabase.from('orders').select('amount, products!inner(vendor_id)').eq('products.vendor_id', vendorId)
+      supabase.from('users').select('*').eq('id', merchantId).single(),
+      supabase.from('products').select('*', { count: 'exact', head: true }).eq('merchant_id', merchantId),
+      supabase.from('orders').select('amount, products!inner(merchant_id)').eq('products.merchant_id', merchantId)
     ]);
 
     if (uError || pError || oError) {
@@ -68,13 +68,13 @@ exports.getVendorStats = async (req, res) => {
   }
 };
 
-exports.getVendorSalesHistory = async (req, res) => {
-  const vendorId = req.user.id;
+exports.getMerchantSalesHistory = async (req, res) => {
+  const merchantId = req.user.id;
   try {
     const { data: orders, error } = await supabase
       .from('orders')
-      .select('amount, created_at, products!inner(vendor_id)')
-      .eq('products.vendor_id', vendorId)
+      .select('amount, created_at, products!inner(merchant_id)')
+      .eq('products.merchant_id', merchantId)
       .order('created_at', { ascending: true });
 
     if (error) throw error;
@@ -98,23 +98,23 @@ exports.getVendorSalesHistory = async (req, res) => {
 };
 
 exports.requestPayout = async (req, res) => {
-  const vendorId = req.user.id;
+  const merchantId = req.user.id;
   const { amount } = req.body;
 
   try {
-    const { data: vendor, error: vError } = await supabase
+    const { data: merchant, error: vError } = await supabase
       .from('users')
       .select('*')
-      .eq('id', vendorId)
+      .eq('id', merchantId)
       .single();
 
-    if (vError || !vendor || vendor.role !== 'vendor') return res.status(403).json({ error: 'Access denied' });
+    if (vError || !merchant || merchant.role !== 'merchant') return res.status(403).json({ error: 'Access denied' });
 
-    if (amount > vendor.settled_payout_balance) {
+    if (amount > merchant.settled_payout_balance) {
       return res.status(400).json({ error: 'Insufficient settled balance' });
     }
 
-    const bankDetails = vendor.bank_details || {};
+    const bankDetails = merchant.bank_details || {};
     if (!bankDetails.account_number || !bankDetails.bank_name) {
       return res.status(400).json({ error: 'Bank details not configured' });
     }
@@ -124,17 +124,17 @@ exports.requestPayout = async (req, res) => {
       account_bank: bankDetails.bank_name, 
       account_number: bankDetails.account_number,
       amount: amount,
-      narration: `GadgetFlex Payout for ${vendor.name}`
+      narration: `GadgetFlex Payout for ${merchant.name}`
     });
 
     if (payout.status === 'success') {
       // Deduct balance
-      const newBalance = vendor.settled_payout_balance - amount;
-      await supabase.from('users').update({ settled_payout_balance: newBalance }).eq('id', vendorId);
+      const newBalance = merchant.settled_payout_balance - amount;
+      await supabase.from('users').update({ settled_payout_balance: newBalance }).eq('id', merchantId);
 
       // Log transaction
       await supabase.from('transactions').insert([{
-        user_id: vendorId,
+        user_id: merchantId,
         amount: amount,
         type: 'payout',
         status: 'success',

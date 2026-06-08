@@ -358,7 +358,7 @@ export default function SuperAdminDashboard() {
                           u.role === 'super_admin' ? 'bg-red-50 text-red-600 border border-red-100' :
                           u.role === 'admin' ? 'bg-indigo-50 text-indigo-600 border border-indigo-100' :
                           u.role === 'manager' ? 'bg-teal-50 text-teal-600 border border-teal-100' :
-                          u.role === 'merchant' || u.role === 'vendor' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
+                          u.role === 'merchant' || u.role === 'merchant' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
                           u.role === 'customer_care' || u.role === 'customer_service' ? 'bg-amber-50 text-amber-600 border border-amber-100' :
                           u.role === 'staff' ? 'bg-slate-100 text-slate-700 border border-slate-200' :
                           'bg-slate-50 text-slate-600 border border-slate-100'
@@ -739,3 +739,4 @@ function XButton() {
     </svg>
   );
 }
+

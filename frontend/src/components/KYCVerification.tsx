@@ -61,7 +61,7 @@ export default function KYCVerification() {
         documentUrl: 'https://placeholder.com/id.jpg',
         nin,
         bvn,
-        cacNumber: user?.role === 'vendor' ? cacNumber : undefined
+        cacNumber: (user?.role === 'merchant' || user?.role === 'merchant') ? cacNumber : undefined
       });
       setKycStatus('pending');
       toast.success('Verification started!');
@@ -231,3 +231,4 @@ export default function KYCVerification() {
     </div>
   );
 }
+

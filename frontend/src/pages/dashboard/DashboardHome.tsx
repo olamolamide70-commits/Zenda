@@ -6,7 +6,7 @@ import DashboardStatCard from '@/components/DashboardStatCard';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { useApp } from '@/context/AppContext';
-import { referralService, orderService, installmentService, vendorService } from '@/services';
+import { referralService, orderService, installmentService, merchantService } from '@/services';
 import { formatCurrency, getStatusColor } from '@/utils/helpers';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'react-toastify';
@@ -259,11 +259,12 @@ export default function Dashboard() {
           <Button 
             onClick={async () => {
               try {
-                await vendorService.register();
+                await merchantService.register();
                 toast.success('Store opened successfully!');
                 window.location.reload();
-              } catch (e) {
-                toast.error('Could not open store');
+              } catch (e: any) {
+                console.error("merchant registration error:", e);
+                toast.error(e?.response?.data?.error || e?.message || 'Could not open store');
               }
             }}
             className="rounded-xl h-14 px-10 font-bold bg-primary text-white relative z-10 hover:scale-[1.02] transition-all shadow-lg"
@@ -337,3 +338,4 @@ export default function Dashboard() {
     </div>
   );
 }
+

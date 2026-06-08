@@ -68,7 +68,7 @@ app.use('/api/installments', require('./routes/installmentRoutes'));
 app.use('/api/transactions', require('./routes/transactionRoutes'));
 app.use('/api/referrals', require('./routes/referralRoutes'));
 app.use('/api/insurance', require('./routes/insuranceRoutes'));
-app.use('/api/vendor', require('./routes/vendorRoutes'));
+app.use('/api/merchant', require('./routes/merchantRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/webhooks', require('./routes/webhookRoutes'));
 app.use('/api/wishlist', require('./routes/wishlistRoutes'));

@@ -25,9 +25,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       { label: 'Alerts', to: '/dashboard/notifications', icon: Bell },
     ];
 
-    if (role === 'vendor') {
+    if (role === 'merchant' || role === 'merchant') {
       return [
-        { label: 'Seller Home', to: '/dashboard/vendor', icon: LayoutDashboard },
+        { label: 'Seller Home', to: '/dashboard/merchant', icon: LayoutDashboard },
         { label: 'My Store', to: '/merchant/products', icon: ShoppingBag }, 
         { label: 'Sales Stats', to: '/merchant/analytics', icon: Clock },
         ...common.filter(i => i.label !== 'My Page')
@@ -152,3 +152,4 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
