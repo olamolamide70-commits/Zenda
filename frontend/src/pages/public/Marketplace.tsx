@@ -72,8 +72,8 @@ export default function Marketplace() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="mb-20 text-center">
           <p className="text-[10px] font-bold text-primary uppercase tracking-[0.3em] mb-4">Find your next gadget</p>
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-black mb-6 text-foreground tracking-tighter leading-none">
-            Shop <span className="text-primary/40">Gadgets</span>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-black mb-6 text-foreground tracking-tighter leading-none">
+            Zenda
           </h1>
           <p className="mx-auto max-w-2xl text-xl font-medium text-muted-foreground/60 leading-relaxed">
             Buy the world's best technology and pay in small, easy monthly steps.
