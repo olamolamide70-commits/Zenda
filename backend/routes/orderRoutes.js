@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getOrders, createOrder, getOrderStats, requestDeliveryCode, confirmDelivery } = require('../controllers/orderController');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, admin } = require('../middleware/authMiddleware');
 const supabase = require('../config/supabase');
 
 router.get('/', protect, getOrders);
@@ -11,7 +11,7 @@ router.post('/request-delivery-code', protect, requestDeliveryCode);
 router.post('/confirm-delivery', protect, confirmDelivery);
 
 // Admin: get ALL orders
-router.get('/all', protect, async (req, res) => {
+router.get('/all', protect, admin, async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('orders')

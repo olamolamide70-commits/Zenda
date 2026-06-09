@@ -8,7 +8,7 @@ import { formatCurrency } from '@/utils/helpers';
 import { Badge } from '@/components/ui/badge';
 import { 
   CreditCard, Plus, Trash2, Loader2, ShieldCheck, Zap, Palette, 
-  AlertCircle, Send, Gift, History, ArrowDownLeft, ArrowUpRight, CheckCircle2 
+  AlertCircle, Send, Gift, History, ArrowDownLeft, ArrowUpRight, CheckCircle2, X 
 } from 'lucide-react';
 import VirtualCard, { CardSkin } from '@/components/VirtualCard';
 

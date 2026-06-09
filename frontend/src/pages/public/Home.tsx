@@ -54,12 +54,13 @@ const categories = [
 ];
 
 export default function Home() {
-  const { data: products = [], isLoading } = useQuery({
+  const { data: productsData, isLoading } = useQuery({
     queryKey: ['featured-products'],
     queryFn: () => productService.getAll()
   });
 
-  const featuredProducts = products.slice(0, 4);
+  const products = useMemo(() => productsData || [], [productsData]);
+  const featuredProducts = useMemo(() => products.slice(0, 4), [products]);
 
   // Dynamic category counts from real data
   const dynamicCategories = useMemo(() => [

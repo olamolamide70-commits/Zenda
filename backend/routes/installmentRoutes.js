@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { createPlan, getSchedule, getUserInstallments } = require('../controllers/installmentController');
 const { initializeAutoDebit } = require('../controllers/autoDebitController');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, admin } = require('../middleware/authMiddleware');
 const supabase = require('../config/supabase');
 
 router.post('/create', protect, createPlan);
@@ -10,7 +10,7 @@ router.get('/', protect, getUserInstallments);
 router.post('/auto-debit', protect, initializeAutoDebit);
 
 // Admin: get ALL installments with user info
-router.get('/all', protect, async (req, res) => {
+router.get('/all', protect, admin, async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('installments')

@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
@@ -87,6 +87,9 @@ const App = () => (
           {/* Public routes */}
           <Route path="/" element={<MainLayout><Home /></MainLayout>} />
           <Route path="/marketplace" element={<MainLayout><Marketplace /></MainLayout>} />
+          <Route path="/products" element={<Navigate to="/marketplace" replace />} />
+          <Route path="/support" element={<Navigate to="/contact" replace />} />
+          <Route path="/dashboard/settings" element={<ProtectedRoute><DashboardLayout><Profile /></DashboardLayout></ProtectedRoute>} />
           <Route path="/product/:id" element={<MainLayout><ProductDetails /></MainLayout>} />
           <Route path="/calculator" element={<MainLayout><InstallmentCalculator /></MainLayout>} />
           <Route path="/about" element={<MainLayout><About /></MainLayout>} />

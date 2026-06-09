@@ -100,6 +100,156 @@ exports.updateUser = async (req, res) => {
   }
 };
 
+exports.getAllOrders = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*, users(name, email), products(name)')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getAllInstallments = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('installments')
+      .select('*, users(name, email), orders(id, product_id, amount, status)')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getAllTransactions = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('transactions')
+      .select('*, users(name, email), orders(id, amount, status), installments(id, order_id, total_amount, next_payment_date)')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getAllNotifications = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('notifications')
+      .select('*, users(name, email)')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getSystemSettings = async (req, res) => {
+  try {
+    const { data: settings, error } = await supabase
+      .from('system_settings')
+      .select('*')
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!settings) {
+      const defaultSettings = {
+        maintenance_mode: false,
+        enable_reminders: true,
+        enable_auto_debit: true,
+        enable_vendor_settlement: true,
+        default_credit_limit: 100000,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      const { data, error: insertError } = await supabase
+        .from('system_settings')
+        .insert(defaultSettings)
+        .select()
+        .single();
+
+      if (insertError) throw insertError;
+      return res.json(data);
+    }
+
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.updateSystemSettings = async (req, res) => {
+  try {
+    const {
+      maintenance_mode,
+      enable_reminders,
+      enable_auto_debit,
+      enable_vendor_settlement,
+      default_credit_limit
+    } = req.body;
+
+    const { data: existing, error } = await supabase
+      .from('system_settings')
+      .select('*')
+      .maybeSingle();
+
+    if (error) throw error;
+
+    const payload = {
+      maintenance_mode,
+      enable_reminders,
+      enable_auto_debit,
+      enable_vendor_settlement,
+      default_credit_limit,
+      updated_at: new Date().toISOString()
+    };
+
+    const trimmedPayload = Object.fromEntries(
+      Object.entries(payload).filter(([, value]) => value !== undefined)
+    );
+
+    let result;
+    if (existing) {
+      const { data, error: updateError } = await supabase
+        .from('system_settings')
+        .update(trimmedPayload)
+        .eq('id', existing.id)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+      result = data;
+    } else {
+      const { data, error: insertError } = await supabase
+        .from('system_settings')
+        .insert(trimmedPayload)
+        .select()
+        .single();
+
+      if (insertError) throw insertError;
+      result = data;
+    }
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.runReminders = async (req, res) => {
   const reminderService = require('../services/ReminderService');
   try {

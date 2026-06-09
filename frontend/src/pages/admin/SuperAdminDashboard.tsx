@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { adminService, giftCardService } from '@/services';
+import { adminService, giftCardService, orderService, installmentService } from '@/services';
 import { Users, Gift, ShieldAlert, Zap, Loader2, Edit2, AlertTriangle, Badge, TrendingUp, AlertCircle, DollarSign, ShieldOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'react-toastify';
@@ -10,7 +10,7 @@ import api from '@/services/api';
 
 export default function SuperAdminDashboard() {
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState<'users' | 'giftcards' | 'policy'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'giftcards' | 'operations' | 'settings'>('users');
   
   // States for role/limit editing
   const [editingUser, setEditingUser] = useState<any | null>(null);
@@ -23,14 +23,15 @@ export default function SuperAdminDashboard() {
   const [mintAmount, setMintAmount] = useState('');
 
   // Maintenance Mode local simulation state
-  const [maintenanceMode, setMaintenanceMode] = useState<boolean>(() => {
-    return localStorage.getItem('maintenance_mode') === 'true';
-  });
+  const [maintenanceMode, setMaintenanceMode] = useState<boolean>(false);
+  const [enableReminders, setEnableReminders] = useState<boolean>(false);
+  const [enableAutoDebit, setEnableAutoDebit] = useState<boolean>(false);
+  const [enableVendorSettlement, setEnableVendorSettlement] = useState<boolean>(false);
+  const [defaultCreditLimit, setDefaultCreditLimit] = useState<string>('0');
 
   const toggleMaintenanceMode = () => {
     const nextVal = !maintenanceMode;
     setMaintenanceMode(nextVal);
-    localStorage.setItem('maintenance_mode', String(nextVal));
     if (nextVal) {
       toast.warning('System placed under Maintenance Mode.');
     } else {
@@ -77,7 +78,41 @@ export default function SuperAdminDashboard() {
     }
   });
 
-  // 6. User Update Mutation
+  // 6. Fetch System Settings for the Owner Hub
+  const { data: systemSettings, isLoading: settingsLoading } = useQuery({
+    queryKey: ['admin-system-settings'],
+    queryFn: () => adminService.getSystemSettings(),
+    onSuccess: (settings: any) => {
+      setMaintenanceMode(settings.maintenance_mode);
+      setEnableReminders(settings.enable_reminders);
+      setEnableAutoDebit(settings.enable_auto_debit);
+      setEnableVendorSettlement(settings.enable_vendor_settlement);
+      setDefaultCreditLimit(settings.default_credit_limit?.toString() || '0');
+    }
+  });
+
+  // 7. Fetch higher-level platform data for operations
+  const { data: adminOrders = [], isLoading: adminOrdersLoading } = useQuery({
+    queryKey: ['admin-orders'],
+    queryFn: () => adminService.getAllOrders()
+  });
+
+  const { data: adminInstallments = [], isLoading: adminInstallmentsLoading } = useQuery({
+    queryKey: ['admin-installments'],
+    queryFn: () => adminService.getAllInstallments()
+  });
+
+  const { data: adminTransactions = [], isLoading: adminTransactionsLoading } = useQuery({
+    queryKey: ['admin-transactions'],
+    queryFn: () => adminService.getAllTransactions()
+  });
+
+  const { data: adminNotifications = [], isLoading: adminNotificationsLoading } = useQuery({
+    queryKey: ['admin-notifications'],
+    queryFn: () => adminService.getAllNotifications()
+  });
+
+  // 8. User Update Mutation
   const updateUserMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: any }) => adminService.updateUser(id, data),
     onSuccess: () => {
@@ -112,6 +147,27 @@ export default function SuperAdminDashboard() {
     },
     onError: (err: any) => {
       toast.error(err.response?.data?.error || 'Failed to deactivate voucher');
+    }
+  });
+
+  const updateSettingsMutation = useMutation({
+    mutationFn: (settings: any) => adminService.updateSystemSettings(settings),
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: ['admin-system-settings'] });
+      toast.success('System settings saved successfully.');
+    },
+    onError: (err: any) => {
+      toast.error(err.response?.data?.error || 'Failed to update system settings');
+    }
+  });
+
+  const runRemindersMutation = useMutation({
+    mutationFn: () => adminService.runReminders(),
+    onSuccess: () => {
+      toast.success('Reminder cycle executed successfully.');
+    },
+    onError: (err: any) => {
+      toast.error(err.response?.data?.error || 'Failed to execute reminder cycle');
     }
   });
 
@@ -154,7 +210,27 @@ export default function SuperAdminDashboard() {
     mintCardMutation.mutate(amount);
   };
 
-  if (usersLoading || cardsLoading || analyticsLoading || staffLoading || financialsLoading) {
+  const handleSaveSystemSettings = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (Number(defaultCreditLimit) < 0) {
+      toast.warning('Default credit limit must be a non-negative amount.');
+      return;
+    }
+
+    updateSettingsMutation.mutate({
+      maintenance_mode: maintenanceMode,
+      enable_reminders: enableReminders,
+      enable_auto_debit: enableAutoDebit,
+      enable_vendor_settlement: enableVendorSettlement,
+      default_credit_limit: Number(defaultCreditLimit)
+    });
+  };
+
+  const handleRunReminders = () => {
+    runRemindersMutation.mutate();
+  };
+
+  if (usersLoading || cardsLoading || analyticsLoading || staffLoading || financialsLoading || settingsLoading || adminOrdersLoading || adminInstallmentsLoading || adminTransactionsLoading || adminNotificationsLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -185,10 +261,16 @@ export default function SuperAdminDashboard() {
             Gift Card Minter
           </button>
           <button 
-            onClick={() => setActiveTab('policy')}
-            className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'policy' ? 'bg-white text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+            onClick={() => setActiveTab('operations')}
+            className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'operations' ? 'bg-white text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
           >
-            System Policy Rules
+            Operations Overview
+          </button>
+          <button 
+            onClick={() => setActiveTab('settings')}
+            className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${activeTab === 'settings' ? 'bg-white text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+          >
+            System Controls
           </button>
         </div>
       </div>
@@ -526,19 +608,171 @@ export default function SuperAdminDashboard() {
         </div>
       )}
 
-      {/* Tab 3: System Policy & Configurations */}
-      {activeTab === 'policy' && (
-        <div className="grid gap-8 lg:grid-cols-2 items-start animate-in fade-in slide-in-from-bottom-4 duration-500">
-          {/* Card 1: Core Installment Rules */}
-          <div className="rounded-[2rem] border border-border bg-white p-8 shadow-sm space-y-6">
-            <div>
-              <h3 className="text-xl font-black text-foreground tracking-tight flex items-center gap-2">
-                <ShieldAlert className="h-5 w-5 text-primary" /> Core Installment Policy
-              </h3>
-              <p className="text-xs text-muted-foreground font-medium mt-1">
-                Platform-wide parameters that govern order creations, automatic schedules, and interest rates.
-              </p>
+      {activeTab === 'operations' && (
+        <div className="space-y-8 animate-in fade-in duration-500">
+          <div className="grid gap-6 lg:grid-cols-4">
+            <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3">All Orders</p>
+              <h3 className="text-4xl font-black text-foreground">{adminOrders?.length || 0}</h3>
+              <p className="text-xs text-muted-foreground mt-3">Complete order history available to the owner.</p>
             </div>
+            <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Installment Plans</p>
+              <h3 className="text-4xl font-black text-foreground">{adminInstallments?.length || 0}</h3>
+              <p className="text-xs text-muted-foreground mt-3">Active and completed schedules across the platform.</p>
+            </div>
+            <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Transactions</p>
+              <h3 className="text-4xl font-black text-foreground">{adminTransactions?.length || 0}</h3>
+              <p className="text-xs text-muted-foreground mt-3">Payments, settlements, and refunds tracked in one view.</p>
+            </div>
+            <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Unread Alerts</p>
+              <h3 className="text-4xl font-black text-foreground">{adminNotifications?.filter((note: any) => !note.is_read).length || 0}</h3>
+              <p className="text-xs text-muted-foreground mt-3">Pending system messages and platform notifications.</p>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-white shadow-sm overflow-hidden">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between p-6 border-b border-border">
+              <div>
+                <h3 className="text-lg font-black text-foreground">Latest Orders Snapshot</h3>
+                <p className="text-xs text-muted-foreground mt-1">Review the most recent order activity across the system.</p>
+              </div>
+              <Button onClick={() => queryClient.invalidateQueries({ queryKey: ['admin-orders', 'admin-installments', 'admin-transactions', 'admin-notifications'] })} variant="outline" className="text-xs uppercase tracking-widest">
+                Refresh Overview
+              </Button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b border-border text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                    <th className="py-4 pl-8">Order ID</th>
+                    <th className="py-4">Customer</th>
+                    <th className="py-4">Amount</th>
+                    <th className="py-4">Status</th>
+                    <th className="py-4 pr-8">Created</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {(adminOrders || []).slice(0, 6).map((order: any) => (
+                    <tr key={order.id} className="group transition-colors hover:bg-slate-50 text-xs">
+                      <td className="py-4 pl-8 font-bold text-foreground">{order.id.slice(0, 8).toUpperCase()}</td>
+                      <td className="py-4">{order?.users?.name || order.user_name || 'Unknown'}</td>
+                      <td className="py-4 font-bold text-primary">{formatCurrency(order.amount)}</td>
+                      <td className="py-4">{order.status}</td>
+                      <td className="py-4 pr-8 text-muted-foreground">{new Date(order.created_at).toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 4: System Controls & Policy */}
+      {activeTab === 'settings' && (
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
+            <div className="rounded-[2rem] border border-border bg-white p-8 shadow-sm space-y-6">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-xl font-black text-foreground tracking-tight flex items-center gap-2">
+                    <ShieldAlert className="h-5 w-5 text-primary" /> System Controls
+                  </h3>
+                  <p className="text-xs text-muted-foreground font-medium mt-1">
+                    Manage global platform toggles, manual reminder execution, and system default settings.
+                  </p>
+                </div>
+                <Button onClick={handleRunReminders} disabled={runRemindersMutation.isPending}>
+                  {runRemindersMutation.isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Run Reminder Cycle'}
+                </Button>
+              </div>
+
+              <form onSubmit={handleSaveSystemSettings} className="space-y-6">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-border bg-slate-50 p-5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Maintenance Mode</p>
+                    <Button variant={maintenanceMode ? 'destructive' : 'outline'} className="w-full" onClick={toggleMaintenanceMode}>
+                      {maintenanceMode ? 'Disable Maintenance' : 'Activate Maintenance'}
+                    </Button>
+                    <p className="mt-3 text-xs text-muted-foreground">
+                      When enabled, new registrations and automated credit workflows are paused.
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-border bg-slate-50 p-5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Reminder Automation</p>
+                    <Button variant={enableReminders ? 'outline' : 'secondary'} className="w-full" onClick={() => setEnableReminders(prev => !prev)}>
+                      {enableReminders ? 'Enabled' : 'Paused'}
+                    </Button>
+                    <p className="mt-3 text-xs text-muted-foreground">Control whether scheduled reminders are delivered to users.</p>
+                  </div>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-border bg-slate-50 p-5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Auto-Debit</p>
+                    <Button variant={enableAutoDebit ? 'outline' : 'secondary'} className="w-full" onClick={() => setEnableAutoDebit(prev => !prev)}>
+                      {enableAutoDebit ? 'Active' : 'Inactive'}
+                    </Button>
+                    <p className="mt-3 text-xs text-muted-foreground">Enable or pause automatic scheduled debit operations for installments.</p>
+                  </div>
+
+                  <div className="rounded-2xl border border-border bg-slate-50 p-5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Vendor Settlement</p>
+                    <Button variant={enableVendorSettlement ? 'outline' : 'secondary'} className="w-full" onClick={() => setEnableVendorSettlement(prev => !prev)}>
+                      {enableVendorSettlement ? 'Settlements On' : 'Settlements Off'}
+                    </Button>
+                    <p className="mt-3 text-xs text-muted-foreground">Control whether vendor payout settlement flows continue to process.</p>
+                  </div>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Default Credit Limit</label>
+                    <input
+                      type="number"
+                      value={defaultCreditLimit}
+                      onChange={(e) => setDefaultCreditLimit(e.target.value)}
+                      className="w-full h-12 px-4 rounded-xl border border-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium text-sm transition-all"
+                    />
+                  </div>
+                  <div className="flex items-end">
+                    <Button type="submit" className="w-full h-14 rounded-xl bg-primary text-white uppercase tracking-widest text-xs">
+                      Save System Settings
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div className="rounded-[2rem] border border-border bg-white p-8 shadow-sm space-y-6">
+              <h3 className="text-xl font-black text-foreground tracking-tight">Owner Growth Signals</h3>
+              <p className="text-xs text-muted-foreground">Monitor high-level system activity and platform health.</p>
+              <div className="grid gap-4">
+                <div className="rounded-2xl border border-border p-5 bg-slate-50">
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Current Maintenance State</p>
+                  <p className="mt-2 text-lg font-black text-foreground">{maintenanceMode ? 'Enabled' : 'Disabled'}</p>
+                </div>
+                <div className="rounded-2xl border border-border p-5 bg-slate-50">
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Reminder Automation</p>
+                  <p className="mt-2 text-lg font-black text-foreground">{enableReminders ? 'Active' : 'Paused'}</p>
+                </div>
+                <div className="rounded-2xl border border-border p-5 bg-slate-50">
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Auto Debit Status</p>
+                  <p className="mt-2 text-lg font-black text-foreground">{enableAutoDebit ? 'On' : 'Off'}</p>
+                </div>
+                <div className="rounded-2xl border border-border p-5 bg-slate-50">
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Default Credit Limit</p>
+                  <p className="mt-2 text-lg font-black text-foreground">{formatCurrency(Number(defaultCreditLimit))}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-2 items-start">
 
             <div className="divide-y divide-border border-y border-border">
               <div className="py-4 flex justify-between items-center">

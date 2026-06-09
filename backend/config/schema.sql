@@ -109,6 +109,18 @@ CREATE TABLE IF NOT EXISTS public.notifications (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- 6.5 System Settings Table
+CREATE TABLE IF NOT EXISTS public.system_settings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  maintenance_mode BOOLEAN DEFAULT FALSE,
+  enable_reminders BOOLEAN DEFAULT TRUE,
+  enable_auto_debit BOOLEAN DEFAULT TRUE,
+  enable_vendor_settlement BOOLEAN DEFAULT TRUE,
+  default_credit_limit NUMERIC DEFAULT 100000,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 -- 7. Wishlist Table
 CREATE TABLE IF NOT EXISTS public.wishlist (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -257,9 +269,11 @@ ALTER TABLE public.auto_debit_subscriptions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.merchant_api_keys ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ai_coaching_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.system_settings ENABLE ROW LEVEL SECURITY;
 
 -- Basic Policies
 CREATE POLICY "Users can view their own data" ON public.users FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Admins can manage system settings" ON public.system_settings FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Public can view products" ON public.products FOR SELECT USING (true);
 CREATE POLICY "Users can view their own orders" ON public.orders FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users can view their own installments" ON public.installments FOR SELECT USING (auth.uid() = user_id);

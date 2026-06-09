@@ -24,10 +24,10 @@ export default function SearchPalette() {
 
   const actions = [
     { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard', category: 'Navigation' },
-    { name: 'Browse Gadgets', icon: ShoppingBag, path: '/products', category: 'Navigation' },
+    { name: 'Browse Gadgets', icon: ShoppingBag, path: '/marketplace', category: 'Navigation' },
     { name: 'Payment History', icon: History, path: '/dashboard/orders', category: 'Navigation' },
     { name: 'Account Settings', icon: Settings, path: '/dashboard/settings', category: 'Account' },
-    { name: 'Support Help', icon: HelpCircle, path: '/support', category: 'Account' },
+    { name: 'Support Help', icon: HelpCircle, path: '/contact', category: 'Account' },
   ];
 
   const filteredActions = query === '' 

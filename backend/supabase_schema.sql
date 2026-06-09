@@ -1,7 +1,7 @@
 -- GadgetFlex Database Schema
 
 -- Users Table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE users (
 );
 
 -- Products Table
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS products (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
   brand TEXT NOT NULL,
@@ -27,27 +27,30 @@ CREATE TABLE products (
 );
 
 -- Orders Table
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS orders (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'active', 'completed', 'cancelled')),
+  payout_status TEXT DEFAULT 'pending',
   total_amount DECIMAL(15, 2) NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Installment Plans Table
-CREATE TABLE installments (
+CREATE TABLE IF NOT EXISTS installments (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   order_id UUID REFERENCES orders(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   total_installments INTEGER NOT NULL,
   frequency TEXT NOT NULL CHECK (frequency IN ('daily', 'weekly', 'monthly')),
   remaining_balance DECIMAL(15, 2) NOT NULL,
   next_payment_date DATE,
+  status TEXT DEFAULT 'active',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Transactions Table
-CREATE TABLE transactions (
+CREATE TABLE IF NOT EXISTS transactions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   installment_id UUID REFERENCES installments(id),
   amount DECIMAL(15, 2) NOT NULL,

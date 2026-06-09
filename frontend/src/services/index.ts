@@ -51,6 +51,13 @@ export const adminService = {
   getUsers: () => api.get('/admin/users').then(res => res.data),
   getAnalytics: () => api.get('/admin/analytics').then(res => res.data),
   updateUser: (id: string, data: any) => api.put(`/admin/users/${id}`, data).then(res => res.data),
+  getAllOrders: () => api.get('/admin/orders').then(res => res.data),
+  getAllInstallments: () => api.get('/admin/installments').then(res => res.data),
+  getAllTransactions: () => api.get('/admin/transactions').then(res => res.data),
+  getAllNotifications: () => api.get('/admin/notifications').then(res => res.data),
+  getSystemSettings: () => api.get('/admin/settings').then(res => res.data),
+  updateSystemSettings: (data: any) => api.put('/admin/settings', data).then(res => res.data),
+  runReminders: () => api.post('/admin/reminders/run').then(res => res.data),
 };
 
 export const walletService = {
