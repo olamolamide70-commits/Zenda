@@ -326,17 +326,10 @@ export default function Home() {
                     <Star key={j} className="h-3 w-3 fill-primary text-primary" />
                   ))}
                 </div>
-                <p className="mb-10 text-lg font-medium italic leading-relaxed text-muted-foreground/80">"{t.text}"</p>
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-slate-100 border border-border overflow-hidden p-1 shadow-inner">
-                    <div className="w-full h-full rounded-full bg-primary/10 flex items-center justify-center font-black text-primary text-[10px]">
-                      {t.name.charAt(0)}
-                    </div>
-                  </div>
-                  <div>
-                    <p className="font-bold tracking-tight text-foreground uppercase text-[10px] tracking-widest">{t.name}</p>
-                    <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">{t.role}</p>
-                  </div>
+                <p className="mb-10 text-lg font-medium leading-relaxed text-muted-foreground/80">{t.text}</p>
+                <div>
+                  <p className="font-bold tracking-tight text-foreground uppercase text-[10px] tracking-widest">{t.name}</p>
+                  <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">{t.role}</p>
                 </div>
               </motion.div>
             ))}
