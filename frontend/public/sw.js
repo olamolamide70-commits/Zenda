@@ -36,10 +36,19 @@ self.addEventListener('fetch', event => {
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
       caches.open(CACHE_NAME).then(cache => {
-        return fetch(request).then(response => {
-          cache.put(request, response.clone());
-          return response;
-        }).catch(() => cache.match(request));
+        return fetch(request)
+          .then(response => {
+            // Only cache successful responses
+            if (response && response.ok) {
+              cache.put(request, response.clone());
+            }
+            return response;
+          })
+          .catch(err => {
+            // Network failed — try cache, otherwise return a 503 response
+            console.error('SW fetch failed for', request.url, err);
+            return cache.match(request).then(cached => cached || new Response('Service Unavailable', { status: 503, statusText: 'Service Unavailable' }));
+          });
       })
     );
     return;
@@ -47,7 +56,13 @@ self.addEventListener('fetch', event => {
 
   // Static Assets: Cache-First
   event.respondWith(
-    caches.match(request).then(response => response || fetch(request))
+    caches.match(request).then(response => {
+      if (response) return response;
+      return fetch(request).catch(err => {
+        console.error('SW asset fetch failed for', request.url, err);
+        return new Response('Service Unavailable', { status: 503, statusText: 'Service Unavailable' });
+      });
+    })
   );
 });
 
