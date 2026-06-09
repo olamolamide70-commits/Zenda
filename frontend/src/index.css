@@ -133,10 +133,10 @@
   }
 
   .mesh-gradient-elite {
-    background: radial-gradient(at 0% 0%, hsla(225, 76%, 48%, 0.08) 0, transparent 50%),
-                radial-gradient(at 100% 0%, hsla(270, 76%, 48%, 0.08) 0, transparent 50%),
-                radial-gradient(at 100% 100%, hsla(200, 76%, 48%, 0.08) 0, transparent 50%),
-                radial-gradient(at 0% 100%, hsla(225, 76%, 48%, 0.08) 0, transparent 50%);
+    background: radial-gradient(at 0% 0%, hsla(262, 80%, 50%, 0.08) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(280, 80%, 50%, 0.08) 0, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(240, 80%, 50%, 0.08) 0, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(262, 80%, 50%, 0.08) 0, transparent 50%);
   }
   
   .nav-link-active {

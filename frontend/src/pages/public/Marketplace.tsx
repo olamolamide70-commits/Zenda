@@ -40,7 +40,6 @@ export default function Marketplace() {
   }, [products]);
 
   const filtered = useMemo(() => {
-    setPage(1);
     let result = products.filter((p: any) => {
       const matchesSearch = p.name?.toLowerCase().includes(search.toLowerCase()) || p.brand?.toLowerCase().includes(search.toLowerCase());
       const matchesBrand = brand === 'All' || p.brand === brand;

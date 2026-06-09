@@ -87,7 +87,7 @@ export default function Home() {
             >
               <h1 className="mb-8 text-6xl font-black leading-[1.05] tracking-[-0.04em] text-foreground md:text-7xl lg:text-8xl text-balance">
                 Ownership for <br />
-                <span className="bg-gradient-to-r from-primary via-blue-600 to-indigo-600 bg-clip-text text-transparent italic pr-4">everyone.</span>
+                <span className="bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent italic pr-4">everyone.</span>
               </h1>
 
               <motion.p

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, ShoppingBag, CreditCard, Receipt, Clock, Heart, User, Bell, Wallet, LogOut, Laptop, Menu, ShieldAlert, ChevronDown } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, CreditCard, Receipt, Clock, Heart, User, Bell, Wallet, LogOut, Laptop, Menu, ShieldAlert, ChevronDown, Home } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
@@ -98,7 +98,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background mesh-gradient-elite">
       {/* Desktop sidebar */}
       <aside className="hidden w-72 flex-shrink-0 lg:block">{sidebar}</aside>
       {/* Mobile sidebar overlay */}
@@ -115,6 +115,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           </Button>
           <div className="flex-1" />
           <div className="flex items-center gap-6">
+            <Link to="/" className="hidden sm:flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors bg-secondary/50 px-4 py-2 rounded-xl">
+              <Home className="h-4 w-4" /> Storefront
+            </Link>
             <Link to="/dashboard/notifications" className="relative group rounded-xl p-2.5 text-muted-foreground transition-all hover:bg-secondary hover:text-primary">
               <Bell className="h-6 w-6" />
               <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-primary ring-2 ring-white" />

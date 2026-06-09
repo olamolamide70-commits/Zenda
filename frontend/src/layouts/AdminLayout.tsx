@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, Users, ShoppingBag, CreditCard, DollarSign, BarChart3, LogOut, Laptop, Menu, ShieldAlert, ChevronDown, User, Bell } from 'lucide-react';
+import { LayoutDashboard, Package, Users, ShoppingBag, CreditCard, DollarSign, BarChart3, LogOut, Laptop, Menu, ShieldAlert, ChevronDown, User, Bell, Home } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
@@ -82,7 +82,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div className="flex min-h-screen bg-background mesh-bg">
+    <div className="flex min-h-screen bg-background mesh-gradient-elite">
       <aside className="hidden w-72 flex-shrink-0 lg:block">{sidebar}</aside>
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
@@ -98,6 +98,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <h1 className="font-display text-lg font-bold text-foreground">Admin Panel</h1>
           <div className="flex-1" />
           <div className="flex items-center gap-6">
+            <Link to="/" className="hidden sm:flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-colors bg-secondary/50 px-4 py-2 rounded-xl">
+              <Home className="h-4 w-4" /> Storefront
+            </Link>
             <Link to="/admin/notifications" className="relative group rounded-xl p-2.5 text-muted-foreground transition-all hover:bg-primary/5 hover:text-primary">
               <Bell className="h-6 w-6" />
               <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-primary ring-2 ring-white" />
