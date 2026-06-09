@@ -85,7 +85,7 @@ export default function Home() {
               variants={fadeIn}
               className="text-left"
             >
-              <h1 className="mb-8 text-6xl font-black leading-[1.05] tracking-[-0.04em] text-foreground md:text-7xl lg:text-8xl text-balance">
+              <h1 className="mb-8 text-4xl font-black leading-[1.05] tracking-[-0.04em] text-foreground md:text-6xl lg:text-8xl text-balance">
                 Ownership for <br />
                 <span className="bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent italic pr-4">everyone.</span>
               </h1>
@@ -113,7 +113,7 @@ export default function Home() {
                 </Link>
               </div>
 
-              <div className="mt-12 flex items-center gap-8 border-t border-slate-100 pt-10">
+              <div className="mt-12 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-8 border-t border-slate-100 pt-10">
                 <div>
                   <p className="text-3xl font-black text-foreground tracking-tight">15k+</p>
                   <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Happy Users</p>
@@ -184,7 +184,7 @@ export default function Home() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="grid grid-cols-1 gap-4 md:grid-cols-4"
+            className="grid grid-cols-2 gap-4 md:grid-cols-4"
           >
             {dynamicCategories.map(cat => (
               <motion.div key={cat.label} variants={fadeIn}>
@@ -349,15 +349,15 @@ export default function Home() {
             className="relative rounded-[3rem] bg-primary py-24 px-10 lg:py-32 overflow-hidden shadow-2xl"
           >
             <div className="absolute top-0 right-0 w-full h-full bg-slate-50 opacity-[0.05] pointer-events-none" />
-            <h2 className="mb-8 text-4xl font-black tracking-tighter text-white lg:text-7xl leading-none">
+            <h2 className="mb-8 text-3xl font-black tracking-tighter text-white sm:text-4xl lg:text-7xl leading-none">
               Get your gadget today.
             </h2>
             <p className="mx-auto mb-12 max-w-xl text-xl font-bold text-white/60 leading-relaxed italic">
               Don't let anything hold you back. Upgrade your tech now and pay as you go.
             </p>
             <Link to="/register">
-              <Button size="lg" className="h-20 rounded-2xl bg-white px-16 text-xl font-black text-primary hover:bg-slate-50 transition-all shadow-xl uppercase tracking-widest">
-                Sign Up Now <ArrowRight className="ml-2 h-6 w-6" />
+              <Button size="lg" className="h-16 sm:h-20 rounded-2xl bg-white px-8 sm:px-16 text-lg sm:text-xl font-black text-primary hover:bg-slate-50 transition-all shadow-xl uppercase tracking-widest">
+                Sign Up Now <ArrowRight className="ml-2 h-5 w-5 sm:h-6 sm:w-6" />
               </Button>
             </Link>
           </motion.div>

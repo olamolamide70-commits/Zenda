@@ -315,7 +315,7 @@ export default function ProductDetails() {
             <div className="mb-6 inline-flex w-fit rounded-xl bg-primary/10 px-5 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
               {product.category}
             </div>
-            <h1 className="mb-6 text-5xl font-black text-foreground lg:text-7xl tracking-tighter leading-[1.05]">{product.name}</h1>
+            <h1 className="mb-6 text-3xl sm:text-5xl font-black text-foreground lg:text-7xl tracking-tighter leading-[1.05]">{product.name}</h1>
             <div className="mb-10 flex items-center gap-8">
               <span className="text-xl font-bold text-muted-foreground/40 tracking-tight uppercase">{product.brand}</span>
               <div className="h-6 w-px bg-slate-100" />
@@ -334,7 +334,7 @@ export default function ProductDetails() {
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 mb-4">Price</p>
               <div className="mb-12 space-y-4">
               <div className="flex items-baseline gap-4">
-                <span className="text-6xl font-black text-foreground tracking-tighter">{formatCurrency(product.price)}</span>
+                <span className="text-4xl sm:text-6xl font-black text-foreground tracking-tighter">{formatCurrency(product.price)}</span>
                 {(product.installment_eligible || product.installmentEligible) && (
                   <div className="text-2xl font-black text-primary italic tracking-tight">
                     or {formatCurrency(product.monthly_installment || product.monthlyInstallment || (product.price * 1.05 / 12))} <span className="text-[10px] uppercase not-italic font-bold">/mo</span>
@@ -414,7 +414,7 @@ export default function ProductDetails() {
 
         {/* Tabs */}
         <Tabs defaultValue="specs" className="mt-32">
-          <TabsList className="h-14 bg-white p-1 rounded-[1.25rem] border border-slate-100 gap-2 inline-flex shadow-premium">
+          <TabsList className="h-auto flex-wrap bg-white p-2 rounded-2xl sm:rounded-[1.25rem] border border-slate-100 gap-2 flex shadow-premium">
             <TabsTrigger value="specs" className="h-12 px-8 rounded-xl font-bold tracking-tight data-[state=active]:bg-primary data-[state=active]:text-white transition-all text-[11px] uppercase">Features</TabsTrigger>
             <TabsTrigger value="plans" className="h-12 px-8 rounded-xl font-bold tracking-tight data-[state=active]:bg-primary data-[state=active]:text-white transition-all text-[11px] uppercase">Payment Plans</TabsTrigger>
             {colorsList.length > 0 && (
@@ -492,7 +492,7 @@ export default function ProductDetails() {
                       <p className="text-xs font-black text-muted-foreground/40 uppercase tracking-widest">Pay every {plan.freq === 'day' ? 'day' : plan.freq === 'week' ? 'week' : 'month'}</p>
                     </div>
                     <div className="mb-10">
-                      <p className="text-4xl font-black text-primary tracking-tighter">
+                      <p className="text-3xl sm:text-4xl font-black text-primary tracking-tighter">
                         {formatCurrency(installment)}
                         <span className="text-sm font-bold text-muted-foreground/40 tracking-normal"> /{plan.freq === 'day' ? 'day' : plan.freq === 'week' ? 'week' : 'mo'}</span>
                       </p>
