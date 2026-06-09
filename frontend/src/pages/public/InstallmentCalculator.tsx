@@ -67,7 +67,7 @@ export default function InstallmentCalculator() {
               {/* Price Slider */}
               <div className="space-y-8">
                 <div className="flex justify-between items-end">
-                  <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 ml-4">Gadget Price</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-4">Gadget Price</Label>
                   <div className="text-3xl font-black text-foreground tracking-tighter">{formatCurrency(price)}</div>
                 </div>
                 <Slider 
@@ -78,7 +78,7 @@ export default function InstallmentCalculator() {
                   step={10000} 
                   className="py-4" 
                 />
-                <div className="flex justify-between text-[10px] font-bold text-muted-foreground/30 uppercase tracking-[0.2em] px-2">
+                <div className="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] px-2">
                   <span>Min ₦10k</span>
                   <div className="flex gap-4">
                     {[500000, 1000000, 2000000].map(val => (
@@ -92,7 +92,7 @@ export default function InstallmentCalculator() {
               {/* Duration Slider */}
               <div className="space-y-8">
                 <div className="flex justify-between items-end">
-                  <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 ml-4">Payment Duration</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-4">Payment Duration</Label>
                   <div className="text-3xl font-black text-foreground tracking-tighter">{duration} <span className="text-sm text-muted-foreground">Months</span></div>
                 </div>
                 <Slider 
@@ -103,7 +103,7 @@ export default function InstallmentCalculator() {
                   step={1} 
                   className="py-4" 
                 />
-                <div className="flex justify-between text-[10px] font-bold text-muted-foreground/30 uppercase tracking-[0.2em] px-2">
+                <div className="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] px-2">
                   <span>1 Month</span>
                   <div className="flex gap-4">
                     {[3, 6, 12, 18].map(val => (
@@ -116,7 +116,7 @@ export default function InstallmentCalculator() {
 
               {/* Frequency Selection */}
               <div className="space-y-8">
-                <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40 ml-4">Repayment Frequency</Label>
+                <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-4">Repayment Frequency</Label>
                 <div className="grid grid-cols-3 gap-4">
                   {(['daily', 'weekly', 'monthly'] as const).map(freq => (
                     <button
@@ -153,18 +153,18 @@ export default function InstallmentCalculator() {
               <div className="grid gap-12 lg:grid-cols-2 items-center">
                 <div className="space-y-10">
                   <div className="flex flex-col justify-center rounded-[2.5rem] bg-slate-50/50 p-10 border border-slate-100 group hover:bg-slate-50 transition-colors">
-                    <span className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-[0.3em] mb-4">Recurring Payment</span>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4">Recurring Payment</span>
                     <span className="text-6xl font-black text-primary tracking-tighter">{formatCurrency(result.installment)}</span>
                     <span className="text-[10px] font-bold text-primary/40 uppercase tracking-widest mt-2">Every {frequency.replace('ly', '')}</span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm">
-                      <span className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest block mb-2">Grand Total</span>
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-2">Grand Total</span>
                       <span className="text-xl font-black text-foreground tracking-tight">{formatCurrency(result.total)}</span>
                     </div>
                     <div className="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm">
-                      <span className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest block mb-2">Total Interest</span>
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-2">Total Interest</span>
                       <span className="text-xl font-black text-primary italic tracking-tight">{formatCurrency(result.interest)}</span>
                     </div>
                   </div>
@@ -219,7 +219,7 @@ export default function InstallmentCalculator() {
                     transition={{ delay: i * 0.05 }}
                     className="flex items-center gap-8 group/item"
                   >
-                    <div className="w-8 text-[10px] font-black text-muted-foreground/30 uppercase tracking-widest">#{s.period}</div>
+                    <div className="w-8 text-[10px] font-black text-slate-500 uppercase tracking-widest">#{s.period}</div>
                     <div className="flex-1 relative">
                       <div className="h-3 rounded-full bg-slate-50 overflow-hidden p-0.5 border border-slate-100/50">
                         <motion.div 
@@ -234,7 +234,7 @@ export default function InstallmentCalculator() {
                   </motion.div>
                 ))}
                 <div className="mt-4 pt-6 border-t border-slate-50 text-center">
-                   <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest italic">Showing first 8 payments of {result.periods} total periods.</p>
+                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest italic">Showing first 8 payments of {result.periods} total periods.</p>
                 </div>
               </div>
             </div>
