@@ -330,7 +330,7 @@ export default function PaymentMethods() {
                   ))
                 ) : (
                     <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-border bg-slate-50/50 py-12 text-center">
-                        <AlertCircle className="h-8 w-8 text-muted-foreground/30 mb-4" />
+                        <AlertCircle className="h-8 w-8 text-slate-500 mb-4" />
                         <h3 className="font-black text-foreground uppercase tracking-widest text-[9px]">No Cards Linked</h3>
                         <Button 
                           variant="ghost" 
@@ -412,7 +412,7 @@ export default function PaymentMethods() {
                       type="text"
                       value={transferDesc}
                       onChange={(e) => setTransferDesc(e.target.value)}
-                      placeholder="e.g. Pizza contribution 🍕"
+                      placeholder="e.g. Pizza contribution "
                       className="w-full h-12 px-4 rounded-xl border border-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium text-sm transition-all"
                     />
                   </div>

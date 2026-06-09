@@ -41,14 +41,14 @@ export default function ReferralHistory() {
             <Users className="h-6 w-6 text-primary" />
           </div>
           <p className="text-4xl font-black text-foreground">{stats?.referrals?.length || 0}</p>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mt-2">Total Invitations</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-2">Total Invitations</p>
         </div>
         <div className="rounded-2xl border border-border bg-white p-8 shadow-sm">
           <div className="h-12 w-12 rounded-xl bg-emerald-50 flex items-center justify-center mb-6">
             <Gift className="h-6 w-6 text-emerald-600" />
           </div>
           <p className="text-4xl font-black text-foreground">{formatCurrency(stats?.rewardsEarned || 0)}</p>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mt-2">Credits Earned</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-2">Credits Earned</p>
         </div>
         <div className="rounded-2xl border border-primary/20 bg-primary/5 p-8 flex flex-col justify-center relative overflow-hidden">
           <div className="absolute -right-4 -bottom-4 h-24 w-24 bg-primary/5 rounded-full blur-2xl" />
@@ -80,7 +80,7 @@ export default function ReferralHistory() {
                 <tr key={r.id} className="group transition-colors hover:bg-slate-50">
                   <td className="py-6 pl-8">
                     <p className="font-bold text-foreground tracking-tight">{r.invitee_name}</p>
-                    <p className="text-[10px] font-bold text-muted-foreground/60 uppercase">{r.invitee_email}</p>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase">{r.invitee_email}</p>
                   </td>
                   <td className="py-6">
                     <Badge className={`rounded-lg gap-1.5 px-3 py-1 text-[10px] font-bold uppercase tracking-widest shadow-none border-none ${
@@ -91,16 +91,16 @@ export default function ReferralHistory() {
                     </Badge>
                   </td>
                   <td className="py-6 font-bold text-sm">
-                    {r.reward_claimed ? <span className="text-primary">+₦5,000</span> : <span className="text-muted-foreground/40">Pending</span>}
+                    {r.reward_claimed ? <span className="text-primary">+₦5,000</span> : <span className="text-slate-500">Pending</span>}
                   </td>
-                  <td className="py-6 pr-8 text-right font-medium text-muted-foreground/60 text-sm">
+                  <td className="py-6 pr-8 text-right font-medium text-slate-500 text-sm">
                     {new Date(r.created_at).toLocaleDateString()}
                   </td>
                 </tr>
               ))}
               {(!stats?.referrals || stats.referrals.length === 0) && (
                 <tr>
-                  <td colSpan={4} className="py-20 text-center text-muted-foreground/40 font-bold italic">No invitations yet. Start sharing to earn rewards!</td>
+                  <td colSpan={4} className="py-20 text-center text-slate-500 font-bold italic">No invitations yet. Start sharing to earn rewards!</td>
                 </tr>
               )}
             </tbody>

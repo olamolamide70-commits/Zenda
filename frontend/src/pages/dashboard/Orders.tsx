@@ -192,7 +192,7 @@ export default function Orders() {
           className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-slate-50/50 py-24 text-center"
         >
           <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-[2rem] bg-white border border-border shadow-sm">
-            <ShoppingBag className="h-10 w-10 text-muted-foreground/30" />
+            <ShoppingBag className="h-10 w-10 text-slate-500" />
           </div>
           <h2 className="text-2xl font-black text-foreground tracking-tight">No Purchases Found</h2>
           <p className="mt-2 text-muted-foreground max-w-xs mx-auto">Your gadget orders will appear here once you make a purchase.</p>

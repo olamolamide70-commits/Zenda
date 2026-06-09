@@ -38,7 +38,7 @@ export default function Contact() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="mt-12 text-xl text-muted-foreground/60 font-medium max-w-2xl mx-auto leading-relaxed md:text-2xl"
+            className="mt-12 text-xl text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed md:text-2xl"
           >
             Have a question? We're here to help. Send us a message and we'll get back to you soon.
           </motion.p>
@@ -59,9 +59,9 @@ export default function Contact() {
                   <c.icon className="h-8 w-8 text-primary" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40 mb-3">{c.label}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-3">{c.label}</p>
                   <p className="text-2xl font-black text-foreground tracking-tighter underline decoration-primary/20 underline-offset-8">{c.value}</p>
-                  <p className="mt-5 text-lg font-medium text-muted-foreground/60 leading-relaxed italic">{c.desc}</p>
+                  <p className="mt-5 text-lg font-medium text-slate-500 leading-relaxed italic">{c.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -76,23 +76,23 @@ export default function Contact() {
           >
             <div className="relative grid gap-10 sm:grid-cols-2">
               <div className="space-y-4">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 ml-5">Full Name</Label>
-                <Input placeholder="Ayomide Makinde" className="h-20 px-8 bg-slate-50 border-none rounded-2xl text-foreground focus:ring-primary/20 transition-all font-bold placeholder:text-muted-foreground/20 text-lg shadow-inner" required />
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-5">Full Name</Label>
+                <Input placeholder="Ayomide Makinde" className="h-20 px-8 bg-slate-50 border-none rounded-2xl text-foreground focus:ring-primary/20 transition-all font-bold placeholder:text-slate-500 text-lg shadow-inner" required />
               </div>
               <div className="space-y-4">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 ml-5">Email</Label>
-                <Input type="email" placeholder="ayomide@example.com" className="h-20 px-8 bg-slate-50 border-none rounded-2xl text-foreground focus:ring-primary/20 transition-all font-bold placeholder:text-muted-foreground/20 text-lg shadow-inner" required />
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-5">Email</Label>
+                <Input type="email" placeholder="ayomide@example.com" className="h-20 px-8 bg-slate-50 border-none rounded-2xl text-foreground focus:ring-primary/20 transition-all font-bold placeholder:text-slate-500 text-lg shadow-inner" required />
               </div>
             </div>
             <div className="relative space-y-4">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 ml-5">Subject</Label>
-              <Input placeholder="How can we help you?" className="h-20 px-8 bg-slate-50 border-none rounded-2xl text-foreground focus:ring-primary/20 transition-all font-bold placeholder:text-muted-foreground/20 text-lg shadow-inner" required />
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-5">Subject</Label>
+              <Input placeholder="How can we help you?" className="h-20 px-8 bg-slate-50 border-none rounded-2xl text-foreground focus:ring-primary/20 transition-all font-bold placeholder:text-slate-500 text-lg shadow-inner" required />
             </div>
             <div className="relative space-y-4">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 ml-5">Message</Label>
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-5">Message</Label>
               <Textarea 
                 placeholder="Write your message here..." 
-                className="min-h-[250px] px-8 py-8 bg-slate-50 border-none rounded-3xl text-foreground focus:ring-primary/20 transition-all font-bold resize-none placeholder:text-muted-foreground/20 text-lg shadow-inner" 
+                className="min-h-[250px] px-8 py-8 bg-slate-50 border-none rounded-3xl text-foreground focus:ring-primary/20 transition-all font-bold resize-none placeholder:text-slate-500 text-lg shadow-inner" 
                 required 
               />
             </div>

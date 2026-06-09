@@ -61,7 +61,7 @@ export default function ProductDetails() {
       toast.info('Removed from wishlist');
     } else {
       addToWishlist(product);
-      toast.success('Added to wishlist! ❤️');
+      toast.success('Added to wishlist! ️');
     }
   };
 
@@ -77,7 +77,7 @@ export default function ProductDetails() {
 
   const handleShareWhatsApp = () => {
     const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent(`Check out ${product?.name} on Zenda! 🔥`);
+    const text = encodeURIComponent(`Check out ${product?.name} on Zenda! `);
     window.open(`https://wa.me/?text=${text}%20${url}`, '_blank');
   };
 
@@ -87,7 +87,7 @@ export default function ProductDetails() {
     setIsSubmittingReview(true);
     try {
       await api.post(`/products/${id}/reviews`, { rating: reviewRating, comment: reviewText });
-      toast.success('Review submitted! Thank you 🎉');
+      toast.success('Review submitted! Thank you ');
       setReviewText('');
       setReviewRating(5);
       queryClient.invalidateQueries({ queryKey: ['product-reviews', id] });
@@ -211,7 +211,7 @@ export default function ProductDetails() {
   if (isError || !product) {
     return (
       <div className="container mx-auto flex flex-col items-center justify-center px-4 py-40 text-center">
-        <p className="text-4xl mb-6 text-muted-foreground/40">📦</p>
+        <p className="text-4xl mb-6 text-slate-500"></p>
         <h2 className="text-4xl font-black text-foreground tracking-tight">Product not found</h2>
         <p className="mt-4 text-xl font-medium text-muted-foreground">We couldn't find the product you're looking for.</p>
         <Link to="/marketplace">
@@ -226,7 +226,7 @@ export default function ProductDetails() {
       <div className="absolute top-0 left-0 w-[50%] h-[50%] bg-primary/[0.03] blur-[120px] -z-10" />
       
       <div className="container mx-auto px-4 relative z-10">
-        <Link to="/marketplace" className="mb-12 inline-flex items-center gap-3 text-sm font-bold text-muted-foreground/60 hover:text-primary transition-all group uppercase tracking-widest">
+        <Link to="/marketplace" className="mb-12 inline-flex items-center gap-3 text-sm font-bold text-slate-500 hover:text-primary transition-all group uppercase tracking-widest">
           <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" /> Back to Shop
         </Link>
  
@@ -256,9 +256,9 @@ export default function ProductDetails() {
               ) : (
                 <div className="flex flex-col items-center gap-6">
                   <span className="text-[180px] drop-shadow-[0_20px_50px_rgba(29,78,216,0.1)] transition-transform hover:rotate-3 duration-700 select-none">
-                    {categoryIcons[product.category] || '📦'}
+                    {categoryIcons[product.category] || ''}
                   </span>
-                  <p className="text-xs font-black uppercase tracking-[0.4em] text-muted-foreground/20">Elite Device</p>
+                  <p className="text-xs font-black uppercase tracking-[0.4em] text-slate-500">Elite Device</p>
                 </div>
               )}
 
@@ -317,7 +317,7 @@ export default function ProductDetails() {
             </div>
             <h1 className="mb-6 text-3xl sm:text-5xl font-black text-foreground lg:text-7xl tracking-tighter leading-[1.05]">{product.name}</h1>
             <div className="mb-10 flex items-center gap-8">
-              <span className="text-xl font-bold text-muted-foreground/40 tracking-tight uppercase">{product.brand}</span>
+              <span className="text-xl font-bold text-slate-500 tracking-tight uppercase">{product.brand}</span>
               <div className="h-6 w-px bg-slate-100" />
               <div className="flex items-center gap-3">
                 <div className="flex gap-1.5">
@@ -331,7 +331,7 @@ export default function ProductDetails() {
             </div>
 
             <div className="mb-12 rounded-[2.5rem] border border-slate-100 bg-white p-10 group hover:border-primary/20 transition-all shadow-premium">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 mb-4">Price</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-4">Price</p>
               <div className="mb-12 space-y-4">
               <div className="flex items-baseline gap-4">
                 <span className="text-4xl sm:text-6xl font-black text-foreground tracking-tighter">{formatCurrency(product.price)}</span>
@@ -353,12 +353,12 @@ export default function ProductDetails() {
                 </div>
                 {(product.metadata?.warranty || product.specs?.['Warranty']) && (
                   <div className="flex items-center gap-2 rounded-full bg-amber-50 px-4 py-2 border border-amber-100">
-                    <span className="text-[8px] font-black uppercase tracking-widest text-amber-600">🛡 {product.metadata?.warranty || product.specs?.['Warranty']}</span>
+                    <span className="text-[8px] font-black uppercase tracking-widest text-amber-600"> {product.metadata?.warranty || product.specs?.['Warranty']}</span>
                   </div>
                 )}
                 {(product.metadata?.condition || product.specs?.['Condition']) && (
                   <div className="flex items-center gap-2 rounded-full bg-slate-50 px-4 py-2 border border-slate-200">
-                    <span className="text-[8px] font-black uppercase tracking-widest text-slate-600">✦ {product.metadata?.condition || product.specs?.['Condition']}</span>
+                    <span className="text-[8px] font-black uppercase tracking-widest text-slate-600"> {product.metadata?.condition || product.specs?.['Condition']}</span>
                   </div>
                 )}
               </div>
@@ -430,7 +430,7 @@ export default function ProductDetails() {
                   <div key={key} className="flex flex-col sm:flex-row sm:items-center justify-between px-10 py-6 bg-white hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0 gap-2">
                     <div className="flex items-center gap-3">
                       <div className="h-2 w-2 rounded-full bg-primary/40" />
-                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">{key}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">{key}</span>
                     </div>
                     <span className="text-xl font-bold text-foreground tracking-tight">{val as string}</span>
                   </div>
@@ -453,7 +453,7 @@ export default function ProductDetails() {
                   className={`cursor-pointer rounded-2xl border p-6 transition-all ${!selectedInsurance ? 'border-primary bg-white shadow-premium' : 'border-slate-100 bg-slate-50/50 hover:bg-white'}`}
                 >
                   <p className="text-[10px] font-bold text-primary mb-1 uppercase tracking-widest">Basic</p>
-                  <p className="text-[10px] font-bold text-muted-foreground/60 uppercase">Standard warranty</p>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase">Standard warranty</p>
                   <p className="mt-4 text-xl font-black text-foreground">₦0 <span className="text-[10px] text-muted-foreground">/mo</span></p>
                 </div>
                 {insurancePlans?.map((ins: any) => (
@@ -463,7 +463,7 @@ export default function ProductDetails() {
                     className={`cursor-pointer rounded-2xl border p-6 transition-all ${selectedInsurance?.id === ins.id ? 'border-primary bg-white shadow-premium' : 'border-slate-100 bg-slate-50/50 hover:bg-white'}`}
                   >
                     <p className="text-[10px] font-bold text-primary mb-1 uppercase tracking-widest">{ins.name}</p>
-                    <p className="text-[10px] font-bold text-muted-foreground/60 uppercase">{ins.description}</p>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase">{ins.description}</p>
                     <p className="mt-4 text-xl font-black text-foreground">{formatCurrency(ins.monthly_premium)} <span className="text-[10px] text-muted-foreground">/mo</span></p>
                   </div>
                 ))}
@@ -489,18 +489,18 @@ export default function ProductDetails() {
                         <h3 className="text-2xl font-black text-foreground tracking-tight">{plan.label}</h3>
                         {interestDiscount > 0 && <Badge className="bg-emerald-500/10 text-emerald-600 border-none">-{interestDiscount}% Discount</Badge>}
                       </div>
-                      <p className="text-xs font-black text-muted-foreground/40 uppercase tracking-widest">Pay every {plan.freq === 'day' ? 'day' : plan.freq === 'week' ? 'week' : 'month'}</p>
+                      <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Pay every {plan.freq === 'day' ? 'day' : plan.freq === 'week' ? 'week' : 'month'}</p>
                     </div>
                     <div className="mb-10">
                       <p className="text-3xl sm:text-4xl font-black text-primary tracking-tighter">
                         {formatCurrency(installment)}
-                        <span className="text-sm font-bold text-muted-foreground/40 tracking-normal"> /{plan.freq === 'day' ? 'day' : plan.freq === 'week' ? 'week' : 'mo'}</span>
+                        <span className="text-sm font-bold text-slate-500 tracking-normal"> /{plan.freq === 'day' ? 'day' : plan.freq === 'week' ? 'week' : 'mo'}</span>
                       </p>
-                      <p className="mt-3 text-[10px] font-bold text-muted-foreground/30 uppercase tracking-widest">Total Price: {formatCurrency(total)}</p>
+                      <p className="mt-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Price: {formatCurrency(total)}</p>
                     </div>
                     <div className="mb-10 space-y-4 flex-1">
                       {[1, 2, 3].map(item => (
-                        <div key={item} className="flex items-center gap-4 text-sm font-bold text-muted-foreground/60">
+                        <div key={item} className="flex items-center gap-4 text-sm font-bold text-slate-500">
                           <CheckCircle className="h-5 w-5 text-primary" /> {item === 1 ? 'No hidden fees' : item === 2 ? 'Instant approval' : 'Secure payments'}
                         </div>
                       ))}
@@ -526,7 +526,7 @@ export default function ProductDetails() {
                   <Palette className="h-7 w-7 text-primary" />
                   <div>
                     <h3 className="text-2xl font-black text-foreground tracking-tight">Available Colors</h3>
-                    <p className="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest mt-0.5">Click a color to preview it on the product image</p>
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-0.5">Click a color to preview it on the product image</p>
                   </div>
                 </div>
 
@@ -551,7 +551,7 @@ export default function ProductDetails() {
                           style={{ backgroundColor: hex }}
                         />
                         <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${
-                          isSelected ? 'text-primary' : 'text-muted-foreground/60'
+                          isSelected ? 'text-primary' : 'text-slate-500'
                         }`}>
                           {color}
                         </span>
@@ -571,9 +571,9 @@ export default function ProductDetails() {
                       style={{ backgroundColor: getColorHex(selectedColor) }}
                     />
                     <div>
-                      <p className="text-xs font-black uppercase tracking-widest text-muted-foreground/40 mb-1">Currently Viewing</p>
+                      <p className="text-xs font-black uppercase tracking-widest text-slate-500 mb-1">Currently Viewing</p>
                       <p className="text-xl font-black text-foreground tracking-tight">{selectedColor}</p>
-                      <p className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest mt-1">Color preview applied to product image above ↑</p>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Color preview applied to product image above ↑</p>
                     </div>
                   </div>
                 )}
@@ -660,7 +660,7 @@ function ReviewsList({ productId }: { productId: string }) {
 
   if (!Array.isArray(reviews) || reviews.length === 0) return (
     <div className="rounded-[2.5rem] border border-dashed border-slate-100 bg-slate-50/50 py-20 text-center">
-      <MessageCircle className="h-12 w-12 text-muted-foreground/20 mx-auto mb-4" />
+      <MessageCircle className="h-12 w-12 text-slate-500 mx-auto mb-4" />
       <p className="font-black text-foreground uppercase tracking-widest text-xs">No reviews yet</p>
       <p className="text-sm font-medium text-muted-foreground mt-2">Be the first to share your experience!</p>
     </div>
@@ -679,7 +679,7 @@ function ReviewsList({ productId }: { productId: string }) {
               <Star key={s} className={`h-4 w-4 ${s <= Math.round(avgRating) ? 'fill-primary text-primary' : 'fill-slate-100 text-slate-200'}`} />
             ))}
           </div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mt-2">{reviews.length} review{reviews.length !== 1 ? 's' : ''}</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-2">{reviews.length} review{reviews.length !== 1 ? 's' : ''}</p>
         </div>
         <div className="flex-1 space-y-2">
           {[5,4,3,2,1].map(star => {
@@ -692,7 +692,7 @@ function ReviewsList({ productId }: { productId: string }) {
                 <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden">
                   <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${pct}%` }} />
                 </div>
-                <span className="text-[10px] font-bold text-muted-foreground/60 w-4">{count}</span>
+                <span className="text-[10px] font-bold text-slate-500 w-4">{count}</span>
               </div>
             );
           })}
@@ -709,7 +709,7 @@ function ReviewsList({ productId }: { productId: string }) {
               </div>
               <div>
                 <p className="font-black text-foreground tracking-tight">{r.user_name || r.reviewer || 'Anonymous'}</p>
-                <p className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">{r.created_at ? new Date(r.created_at).toLocaleDateString() : ''}</p>
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{r.created_at ? new Date(r.created_at).toLocaleDateString() : ''}</p>
               </div>
             </div>
             <div className="flex gap-0.5">
@@ -718,7 +718,7 @@ function ReviewsList({ productId }: { productId: string }) {
               ))}
             </div>
           </div>
-          <p className="text-base font-medium text-muted-foreground/80 leading-relaxed italic">"{r.comment || r.review || r.text}"</p>
+          <p className="text-base font-medium text-slate-500 leading-relaxed italic">"{r.comment || r.review || r.text}"</p>
         </div>
       ))}
     </div>
@@ -760,9 +760,9 @@ function Recommendations({ productId }: { productId: string }) {
                 ) : (
                   <div className="flex flex-col items-center gap-2">
                     <span className="text-6xl drop-shadow-sm transition-transform group-hover:scale-110 duration-500">
-                      {categoryIcons[product.category] || '📦'}
+                      {categoryIcons[product.category] || ''}
                     </span>
-                    <p className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/30">Premium Gadget</p>
+                    <p className="text-[8px] font-black uppercase tracking-widest text-slate-500">Premium Gadget</p>
                   </div>
                 )}
               </div>

@@ -134,7 +134,7 @@ export default function VerifyOTP() {
           <button 
             onClick={handleResend}
             disabled={timer > 0 || resending}
-            className={`text-sm font-bold uppercase tracking-widest transition-colors ${timer > 0 || resending ? 'text-muted-foreground/50 cursor-not-allowed' : 'text-primary hover:text-primary/80 underline decoration-2 underline-offset-8'}`}
+            className={`text-sm font-bold uppercase tracking-widest transition-colors ${timer > 0 || resending ? 'text-slate-500 cursor-not-allowed' : 'text-primary hover:text-primary/80 underline decoration-2 underline-offset-8'}`}
           >
             {resending ? 'Sending...' : timer > 0 ? `Resend Code in ${timer}s` : 'Resend Code Now'}
           </button>

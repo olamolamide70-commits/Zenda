@@ -187,7 +187,7 @@ export default function Installments() {
                       <Button 
                         variant="ghost" 
                         disabled 
-                        className="w-full h-12 rounded-xl border border-border text-muted-foreground/50 font-bold text-sm gap-2 cursor-not-allowed"
+                        className="w-full h-12 rounded-xl border border-border text-slate-500 font-bold text-sm gap-2 cursor-not-allowed"
                       >
                         <Zap className="h-5 w-5 fill-primary" />
                         Auto-pay is on
@@ -220,7 +220,7 @@ export default function Installments() {
           {(!installments || installments.length === 0) && (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-slate-50/50 py-24 text-center">
               <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-[2rem] bg-white border border-border shadow-sm">
-                <AlertCircle className="h-10 w-10 text-muted-foreground/30" />
+                <AlertCircle className="h-10 w-10 text-slate-500" />
               </div>
               <h2 className="text-2xl font-black text-foreground tracking-tight">No Active Plans</h2>
               <p className="mt-2 text-muted-foreground max-w-xs mx-auto">You don't have any active gadget payments yet.</p>

@@ -49,7 +49,7 @@ export default function AdminOrders() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
           <input
             type="text"
             placeholder="Search orders or products..."
@@ -81,7 +81,7 @@ export default function AdminOrders() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-slate-50/50 py-24 text-center">
-          <Package className="h-12 w-12 text-muted-foreground/30 mb-4" />
+          <Package className="h-12 w-12 text-slate-500 mb-4" />
           <h3 className="font-black text-foreground uppercase tracking-widest text-xs">No Orders Found</h3>
           <p className="text-sm font-medium text-muted-foreground mt-2">No orders match your current filters.</p>
         </div>

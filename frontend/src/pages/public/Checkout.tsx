@@ -9,9 +9,9 @@ import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 
 const PAYMENT_MODES = [
-  { id: 'direct', label: 'Pay Outright', desc: 'Pay the full amount now', icon: '💳' },
-  { id: 'monthly', label: 'Monthly (12 months)', desc: 'Spread over 12 months at 5% interest', icon: '📅' },
-  { id: 'weekly', label: 'Weekly (6 months)', desc: 'Spread over 26 weeks at 5% interest', icon: '🗓️' },
+  { id: 'direct', label: 'Pay Outright', desc: 'Pay the full amount now', icon: '' },
+  { id: 'monthly', label: 'Monthly (12 months)', desc: 'Spread over 12 months at 5% interest', icon: '' },
+  { id: 'weekly', label: 'Weekly (6 months)', desc: 'Spread over 26 weeks at 5% interest', icon: '️' },
   { id: 'daily', label: 'Daily (3 months)', desc: 'Spread over 90 days at 5% interest', icon: '⏱️' },
 ];
 
@@ -79,7 +79,7 @@ export default function Checkout() {
         }
       }
 
-      toast.success('🎉 Order placed successfully!');
+      toast.success(' Order placed successfully!');
       navigate('/dashboard/orders');
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Failed to place order. Please try again.');
@@ -93,7 +93,7 @@ export default function Checkout() {
       <div className="container mx-auto px-4 max-w-5xl">
         <Link
           to="/cart"
-          className="mb-12 inline-flex items-center gap-3 text-sm font-bold text-muted-foreground/60 hover:text-primary transition-all group uppercase tracking-widest"
+          className="mb-12 inline-flex items-center gap-3 text-sm font-bold text-slate-500 hover:text-primary transition-all group uppercase tracking-widest"
         >
           <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" /> Back to Cart
         </Link>
@@ -125,7 +125,7 @@ export default function Checkout() {
                   <div key={f.key}>
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">{f.label}</label>
                     <div className="relative">
-                      <f.icon className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40" />
+                      <f.icon className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
                       <input
                         type="text"
                         placeholder={f.placeholder}
@@ -189,7 +189,7 @@ export default function Checkout() {
                     )}
                     <div className="text-2xl mb-2">{mode.icon}</div>
                     <p className="font-black text-foreground tracking-tight text-sm">{mode.label}</p>
-                    <p className="text-[10px] font-bold text-muted-foreground/60 mt-1 uppercase tracking-widest">{mode.desc}</p>
+                    <p className="text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-widest">{mode.desc}</p>
                     {mode.id !== 'direct' && plan && paymentMode === mode.id && (
                       <p className="mt-3 text-lg font-black text-primary">
                         {formatCurrency(periodicAmount)}
@@ -219,11 +219,11 @@ export default function Checkout() {
                           alt={product.name}
                           className="h-full w-full object-cover"
                         />
-                      ) : <div className="h-full w-full flex items-center justify-center text-xl">📦</div>}
+                      ) : <div className="h-full w-full flex items-center justify-center text-xl"></div>}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-bold text-foreground text-sm line-clamp-1">{product.name}</p>
-                      <p className="text-[10px] font-bold text-muted-foreground/60 uppercase">qty: {quantity}</p>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase">qty: {quantity}</p>
                     </div>
                     <p className="font-black text-primary text-sm">{formatCurrency(product.price * quantity)}</p>
                   </div>

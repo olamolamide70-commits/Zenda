@@ -56,7 +56,7 @@ export default function Profile() {
       const updatedUser = await authService.updateProfile({ avatar_url: newUrl });
       const token = localStorage.getItem('auth_token') || '';
       login(updatedUser, token);
-      toast.success('Profile picture updated! 📸');
+      toast.success('Profile picture updated! ');
     } catch (err: any) {
       console.error('Avatar upload error:', err?.response?.data || err.message);
       toast.error(err?.response?.data?.error || 'Failed to upload photo');
@@ -235,7 +235,7 @@ export default function Profile() {
                     <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mt-1">
                       {user?.role === 'super_admin' ? 'System Administrator' : (user?.role === 'merchant' || user?.role === 'merchant') ? 'Merchant Partner' : 'Verified Member'}
                     </p>
-                    <p className="text-[10px] text-muted-foreground/50 font-bold mt-1 uppercase tracking-widest">Click photo to change</p>
+                    <p className="text-[10px] text-slate-500 font-bold mt-1 uppercase tracking-widest">Click photo to change</p>
                   </div>
                 </div>
 

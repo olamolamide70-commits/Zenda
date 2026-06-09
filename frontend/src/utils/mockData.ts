@@ -86,5 +86,5 @@ export const mockNotifications = [
 ];
 
 export const categoryIcons: Record<string, string> = {
-  Laptops: '💻', Phones: '📱', Tablets: '📲', Accessories: '🎧',
+  Laptops: '', Phones: '', Tablets: '', Accessories: '',
 };

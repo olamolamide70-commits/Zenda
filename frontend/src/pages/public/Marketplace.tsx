@@ -75,7 +75,7 @@ export default function Marketplace() {
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-black mb-6 text-foreground tracking-tighter leading-none">
             Zenda
           </h1>
-          <p className="mx-auto max-w-2xl text-xl font-medium text-muted-foreground/60 leading-relaxed">
+          <p className="mx-auto max-w-2xl text-xl font-medium text-slate-500 leading-relaxed">
             Buy the world's best technology and pay in small, easy monthly steps.
           </p>
         </div>
@@ -84,12 +84,12 @@ export default function Marketplace() {
         <div className="mb-8 space-y-4">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
             <div className="relative flex-1">
-              <Search className="absolute left-6 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground/40" />
+              <Search className="absolute left-6 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
               <Input
                 placeholder="Search gadgets, brands, or categories..."
                 value={search}
                 onChange={e => { setSearch(e.target.value); setPage(1); }}
-                className="h-16 pl-14 bg-white border-border rounded-2xl text-foreground placeholder:text-muted-foreground/30 focus:ring-primary/20 transition-all font-bold text-lg shadow-sm"
+                className="h-16 pl-14 bg-white border-border rounded-2xl text-foreground placeholder:text-slate-500 focus:ring-primary/20 transition-all font-bold text-lg shadow-sm"
               />
             </div>
             <Button
@@ -159,7 +159,7 @@ export default function Marketplace() {
                     onChange={e => { setMaxPrice(e.target.value); setPage(1); }}
                     className="h-12 w-36 px-4 rounded-xl border border-border bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 font-medium text-sm"
                   />
-                  <span className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                     Max: {formatCurrency(maxProductPrice)}
                   </span>
                 </div>
@@ -177,7 +177,7 @@ export default function Marketplace() {
           )}
         </div>
 
-        <p className="mb-8 text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.2em] leading-none">
+        <p className="mb-8 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] leading-none">
           {isLoading ? 'Synchronizing catalog...' : `${filtered.length} product${filtered.length !== 1 ? 's' : ''} found${page > 1 ? ` · Page ${page} of ${totalPages}` : ''}`}
         </p>
 
@@ -188,7 +188,7 @@ export default function Marketplace() {
         ) : isError ? (
           <div className="flex flex-col items-center justify-center rounded-[3rem] border border-red-500/10 bg-white py-24 text-center shadow-sm">
             <p className="text-3xl font-black text-foreground tracking-tight">Something went wrong</p>
-            <p className="mt-4 text-lg font-medium text-muted-foreground/60 max-w-md mx-auto">We're having trouble loading products.</p>
+            <p className="mt-4 text-lg font-medium text-slate-500 max-w-md mx-auto">We're having trouble loading products.</p>
             <Button variant="outline" className="mt-12 h-14 px-10 rounded-xl border-border font-bold uppercase tracking-widest text-[10px]" onClick={() => window.location.reload()}>Try again</Button>
           </div>
         ) : paginated.length > 0 ? (
@@ -237,10 +237,10 @@ export default function Marketplace() {
         ) : (
           <div className="flex flex-col items-center justify-center rounded-[3rem] border border-border bg-white py-24 text-center shadow-sm">
             <div className="h-32 w-32 rounded-full bg-slate-50 flex items-center justify-center mb-10">
-              <Search className="h-10 w-10 text-muted-foreground/20" />
+              <Search className="h-10 w-10 text-slate-500" />
             </div>
             <p className="text-3xl font-black text-foreground tracking-tight lowercase">no matches found</p>
-            <p className="mt-4 text-lg font-medium text-muted-foreground/60 max-w-md mx-auto italic">Adjust your search or filters.</p>
+            <p className="mt-4 text-lg font-medium text-slate-500 max-w-md mx-auto italic">Adjust your search or filters.</p>
             {hasActiveFilters && (
               <Button onClick={clearFilters} className="mt-8 h-12 px-8 rounded-xl bg-primary text-white font-bold uppercase tracking-widest text-[10px]">
                 Clear Filters

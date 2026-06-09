@@ -49,7 +49,7 @@ export default function Footer() {
         </div>
         <div className="mt-24 border-t border-border/50 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
-            © {new Date().getFullYear()} Zenda. <span className="text-primary/40 italic">Accelerating progress.</span>
+            © {new Date().getFullYear()} Zenda. <span className="text-primary/40 italic">.</span>
           </p>
           <div className="flex gap-8 text-xs font-bold text-slate-500 uppercase tracking-[0.3em]">
             <span className="hover:text-primary cursor-pointer transition-colors hover:scale-110">Insta</span>

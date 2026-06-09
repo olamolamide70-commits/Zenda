@@ -52,7 +52,7 @@ export default function AdminTransactions() {
               <card.icon className="h-5 w-5" />
             </div>
             <p className="text-2xl font-black text-foreground tracking-tight">{card.value}</p>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mt-1">{card.label}</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">{card.label}</p>
           </div>
         ))}
       </div>
@@ -60,7 +60,7 @@ export default function AdminTransactions() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
           <input
             type="text"
             placeholder="Search by description, ID, or email..."

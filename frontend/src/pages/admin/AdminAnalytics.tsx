@@ -96,7 +96,7 @@ export default function AdminAnalytics() {
         <Card className="rounded-2xl border-border bg-white p-10 shadow-sm">
           <div className="mb-8 items-center justify-between flex">
             <h2 className="text-2xl font-black text-foreground tracking-tight">Plan Adoption</h2>
-            <Wallet className="h-6 w-6 text-muted-foreground/30" />
+            <Wallet className="h-6 w-6 text-slate-500" />
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={growth?.installments}>
@@ -127,7 +127,7 @@ export default function AdminAnalytics() {
                 <div key={plan.name} className="flex items-center gap-4">
                   <div className="h-3 w-3 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
                   <div>
-                    <span className="block text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{plan.name}</span>
+                    <span className="block text-[10px] font-bold uppercase tracking-widest text-slate-500">{plan.name}</span>
                     <span className="text-2xl font-black text-foreground">{plan.value} Clients</span>
                   </div>
                 </div>

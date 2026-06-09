@@ -67,7 +67,7 @@ export default function Notifications() {
                       )}
                     </div>
                     <p className="mt-2 text-base font-medium text-muted-foreground leading-relaxed">{n.message}</p>
-                    <div className="mt-4 flex items-center gap-2 text-xs font-bold text-muted-foreground/50 uppercase tracking-widest">
+                    <div className="mt-4 flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest">
                       <Clock className="h-3 w-3" /> {new Date(n.created_at).toLocaleDateString()}
                     </div>
                   </div>
@@ -81,7 +81,7 @@ export default function Notifications() {
               className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-slate-50/50 py-24 text-center"
             >
               <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-[2rem] bg-white border border-border shadow-sm">
-                <Inbox className="h-10 w-10 text-muted-foreground/30" />
+                <Inbox className="h-10 w-10 text-slate-500" />
               </div>
               <h2 className="text-2xl font-black text-foreground tracking-tight">No Notifications</h2>
               <p className="mt-2 text-muted-foreground text-center mx-auto max-w-xs">You'll see updates about your orders and payments here.</p>

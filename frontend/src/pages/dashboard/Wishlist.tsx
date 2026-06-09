@@ -50,7 +50,7 @@ export default function Wishlist() {
             className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-slate-50/50 py-24 text-center"
           >
             <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-[2rem] bg-white border border-border shadow-sm">
-              <Heart className="h-10 w-10 text-muted-foreground/30" />
+              <Heart className="h-10 w-10 text-slate-500" />
             </div>
             <h2 className="text-2xl font-black text-foreground tracking-tight">Wishlist is Empty</h2>
             <p className="mt-2 text-muted-foreground max-w-xs mx-auto">Browse our premium gadgets and save the ones you love.</p>

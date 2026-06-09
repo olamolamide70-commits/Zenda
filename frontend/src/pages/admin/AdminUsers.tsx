@@ -56,7 +56,7 @@ export default function AdminUsers() {
               ))}
               {(!users || users.length === 0) && (
                 <tr>
-                  <td colSpan={4} className="py-20 text-center text-muted-foreground/40 font-bold italic">No users found in the directory.</td>
+                  <td colSpan={4} className="py-20 text-center text-slate-500 font-bold italic">No users found in the directory.</td>
                 </tr>
               )}
             </tbody>

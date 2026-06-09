@@ -48,7 +48,7 @@ export default function Privacy() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-xl text-muted-foreground/60 font-medium max-w-2xl mx-auto leading-relaxed"
+            className="text-xl text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed"
           >
             Your privacy is our priority. Learn how we handle your data with transparency and care.
           </motion.p>
@@ -72,7 +72,7 @@ export default function Privacy() {
                   <h3 className="text-xl font-black text-foreground tracking-tight mb-4 uppercase text-[12px] tracking-widest text-primary/60">
                     {section.title}
                   </h3>
-                  <p className="text-lg font-medium text-muted-foreground/60 leading-relaxed">
+                  <p className="text-lg font-medium text-slate-500 leading-relaxed">
                     {section.content}
                   </p>
                 </div>
@@ -82,7 +82,7 @@ export default function Privacy() {
         </div>
 
         <div className="mt-24 text-center">
-          <p className="text-sm font-bold text-muted-foreground/40 uppercase tracking-widest">
+          <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">
             Last Updated: March 20, 2026
           </p>
         </div>

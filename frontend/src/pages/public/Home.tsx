@@ -94,7 +94,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
-                className="mb-12 text-xl text-muted-foreground/80 max-w-xl leading-relaxed font-medium text-balance"
+                className="mb-12 text-xl text-slate-500 max-w-xl leading-relaxed font-medium text-balance"
               >
                 Get the latest premium gadgets and pay in easy, stress-free installments. 
                 <span className="block text-primary font-black mt-4 uppercase tracking-[0.2em] text-xs">Empowering Your Digital Lifestyle.</span>
@@ -194,7 +194,7 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="text-sm font-bold tracking-tight text-foreground uppercase">{cat.label}</p>
-                    <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">{cat.count}+ units</p>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{cat.count}+ units</p>
                   </div>
                 </Link>
               </motion.div>
@@ -210,7 +210,7 @@ export default function Home() {
             <div className="max-w-2xl">
               <p className="text-[10px] font-bold text-primary uppercase tracking-[0.3em] mb-4">Top Picks</p>
               <h2 className="text-4xl lg:text-5xl font-black tracking-tighter text-foreground">Trending Gadgets</h2>
-              <p className="mt-4 text-xl font-medium text-muted-foreground/60">Check out our most popular items available on easy payment plans.</p>
+              <p className="mt-4 text-xl font-medium text-slate-500">Check out our most popular items available on easy payment plans.</p>
             </div>
             <Link to="/marketplace">
               <Button variant="link" className="h-12 text-base font-bold text-primary p-0">
@@ -247,7 +247,7 @@ export default function Home() {
           <div className="mb-20 text-center">
             <p className="text-[10px] font-bold text-primary uppercase tracking-[0.3em] mb-4">How it works</p>
             <h2 className="text-4xl lg:text-5xl font-black tracking-tighter text-foreground">Four easy steps</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-xl font-medium text-muted-foreground/60">Getting your dream gadget is as simple as 1, 2, 3, 4.</p>
+            <p className="mx-auto mt-4 max-w-2xl text-xl font-medium text-slate-500">Getting your dream gadget is as simple as 1, 2, 3, 4.</p>
           </div>
           <div className="grid gap-8 md:grid-cols-4">
             {steps.map((step, i) => (
@@ -264,7 +264,7 @@ export default function Home() {
                   <step.icon className="h-10 w-10" />
                 </div>
                 <h3 className="mb-4 text-xl font-black tracking-tight text-foreground uppercase text-[12px] tracking-widest">{step.title}</h3>
-                <p className="text-sm font-medium leading-relaxed text-muted-foreground/60">{step.desc}</p>
+                <p className="text-sm font-medium leading-relaxed text-slate-500">{step.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -277,7 +277,7 @@ export default function Home() {
           <div className="mb-20">
             <p className="text-[10px] font-bold text-primary uppercase tracking-[0.3em] mb-4">Why choose us</p>
             <h2 className="text-4xl lg:text-5xl font-black tracking-tighter text-foreground">The Zenda way</h2>
-            <p className="mt-4 text-xl font-medium text-muted-foreground/60">We make it easy for you to own the best technology.</p>
+            <p className="mt-4 text-xl font-medium text-slate-500">We make it easy for you to own the best technology.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {benefits.map((b, i) => (
@@ -294,7 +294,7 @@ export default function Home() {
                   <b.icon className="h-8 w-8 text-primary" />
                 </div>
                 <h3 className="mb-4 text-xl font-black tracking-tight text-foreground uppercase text-[12px] tracking-widest">{b.title}</h3>
-                <p className="text-base font-medium leading-relaxed text-muted-foreground/60">{b.desc}</p>
+                <p className="text-base font-medium leading-relaxed text-slate-500">{b.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -307,7 +307,7 @@ export default function Home() {
           <div className="mb-20 text-center">
             <p className="text-[10px] font-bold text-primary uppercase tracking-[0.3em] mb-4">Wall of fame</p>
             <h2 className="text-4xl lg:text-5xl font-black tracking-tighter text-foreground">What our customers say</h2>
-            <p className="mt-4 text-lg text-muted-foreground/60 font-medium max-w-2xl mx-auto">
+            <p className="mt-4 text-lg text-slate-500 font-medium max-w-2xl mx-auto">
               Join thousands of Nigerians using Zenda to upgrade their lives with smart, manageable payments.
             </p>
           </div>
@@ -327,10 +327,10 @@ export default function Home() {
                     <Star key={j} className="h-3 w-3 fill-primary text-primary" />
                   ))}
                 </div>
-                <p className="mb-10 text-lg font-medium leading-relaxed text-muted-foreground/80">{t.text}</p>
+                <p className="mb-10 text-lg font-medium leading-relaxed text-slate-500">{t.text}</p>
                 <div>
                   <p className="font-bold tracking-tight text-foreground uppercase text-[10px] tracking-widest">{t.name}</p>
-                  <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">{t.role}</p>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t.role}</p>
                 </div>
               </motion.div>
             ))}

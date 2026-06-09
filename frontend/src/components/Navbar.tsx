@@ -34,7 +34,7 @@ export default function Navbar() {
               key={link.to} 
               to={link.to} 
               className={`text-[11px] font-bold uppercase tracking-[0.15em] transition-all hover:text-primary ${
-                location.pathname === link.to ? 'text-primary' : 'text-muted-foreground/40'
+                location.pathname === link.to ? 'text-primary' : 'text-slate-500'
               }`}
             >
               {link.label}
@@ -46,7 +46,7 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           <Link 
             to="/cart" 
-            className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 text-muted-foreground/60 transition-all hover:bg-white hover:text-primary border border-slate-100"
+            className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 text-slate-500 transition-all hover:bg-white hover:text-primary border border-slate-100"
             aria-label={`Shopping cart with ${cartCount} items`}
           >
             <ShoppingCart className="h-4 w-4" />
@@ -68,7 +68,7 @@ export default function Navbar() {
           ) : (
             <div className="hidden gap-3 sm:flex">
               <Link to="/login">
-                <Button size="sm" variant="ghost" className="h-10 px-4 text-muted-foreground/60 hover:text-primary hover:bg-slate-50 font-bold uppercase text-[10px] tracking-widest">
+                <Button size="sm" variant="ghost" className="h-10 px-4 text-slate-500 hover:text-primary hover:bg-slate-50 font-bold uppercase text-[10px] tracking-widest">
                   Login
                 </Button>
               </Link>

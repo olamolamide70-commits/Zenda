@@ -26,7 +26,7 @@ export default function Cart() {
       <div className="container mx-auto px-4">
         <Link
           to="/marketplace"
-          className="mb-12 inline-flex items-center gap-3 text-sm font-bold text-muted-foreground/60 hover:text-primary transition-all group uppercase tracking-widest"
+          className="mb-12 inline-flex items-center gap-3 text-sm font-bold text-slate-500 hover:text-primary transition-all group uppercase tracking-widest"
         >
           <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" /> Back to Shop
         </Link>
@@ -49,7 +49,7 @@ export default function Cart() {
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-col items-center justify-center rounded-[3rem] border border-dashed border-border bg-white py-32 text-center shadow-premium"
           >
-            <ShoppingCart className="h-16 w-16 text-muted-foreground/20 mb-6" />
+            <ShoppingCart className="h-16 w-16 text-slate-500 mb-6" />
             <h2 className="text-3xl font-black text-foreground tracking-tight">Your cart is empty</h2>
             <p className="mt-3 text-lg text-muted-foreground font-medium max-w-sm mx-auto">
               Start exploring our premium gadgets and add items to your cart.
@@ -85,21 +85,21 @@ export default function Cart() {
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <div className="h-full w-full flex items-center justify-center text-4xl">📦</div>
+                        <div className="h-full w-full flex items-center justify-center text-4xl"></div>
                       )}
                     </div>
 
                     {/* Details */}
                     <div className="flex-1 min-w-0">
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-1">{product.brand}</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">{product.brand}</p>
                       <h3 className="font-black text-foreground tracking-tight text-lg line-clamp-1">{product.name}</h3>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 mt-1">{product.category}</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">{product.category}</p>
 
                       <div className="mt-4 flex items-center justify-between gap-4 flex-wrap">
                         <div>
                           <p className="text-2xl font-black text-primary tracking-tighter">{formatCurrency(product.price * quantity)}</p>
                           {quantity > 1 && (
-                            <p className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">{formatCurrency(product.price)} each</p>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{formatCurrency(product.price)} each</p>
                           )}
                         </div>
 
@@ -180,7 +180,7 @@ export default function Cart() {
                     From <span className="text-primary">{formatCurrency(installmentTotal)}</span>
                     <span className="text-sm font-bold text-muted-foreground"> /mo</span>
                   </p>
-                  <p className="text-[10px] font-bold text-muted-foreground/60 mt-1 uppercase tracking-widest">12-month plan at 5% interest</p>
+                  <p className="text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-widest">12-month plan at 5% interest</p>
                 </div>
 
                 <Button

@@ -86,7 +86,7 @@ export default function Dashboard() {
               <ShieldCheck className="h-6 w-6 text-primary" />
             </div>
             <div className="text-right">
-              <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 mb-1">Current Status</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">Current Status</p>
               <p className="text-xl font-black text-foreground tracking-tight">{user?.tier || 'Bronze'} Member</p>
             </div>
           </div>
@@ -111,7 +111,7 @@ export default function Dashboard() {
                 className="h-full bg-gradient-to-r from-primary to-blue-400 rounded-full shadow-lg shadow-primary/20"
               />
             </div>
-            <p className="text-[10px] font-bold text-muted-foreground/60 text-center italic">Pay on time to increase your score & unlock 5% discount.</p>
+            <p className="text-[10px] font-bold text-slate-500 text-center italic">Pay on time to increase your score & unlock 5% discount.</p>
           </div>
         </motion.div>
       </div>

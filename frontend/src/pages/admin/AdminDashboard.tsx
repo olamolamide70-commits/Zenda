@@ -104,7 +104,7 @@ export default function AdminDashboard() {
           
           <div className="space-y-6 flex-1">
             <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">Title</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-1">Title</label>
               <Input 
                 placeholder="Important Platform Update" 
                 value={pushTitle}
@@ -113,7 +113,7 @@ export default function AdminDashboard() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">Announcement Details</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-1">Announcement Details</label>
               <Textarea 
                 placeholder="Compose your broadcast message here..." 
                 value={pushBody}

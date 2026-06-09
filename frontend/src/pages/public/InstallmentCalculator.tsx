@@ -51,7 +51,7 @@ export default function InstallmentCalculator() {
             <Calculator className="h-10 w-10 text-primary" />
           </motion.div>
           <h1 className="text-6xl lg:text-8xl font-black text-foreground tracking-tighter leading-none">Payment <br /><span className="text-primary italic pr-4">Calculator.</span></h1>
-          <p className="mt-8 text-xl font-medium text-muted-foreground/60 max-w-2xl mx-auto tracking-tight text-balance">Ownership made simple. Pick your price, set your duration, and see exactly what you pay.</p>
+          <p className="mt-8 text-xl font-medium text-slate-500 max-w-2xl mx-auto tracking-tight text-balance">Ownership made simple. Pick your price, set your duration, and see exactly what you pay.</p>
         </div>
 
         <div className="mx-auto max-w-6xl grid gap-12 lg:grid-cols-2">
@@ -125,7 +125,7 @@ export default function InstallmentCalculator() {
                       className={`h-16 rounded-2xl border-2 font-black uppercase tracking-widest text-[10px] transition-all ${
                         frequency === freq 
                           ? 'border-primary bg-primary text-white shadow-lg shadow-primary/20 scale-[1.02]' 
-                          : 'border-slate-100 bg-slate-50 text-muted-foreground/60 hover:border-slate-200'
+                          : 'border-slate-100 bg-slate-50 text-slate-500 hover:border-slate-200'
                       }`}
                     >
                       {freq}

@@ -35,7 +35,7 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.8 }}
-            className="mt-12 text-xl text-muted-foreground/60 font-medium max-w-3xl mx-auto leading-relaxed md:text-2xl"
+            className="mt-12 text-xl text-slate-500 font-medium max-w-3xl mx-auto leading-relaxed md:text-2xl"
           >
             Zenda helps every Nigerian get the gadgets they need with easy monthly payments. We make premium technology affordable for everyone.
           </motion.p>
@@ -52,7 +52,7 @@ export default function About() {
               className="group relative rounded-[2.5rem] border border-border bg-white p-10 text-center shadow-sm transition-all hover:bg-slate-50 hover:border-primary/20"
             >
               <p className="relative text-4xl font-black text-foreground group-hover:text-primary transition-colors tracking-tighter">{s.value}</p>
-              <p className="relative mt-3 text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.2em]">{s.label}</p>
+              <p className="relative mt-3 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">{s.label}</p>
             </motion.div>
           ))}
         </div>
@@ -81,7 +81,7 @@ export default function About() {
                 </div>
                 <div>
                   <h3 className="text-xl font-black text-foreground tracking-tight mb-4 uppercase text-[12px] tracking-widest text-primary/60">{v.title}</h3>
-                  <p className="text-lg font-medium text-muted-foreground/60 leading-relaxed">{v.desc}</p>
+                  <p className="text-lg font-medium text-slate-500 leading-relaxed">{v.desc}</p>
                 </div>
               </motion.div>
             ))}

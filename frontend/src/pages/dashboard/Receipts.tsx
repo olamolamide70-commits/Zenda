@@ -54,7 +54,7 @@ export default function Receipts() {
                 </div>
                 <div>
                   <p className="font-bold text-foreground tracking-tight leading-tight">{p.installments?.order?.product_name || 'Installment Payment'}</p>
-                  <div className="mt-1 flex items-center gap-2 text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">
+                  <div className="mt-1 flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                     <span>{p.id.split('-')[0]}</span>
                     <span>•</span>
                     <span>{new Date(p.created_at).toLocaleDateString()}</span>
@@ -81,7 +81,7 @@ export default function Receipts() {
           className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-slate-50/50 py-24 text-center"
         >
           <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-[2rem] bg-white border border-border shadow-sm">
-            <Receipt className="h-10 w-10 text-muted-foreground/30" />
+            <Receipt className="h-10 w-10 text-slate-500" />
           </div>
           <h2 className="text-2xl font-black text-foreground tracking-tight">No Receipts</h2>
           <p className="mt-2 text-muted-foreground max-w-xs mx-auto">Your digital receipts will be available here once payments are completed.</p>

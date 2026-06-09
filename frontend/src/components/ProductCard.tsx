@@ -57,9 +57,9 @@ export default function ProductCard({ product }: ProductCardProps) {
           ) : (
             <div className="flex flex-col items-center gap-4">
               <span className="text-7xl drop-shadow-2xl select-none animate-bounce-slow">
-                {categoryIcons[product.category] || '📦'}
+                {categoryIcons[product.category] || ''}
               </span>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/30">Premium Gadget</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Premium Gadget</p>
             </div>
           )}
         </div>
@@ -112,7 +112,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="mb-6">
           <div className="text-2xl font-black text-primary tracking-tighter">{formatCurrency(product.price)}</div>
           {product.installment_eligible && (
-            <div className="text-[10px] font-bold text-muted-foreground/60 mt-1 uppercase tracking-widest leading-none">
+            <div className="text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-widest leading-none">
               From <span className="text-primary">{formatCurrency(product.monthly_installment || (product.price * 1.05 / 12))}</span> / month
             </div>
           )}

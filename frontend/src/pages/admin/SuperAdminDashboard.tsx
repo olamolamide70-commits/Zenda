@@ -810,7 +810,7 @@ export default function SuperAdminDashboard() {
 
             <div className="bg-slate-50 rounded-xl p-4 border border-border">
               <p className="text-xs text-muted-foreground leading-relaxed">
-                💡 <span className="font-bold text-foreground">Note:</span> These policy coefficients are standard platform defaults. User-specific interest rate overrides can be managed by assigning tiers (Bronze, Silver, Gold) which offer discounts on base interest.
+                 <span className="font-bold text-foreground">Note:</span> These policy coefficients are standard platform defaults. User-specific interest rate overrides can be managed by assigning tiers (Bronze, Silver, Gold) which offer discounts on base interest.
               </p>
             </div>
           </div>
